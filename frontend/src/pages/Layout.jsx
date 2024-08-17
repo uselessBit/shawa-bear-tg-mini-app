@@ -12,21 +12,9 @@ import {
   DrawerCloseButton,
   useDisclosure,
   IconButton,
-  Text,
-  Avatar,
   useColorMode,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
-  ModalFooter,
-  Button,
-  Input,
-  ModalHeader
 } from "@chakra-ui/react";
 import { FaHome, FaShoppingBasket, FaBars } from "react-icons/fa";
-import { FaRegUser } from "react-icons/fa6";
 import React, { useEffect, useState } from "react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -37,38 +25,7 @@ const Layout = () => {
   const { isOpen, onOpen, onClose } = useDisclosure(); // Drawer state
   const { colorMode, toggleColorMode } = useColorMode(); // Color mode state
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication status
-  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure(); // Modal state
   const location = useLocation();
-
-  const checkAuthStatus = async () => {
-    try {
-      const response = await axios.get('https://127.0.0.1:8000/users/me');
-      setIsAuthenticated(!!response.data);
-    } catch (error) {
-      console.error("Error fetching auth status:", error);
-      setIsAuthenticated(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      await axios.post('https://127.0.0.1:8000/users/logout');
-      setIsAuthenticated(false);
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  useEffect(() => {
-    // Open modal if not authenticated and navigated to /profile
-    if (location.pathname === "/profile" && !isAuthenticated) {
-      onModalOpen();
-    }
-  }, [location, isAuthenticated, onModalOpen]);
 
   return (
     <Box bg={bgColor} color={textColor} minH="100vh" pb={16}>
@@ -106,12 +63,6 @@ const Layout = () => {
                 Menu
               </Flex>
             </Link>
-            <Link to="/profile" onClick={onClose}>
-              <Flex align="center" py={2}>
-                <Icon as={FaRegUser} mr={2} />
-                Profile
-              </Flex>
-            </Link>
             <Link to="/basket" onClick={onClose}>
               <Flex align="center" py={2}>
                 <Icon as={FaShoppingBasket} mr={2} />
@@ -122,38 +73,7 @@ const Layout = () => {
         </DrawerContent>
       </Drawer>
 
-      {/* Modal for registration/login */}
-      <Modal isOpen={isModalOpen} onClose={onModalClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{isAuthenticated ? "Welcome Back" : "Register"}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {!isAuthenticated && (
-              <>
-                <Input placeholder="Email" mb={3} />
-                <Input placeholder="Password" type="password" mb={3} />
-              </>
-            )}
-          </ModalBody>
-          <ModalFooter>
-            {!isAuthenticated ? (
-              <>
-                <Button colorScheme="blue" mr={3} onClick={onModalClose}>
-                  Register
-                </Button>
-                <Button variant="ghost" onClick={onModalClose}>
-                  Cancel
-                </Button>
-              </>
-            ) : (
-              <Button colorScheme="red" onClick={handleLogout}>
-                Logout
-              </Button>
-            )}
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+
 
       <Box pt={6}>
         <Outlet />
@@ -175,12 +95,6 @@ const Layout = () => {
           <Flex direction="column" align="center">
             <Icon as={FaHome} boxSize={6} />
             <Box fontSize="sm">Menu</Box>
-          </Flex>
-        </Link>
-        <Link to="/profile">
-          <Flex direction="column" align="center">
-            <Icon as={FaRegUser} boxSize={6} />
-            <Box fontSize="sm">Profile</Box>
           </Flex>
         </Link>
         <Link to="/basket">
