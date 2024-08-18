@@ -1,0 +1,5 @@
+[tool.ruff]
+ignore = [
+    "migrations/",
+    "alembic.ini"
+]

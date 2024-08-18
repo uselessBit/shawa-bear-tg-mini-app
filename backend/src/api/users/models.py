@@ -1,6 +1,6 @@
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer, String,
+from sqlalchemy import (Boolean, Column, Integer, String,
                         Text)
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped
 
 from src.db import Base
 

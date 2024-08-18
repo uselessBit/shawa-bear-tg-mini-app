@@ -24,8 +24,6 @@ const Layout = () => {
   const textColor = useColorModeValue("gray.900", "white");
   const { isOpen, onOpen, onClose } = useDisclosure(); // Drawer state
   const { colorMode, toggleColorMode } = useColorMode(); // Color mode state
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Authentication status
-  const location = useLocation();
 
   return (
     <Box bg={bgColor} color={textColor} minH="100vh" pb={16}>
