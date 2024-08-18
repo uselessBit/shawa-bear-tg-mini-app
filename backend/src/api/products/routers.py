@@ -52,7 +52,7 @@ async def get_product_by_name(product_name: str, db: AsyncSession = Depends(get_
         else:
             raise HTTPException(status_code=404, detail="Product not found")
 
-
+# Добавить фото
 @router.patch("/update_product/{product_id}")
 async def update_product(product_id: int, product_data: ProductUpdate, db: AsyncSession = Depends(get_session)):
     async with db as session:
