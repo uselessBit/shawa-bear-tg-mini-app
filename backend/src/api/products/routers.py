@@ -17,7 +17,11 @@ router = APIRouter(
 
 
 @router.post("/create_product")
-async def create_product(product: ProductCreate, file: UploadFile = File(None), db: AsyncSession = Depends(get_session)):
+async def create_product(product: ProductCreate, file: UploadFile | None = File(None), db: AsyncSession = Depends(get_session)):
+    if file:
+        image_url = await save_image(file)
+    else:
+        image_url = None
     async with db as session:
         async with session.begin():
 
@@ -25,7 +29,7 @@ async def create_product(product: ProductCreate, file: UploadFile = File(None), 
                 name=product.name,
                 description=product.description,
                 price=product.price,
-                image_url=await save_image(file)
+                image_url=image_url
             )
             session.add(new_product)
         return {"message": "Product created successfully"}

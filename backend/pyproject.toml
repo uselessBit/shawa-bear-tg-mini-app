@@ -1,5 +1,6 @@
-[tool.ruff]
-ignore = [
-    "migrations/",
-    "alembic.ini"
+[tool.pytest.ini_options]
+pythonpath = [
+    ".", "src/api"
 ]
+asyncio_default_fixture_loop_scope = "session"
+asyncio_mode="auto"

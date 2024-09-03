@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from passlib.context import CryptContext
+from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -26,3 +27,12 @@ async def create_user(user: UserCreate, db: AsyncSession = Depends(get_session))
             )
             session.add(new_user)
         return {"message": "User created successfully"}
+
+@router.get("/get_user_by_id")
+async def get_user_by_id(user_id: int, db: AsyncSession = Depends(get_session)):
+    async with db as session:
+        async with session.begin():
+            query = Select(User).where(user_id == User.user_id)
+            result = await session.execute(query)
+            user = result.scalar_one_or_none()
+        return {"user": user}

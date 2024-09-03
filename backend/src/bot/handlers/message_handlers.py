@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from src.api.users.routers import create_user
+from src.api.users.routers import create_user, get_user_by_id
 from src.api.users.schemas import UserCreate
 from src.db import get_session
 
@@ -19,5 +19,7 @@ async def send_welcome(message: Message):
         language_code=message.from_user.language_code,
     )
     async for session in get_session():
-        await create_user(user=user, db=session)
+        user = await get_user_by_id(message.from_user.id, session)
+        if not user["user"]:
+            await create_user(user=user, db=session)
     await message.answer("Welcome!")
