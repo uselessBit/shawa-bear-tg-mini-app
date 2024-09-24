@@ -11,7 +11,7 @@ router = Router(name='message_handlers')
 
 @router.message(Command("start"))
 async def send_welcome(message: Message):
-    user = UserCreate(
+    user_create = UserCreate(
         user_id=message.from_user.id,
         first_name=message.from_user.first_name,
         last_name=message.from_user.last_name,
@@ -21,5 +21,5 @@ async def send_welcome(message: Message):
     async for session in get_session():
         user = await get_user_by_id(message.from_user.id, session)
         if not user["user"]:
-            await create_user(user=user, db=session)
+            await create_user(user=user_create, db=session)
     await message.answer("Welcome!")
