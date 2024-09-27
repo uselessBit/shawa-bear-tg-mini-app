@@ -38,37 +38,41 @@ const ProductGrid = ({products, onProductClick}) => {
 };
 
 const Menu = () => {
-    // const [products, setProducts] = useState([]); // Добавляем состояние для товаров
+    const [products, setProducts] = useState([]); // Добавляем состояние для товаров
 
-    // useEffect(() => {
-    //     // Загружаем данные товаров из файла
-    //     fetch('/path/to/your/products.json') // Замените на путь к вашему файлу
-    //         .then(response => response.json())
-    //         .then(data => setProducts(data))
-    //         .catch(error => console.error('Error fetching products:', error));
-    // }, []); // Выполняем только один раз при монтировании компонента
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('https://127.0.0.1:8000/products/get_products');
+                setProducts(response.data); // Предположим, что API возвращает объект с полем jobs, содержащим массив работ
+            } catch (error) {
+                console.error("Ошибка при получении данных:", error);
+
+            }
+        };
+    }, []); // Выполняем только один раз при монтировании компонента
 
     const handleProductClick = (productId) => {
         // Логика перехода на страницу товара
         console.log("Product clicked:", productId);
     };
 
-    const products = [
-        {
-            id: 1,
-            name: 'Product 1',
-            description: 'Description of Product 1',
-            price: 10,
-            imageUrl: 'media/fe4ce7d5-14e8-45a9-b83b-50e91d0e9c86.png',
-        },
-        {
-            id: 2,
-            name: 'Product 2',
-            description: 'Description of Product 2',
-            price: 20,
-            imageUrl: 'media/fe4ce7d5-14e8-45a9-b83b-50e91d0e9c86.png',
-        },
-    ];
+    // const products = [
+    //     {
+    //         id: 1,
+    //         name: 'Product 1',
+    //         description: 'Description of Product 1',
+    //         price: 10,
+    //         imageUrl: 'media/fe4ce7d5-14e8-45a9-b83b-50e91d0e9c86.png',
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Product 2',
+    //         description: 'Description of Product 2',
+    //         price: 20,
+    //         imageUrl: 'media/fe4ce7d5-14e8-45a9-b83b-50e91d0e9c86.png',
+    //     },
+    // ];
 
     return (
         <Box>

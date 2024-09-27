@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_TOKEN = getenv("API_TOKEN")
-bot = Bot(API_TOKEN, default=DefaultBotProperties(parse_mode='HTML'))
+bot = Bot(API_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 
 DB_HOST = getenv("DB_HOST")
 DB_PORT = getenv("DB_PORT")
@@ -22,8 +22,8 @@ TEST_DB_USER = getenv("TEST_DB_USER")
 TEST_DB_PASS = getenv("TEST_DB_PASS")
 
 LEXICON_COMMANDS_RU: dict[str, str | None] = {
-    '/start': 'start',
-    '/cancel': 'cancel',
+    "/start": "start",
+    "/cancel": "cancel",
 }
 
 SECRET_KEY = getenv("SECRET_KEY")

@@ -1,10 +1,9 @@
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
-from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
-                                    create_async_engine)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import declarative_base
 
-from src.config import DB_NAME, DB_USER, DB_HOST, DB_PASS, DB_PORT
+from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
@@ -17,6 +16,7 @@ async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session() as session:
         yield session
+
 
 # alembic revision --autogenerate -m 'initial'
 # alembic upgrade head

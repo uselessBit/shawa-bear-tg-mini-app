@@ -1,21 +1,18 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
-from passlib.context import CryptContext
+from typing import Any
+
+from fastapi import APIRouter, Depends
 from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 
-from src.db import get_session
 from src.api.users.models import User
 from src.api.users.schemas import UserCreate
+from src.db import get_session
 
-router = APIRouter(
-    prefix="/users",
-    tags=["Users"]
-)
+router = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.post("/create_user")
-async def create_user(user: UserCreate, db: AsyncSession = Depends(get_session)):
+async def create_user(user: UserCreate, db: AsyncSession = Depends(get_session)) -> dict[str, Any]:
     async with db as session:
         async with session.begin():
             new_user = User(
@@ -28,8 +25,9 @@ async def create_user(user: UserCreate, db: AsyncSession = Depends(get_session))
             session.add(new_user)
         return {"message": "User created successfully"}
 
+
 @router.get("/get_user_by_id")
-async def get_user_by_id(user_id: int, db: AsyncSession = Depends(get_session)):
+async def get_user_by_id(user_id: int, db: AsyncSession = Depends(get_session)) -> dict[str, Any]:
     async with db as session:
         async with session.begin():
             query = Select(User).where(user_id == User.user_id)

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 
 
 class UserCreate(BaseModel):
@@ -7,5 +7,3 @@ class UserCreate(BaseModel):
     last_name: str
     username: str
     language_code: str
-
-

@@ -6,7 +6,7 @@ from src.api.users.routers import create_user, get_user_by_id
 from src.api.users.schemas import UserCreate
 from src.db import get_session
 
-router = Router(name='message_handlers')
+router = Router(name="message_handlers")
 
 
 @router.message(Command("start"))

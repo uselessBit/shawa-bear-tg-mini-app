@@ -1,18 +1,12 @@
 import asyncio
-import os
-import sys
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
-                                    create_async_engine)
-from sqlalchemy.orm import declarative_base
-
-from src.api.main import app
-from src.config import TEST_DB_NAME, TEST_DB_USER, TEST_DB_HOST, TEST_DB_PASS, TEST_DB_PORT
 import pytest
-
-from src.db import get_session, Base
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from src.api.main import app
+from src.config import TEST_DB_HOST, TEST_DB_NAME, TEST_DB_PASS, TEST_DB_PORT, TEST_DB_USER
+from src.db import Base, get_session
 
 TEST_DATABASE_URL = f"postgresql+asyncpg://{TEST_DB_USER}:{TEST_DB_PASS}@{TEST_DB_HOST}:{TEST_DB_PORT}/{TEST_DB_NAME}"
 
@@ -25,6 +19,7 @@ async_session = async_sessionmaker(test_engine, class_=AsyncSession, expire_on_c
 async def override_get_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session() as session:
         yield session
+
 
 app.dependency_overrides[get_session] = override_get_session
 

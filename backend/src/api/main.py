@@ -1,8 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from src.api.users.routers import router as users_router
+
 from src.api.products.routers import router as products_router
+from src.api.users.routers import router as users_router
 
 app = FastAPI()
 
@@ -22,6 +23,7 @@ app.add_middleware(
 app.include_router(users_router)
 app.include_router(products_router)
 
-if __name__ == '__main__':
-    uvicorn.run('main:app', reload=True, port=8000, ssl_keyfile="../../localhost-key.pem",
-                ssl_certfile="../../localhost.pem")
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app", reload=True, port=8000, ssl_keyfile="../../localhost-key.pem", ssl_certfile="../../localhost.pem"
+    )
