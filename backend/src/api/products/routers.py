@@ -31,7 +31,6 @@ async def get_product_by_name(product_name: str, db: AsyncSession = Depends(get_
     return await get_by_name(product_name, db)
 
 
-# Добавить фото
 @router.patch("/update_product/{product_id}")
 async def update_product(
         product_id: int, product_data: ProductUpdate,

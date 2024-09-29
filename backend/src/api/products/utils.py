@@ -1,3 +1,4 @@
+import os
 import uuid
 from pathlib import Path
 
@@ -23,3 +24,17 @@ async def save_image(file: UploadFile, directory: str = "../../../../frontend/me
             await buffer.write(data)
 
     return filename
+
+async def delete_image(filename: str, directory: str = "../../../../frontend/media") -> None:
+    base_dir = Path(__file__).parent
+    abs_directory = base_dir / directory
+    file_path = abs_directory / filename
+
+    if file_path.exists() and file_path.is_file():
+        try:
+            os.remove(file_path)
+        except Exception as e:
+            print(f"An error occurred while deleting file {filename}: {e}")
+    else:
+        print(f"File {filename} does not exist.")
+

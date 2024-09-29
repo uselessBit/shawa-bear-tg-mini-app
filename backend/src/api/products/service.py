@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.products.models import Product
 from src.api.products.schemas import ProductCreate, ProductUpdate
-from src.api.products.utils import save_image
+from src.api.products.utils import save_image, delete_image
 
 
 async def create(product: ProductCreate, file: UploadFile | None, db: AsyncSession) -> dict[str, Any]:
@@ -38,6 +38,8 @@ async def get_by_name(product_name: str, db: AsyncSession) -> Product:
             return product
         raise HTTPException(status_code=404, detail="Product not found")
 
+
+
 async def update(
         product_id: int, product_data: ProductUpdate,
         file: UploadFile | None,
@@ -57,6 +59,8 @@ async def update(
             if product_data.price:
                 product.price = product_data.price
             if image_url:
+                if filename := product.image_url:
+                    await delete_image(filename)
                 product.image_url = image_url
 
             await session.commit()
