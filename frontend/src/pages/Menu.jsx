@@ -30,6 +30,8 @@ const ProductGrid = ({products, onProductClick}) => {
             templateColumns="repeat(2, 1fr)" // 2 колонки на всех устройствах
             gap={0} // Уменьшили отступ между карточками
         >
+
+
             {products.map((product) => (
                 <ProductCard key={product.id} product={product} onProductClick={onProductClick}/>
             ))}

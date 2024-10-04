@@ -1,10 +1,8 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import Select
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.users.models import User
 from src.api.users.schemas import UserCreate, UserResponse
 from src.api.users.services import create, get_by_id
 from src.db import get_session

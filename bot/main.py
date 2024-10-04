@@ -4,9 +4,8 @@ import sys
 
 from aiogram import Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from config import bot
 from handlers.message_handlers import router as message_router
-
-from src.config import bot
 
 storage = MemoryStorage()
 

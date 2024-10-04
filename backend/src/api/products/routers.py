@@ -52,9 +52,10 @@ async def get_product_by_name(product_name: str, db: AsyncSession = Depends(get_
 # Добавить фото
 @router.patch("/update_product/{product_id}")
 async def update_product(
-        product_id: int, product_data: ProductUpdate,
-        file: UploadFile | None = File(None),
-        db: AsyncSession = Depends(get_session)
+    product_id: int,
+    product_data: ProductUpdate,
+    file: UploadFile | None = File(None),
+    db: AsyncSession = Depends(get_session),
 ) -> dict[str, Any]:
     if file:
         image_url = await save_image(file)
