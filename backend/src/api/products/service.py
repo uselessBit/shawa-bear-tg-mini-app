@@ -9,47 +9,44 @@ from src.api.products.schemas import ProductCreate, ProductUpdate
 from src.api.products.utils import save_image, delete_image
 
 
-async def create(product: ProductCreate, file: UploadFile | None, db: AsyncSession) -> dict[str, Any]:
+async def create(product: ProductCreate, file: UploadFile | None, session: AsyncSession) -> dict[str, Any]:
     if file:
         image_url = await save_image(file)
     else:
         image_url = None
-    async with db.begin():
+    async with session.begin():
         new_product = Product(
             name=product.name, description=product.description, price=product.price, image_url=image_url
         )
-        db.add(new_product)
+        session.add(new_product)
     return {"message": "Product created successfully"}
 
 
-async def get(db: AsyncSession) -> Sequence[Product]:
-    async with db as session:
-        query = select(Product)
-        results = await session.execute(query)
-        return results.scalars().all()
+async def get(session: AsyncSession) -> Sequence[Product]:
+    query = select(Product)
+    results = await session.execute(query)
+    return results.scalars().all()
 
 
-async def get_by_name(product_name: str, db: AsyncSession) -> Product:
-    async with db as session:
-        query = select(Product).where(product_name == Product.name)
-        result = await session.execute(query)
-        product = result.scalar()
-        if product:
-            return product
-        raise HTTPException(status_code=404, detail="Product not found")
-
+async def get_by_name(product_name: str, session: AsyncSession) -> Product:
+    query = select(Product).where(product_name == Product.name)
+    result = await session.execute(query)
+    product = result.scalar()
+    if product:
+        return product
+    raise HTTPException(status_code=404, detail="Product not found")
 
 
 async def update(
         product_id: int, product_data: ProductUpdate,
         file: UploadFile | None,
-        db: AsyncSession,
+        session: AsyncSession,
 ) -> dict[str, Any]:
+    image_url = None
     if file:
         image_url = await save_image(file)
-    else:
-        image_url = None
-    async with db as session:
+
+    async with session.begin():
         product = await session.get(Product, product_id)
         if product:
             if product_data.name:
@@ -63,6 +60,5 @@ async def update(
                     await delete_image(filename)
                 product.image_url = image_url
 
-            await session.commit()
             return {"message": "Product updated successfully"}
         raise HTTPException(status_code=404, detail="Product not found")
