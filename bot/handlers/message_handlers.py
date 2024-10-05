@@ -1,8 +1,9 @@
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from api_client import data_get, data_post
 from schemas import UserCreate
+from db import get_session
+from service import get_user_by_id, create_user
 
 router = Router(name="message_handlers")
 
@@ -16,8 +17,9 @@ async def send_welcome(message: Message):
         username=message.from_user.username,
         language_code=message.from_user.language_code,
     )
-    user = await data_get(f"https://127.0.0.1:8000/users/get_user_by_id?user_id={user_create.user_id}")
-    if not user:
-        await data_post("https://127.0.0.1:8000/users/create_user", form_data=user_create)
+    async for session in get_session():
+        user = await get_user_by_id(message.from_user.id, session)
+        if not user:
+            await create_user(user=user_create, db=session)
 
     await message.answer("Welcome!")
