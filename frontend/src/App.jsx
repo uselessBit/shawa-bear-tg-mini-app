@@ -25,6 +25,9 @@ const theme = extendTheme({
             900: "#F9F9F9",
         },
     },
+    shadows: {
+        light: "5px 5px 10px rgba(0, 0, 0, 0.05), -5px -5px 10px rgba(255, 255, 255, 1)",
+    },
 });
 
 export default function App() {
