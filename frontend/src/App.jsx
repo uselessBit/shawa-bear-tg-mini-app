@@ -26,7 +26,7 @@ const theme = extendTheme({
         },
     },
     shadows: {
-        light: "5px 5px 10px rgba(0, 0, 0, 0.05), -5px -5px 10px rgba(255, 255, 255, 1)",
+        light: "5px 5px 10px rgba(0, 0, 0, 0.03), -5px -5px 10px rgba(255, 255, 255, 1)",
     },
 });
 
