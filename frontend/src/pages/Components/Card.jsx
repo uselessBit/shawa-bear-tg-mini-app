@@ -6,41 +6,55 @@ import {
     Stack,
     Heading,
     Text,
-    Divider,
+    Flex,
     CardFooter,
-    ButtonGroup,
-    Button,
+    Spacer,
+    useColorModeValue,
+    Center
 } from "@chakra-ui/react";
 
 export default function MyCard() {
+    const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
+    const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
+
     return (
-        <Card>
-            <CardBody>
+        <Card borderRadius={26} w="full" mb={6} css={`break-inside: avoid;`} boxShadow="light" backgroundColor={boxClr}>
+            <CardBody p={0}>
                 <Image
-                    src='https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
+                    src='shava1.png'
                     alt='Green double couch with wooden legs'
-                    borderRadius='lg'
+                    borderRadius={26}
                 />
-                <Stack mt='6' spacing='3'>
-                    <Heading size='md'>Living room Sofa</Heading>
-                    <Text>
-                        This sofa is perfect
+                <Stack>
+                    <Text fontWeight="bold" fontSize={16} textAlign="center" h={1}>
+                        Донер
                     </Text>
-                    <Text color='blue.600' fontSize='2xl'>
-                        $450
+                    <Text fontWeight="bold" fontSize={28} textAlign="center" h={6}>
+                        Чикен
                     </Text>
                 </Stack>
             </CardBody>
-            <Divider />
             <CardFooter>
-                <ButtonGroup spacing='2'>
-                    <Button variant='solid' colorScheme='blue'>
-                        Buy now
-                    </Button>
-                    <Button variant='ghost' colorScheme='blue'>
-                        Add to cart
-                    </Button>
-                </ButtonGroup>
+                <Flex w="full" justify="center">
+                    <Flex flexDirection="column">
+                        <Text opacity="0.5" fontSize={10} textAlign="center" h={2}>300г</Text>
+                        <Text fontWeight="bold" fontSize={22}>6<Text as="span" fontSize={12}>.5<Text as="span" color={accentColor}>р</Text></Text></Text>
+                    </Flex>
+
+                    <Spacer />
+
+                    <Flex flexDirection="column">
+                        <Text opacity="0.5" fontSize={10} textAlign="center" h={2}>400г</Text>
+                        <Text fontWeight="bold" fontSize={22}>8<Text as="span" fontSize={12}>.5<Text as="span" color={accentColor}>р</Text></Text></Text>
+                    </Flex>
+
+                    <Spacer />
+
+                    <Flex flexDirection="column">
+                        <Text opacity="0.5" fontSize={10} textAlign="center" h={2}>500г</Text>
+                        <Text fontWeight="bold" fontSize={22}>10<Text as="span" fontSize={12}>.5<Text as="span" color={accentColor}>р</Text></Text></Text>
+                    </Flex>
+                </Flex>
             </CardFooter>
         </Card>
     );

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex, Center, useColorModeValue, Input, Icon, Text } from "@chakra-ui/react";
+import { Box, Flex, Center, useColorModeValue, Input, SimpleGrid, Text } from "@chakra-ui/react";
 import Header from "./Components/Header"
 import MyCard from "./Components/Card"
 
@@ -11,9 +11,8 @@ export default function Layout() {
         <Center>
             <Header />
 
-            <Box w="full" maxW="container.md" px={8} color={textClr} fontFamily="Montserrat" columns="170px">
-
-                <Box mt={28}>
+            <Box w="full" maxW="container.md" px={8} color={textClr} fontFamily="Montserrat" css={`column-count: 2;`} gap={6} mt={28}>
+                <Box maxW={"165px"} mb={6}>
                     <Text fontWeight="bold" fontSize="3xl" lineHeight="40px">
                         Найдено 23 донера
                     </Text>
@@ -25,7 +24,11 @@ export default function Layout() {
                 <MyCard />
                 <MyCard />
                 <MyCard />
-
+                <MyCard />
+                <MyCard />
+                <MyCard />
+                <MyCard />
+                <MyCard />
             </Box>
         </Center>
     );

@@ -24,6 +24,10 @@ const theme = extendTheme({
             100: "#252525",
             900: "#F9F9F9",
         },
+        accentColor: {
+            100: "#FFCF0D",
+            900: "#FFCF0D",
+        }
     },
     shadows: {
         light: "5px 5px 10px rgba(0, 0, 0, 0.03), -5px -5px 10px rgba(255, 255, 255, 1)",
