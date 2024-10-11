@@ -1,9 +1,6 @@
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-from src.api.basket.models import Basket
 from src.database import Base
-
 
 class Product(Base):
     __tablename__ = "products"
@@ -15,4 +12,4 @@ class Product(Base):
     price: Mapped[int] = mapped_column(nullable=False)
     image_url: Mapped[str] = mapped_column(nullable=True)
 
-    basket: Mapped[list["Basket"]] = relationship(back_populates="proudct")
+    basket: Mapped[list["Basket"]] = relationship(back_populates="product")

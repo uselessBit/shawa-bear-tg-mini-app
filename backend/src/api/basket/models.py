@@ -1,8 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, Float
 from sqlalchemy.orm import relationship, mapped_column, Mapped
-
-from src.api.products.models import Product
-from src.api.users.models import User
 from src.database import Base
 
 class Basket(Base):
