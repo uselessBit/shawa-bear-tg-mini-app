@@ -4,58 +4,104 @@ import {
     CardBody,
     Image,
     Stack,
-    Heading,
     Text,
     Flex,
     CardFooter,
-    Spacer,
     useColorModeValue,
-    Center
+    Box,
+    useDisclosure
 } from "@chakra-ui/react";
+import ProductDrawer from './ProductDrawer'; 
 
-export default function MyCard() {
+export default function MyCard({ prices, sizes }) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
 
+    const formatPrice = (price) => {
+        const [integer, decimal] = price.split(".");
+        return { integer, decimal };
+    };
+
+    const productInfo = {
+        title: "Донер Чикен",
+        sizes,
+        prices
+    };
+
     return (
-        <Card borderRadius={26} w="full" mb={6} css={`break-inside: avoid;`} boxShadow="light" backgroundColor={boxClr}>
-            <CardBody p={0}>
-                <Image
-                    src='shava1.png'
-                    alt='Green double couch with wooden legs'
-                    borderRadius={26}
-                />
-                <Stack>
-                    <Text fontWeight="bold" fontSize={16} textAlign="center" h={1}>
-                        Донер
-                    </Text>
-                    <Text fontWeight="bold" fontSize={28} textAlign="center" h={6}>
-                        Чикен
-                    </Text>
-                </Stack>
-            </CardBody>
-            <CardFooter>
-                <Flex w="full" justify="center">
-                    <Flex flexDirection="column">
-                        <Text opacity="0.5" fontSize={10} textAlign="center" h={2}>300г</Text>
-                        <Text fontWeight="bold" fontSize={22}>6<Text as="span" fontSize={12}>.5<Text as="span" color={accentColor}>р</Text></Text></Text>
+        <>
+            <Card 
+                borderRadius={26} 
+                w="full" 
+                mb={6} 
+                css={`break-inside: avoid;`} 
+                boxShadow="light" 
+                backgroundColor={boxClr} 
+                cursor="pointer"
+                onClick={onOpen} 
+            >
+                <CardBody p={0}>
+                    <Image
+                        src='shava1.png'
+                        borderRadius={26}
+                        pos="absolute"
+                    />
+                    <Box h="clamp(100px, calc(44vw - 40px), 300px)" />
+                    <Stack>
+                        <Text
+                            fontWeight="bold"
+                            fontSize="clamp(12px, 3.5vw, 26px)"
+                            textAlign="center"
+                            h="clamp(4px, 1vw, 16px)"
+                        >
+                            Донер
+                        </Text>
+                        <Text
+                            fontWeight="bold"
+                            fontSize="clamp(20px, 6vw, 48px)"
+                            textAlign="center"
+                            h="clamp(10px, 8vw, 66px)"
+                        >
+                            Чикен
+                        </Text>
+                    </Stack>
+                </CardBody>
+                <CardFooter p={3}>
+                    <Flex w="full" justifyContent="space-around">
+                        {prices.map((price, index) => {
+                            const { integer, decimal } = formatPrice(price);
+
+                            return (
+                                <Flex key={index} flexDirection="column">
+                                    <Text
+                                        opacity="0.5"
+                                        fontSize="clamp(10px, 2.5vw, 16px)"
+                                        textAlign="center"
+                                        h="clamp(10px, 1vw, 16px)"
+                                    >
+                                        {sizes[index]}
+                                    </Text>
+                                    <Text
+                                        fontWeight="bold"
+                                        fontSize="clamp(18px, 6vw, 42px)"
+                                    >
+                                        {integer}
+                                        <Text as="span" fontSize="clamp(10px, 3vw, 22px)">
+                                            .{decimal}
+                                            <Text as="span" color={accentColor}>
+                                                р
+                                            </Text>
+                                        </Text>
+                                    </Text>
+                                </Flex>
+                            );
+                        })}
                     </Flex>
+                </CardFooter>
+            </Card>
 
-                    <Spacer />
-
-                    <Flex flexDirection="column">
-                        <Text opacity="0.5" fontSize={10} textAlign="center" h={2}>400г</Text>
-                        <Text fontWeight="bold" fontSize={22}>8<Text as="span" fontSize={12}>.5<Text as="span" color={accentColor}>р</Text></Text></Text>
-                    </Flex>
-
-                    <Spacer />
-
-                    <Flex flexDirection="column">
-                        <Text opacity="0.5" fontSize={10} textAlign="center" h={2}>500г</Text>
-                        <Text fontWeight="bold" fontSize={22}>10<Text as="span" fontSize={12}>.5<Text as="span" color={accentColor}>р</Text></Text></Text>
-                    </Flex>
-                </Flex>
-            </CardFooter>
-        </Card>
+            <ProductDrawer isOpen={isOpen} onClose={onClose} productInfo={productInfo} />
+        </>
     );
 }
