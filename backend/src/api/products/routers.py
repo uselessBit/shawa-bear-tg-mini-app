@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.products.models import Product
 from src.api.products.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.api.products.service import create, get, get_by_name, update
-from src.db import get_session
+from src.database import get_session
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
