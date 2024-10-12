@@ -1,109 +1,34 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
-import {
-  Box,
-  Flex,
-  Icon,
-  useColorModeValue,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  useDisclosure,
-  IconButton,
-  useColorMode,
-} from "@chakra-ui/react";
-import { FaHome, FaShoppingBasket, FaBars } from "react-icons/fa";
-import React, { useEffect, useState } from "react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
-import axios from "axios";
+import React from "react";
+import { Box, Center, useColorModeValue, Text } from "@chakra-ui/react";
+import Header from "./Components/Header"
+import MyCard from "./Components/Card"
 
-const Layout = () => {
-  const bgColor = useColorModeValue("gray.100", "gray.900");
-  const textColor = useColorModeValue("gray.900", "white");
-  const { isOpen, onOpen, onClose } = useDisclosure(); // Drawer state
-  const { colorMode, toggleColorMode } = useColorMode(); // Color mode state
+export default function Layout() {
+    const textClr = useColorModeValue("textColor.100", "textColor.900");
+    const prices = ["6.5", "8.5", "10.5"];
+    const sizes = ["300г", "400г", "500г"];
 
-  return (
-    <Box bg={bgColor} color={textColor} minH="100vh" pb={16}>
-      <Flex as="header" align="center" justify="space-between" p={1} bg={bgColor} boxShadow="md" zIndex="overlay">
-        <IconButton
-          icon={<FaBars />}
-          onClick={onOpen}
-          aria-label="Open menu"
-          variant="ghost"
-          color={textColor}
-          size="sm"
-          mr={2}
-          _hover={{ bg: "transparent" }}
-        />
-        <IconButton
-          icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-          onClick={toggleColorMode}
-          aria-label="Toggle theme"
-          variant="ghost"
-          color={textColor}
-          size="sm"
-          _hover={{ bg: "transparent" }}
-        />
-      </Flex>
+    return (
+        <Center>
+            <Header />
 
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent bg={bgColor} color={textColor}>
-          <DrawerCloseButton />
-          <DrawerHeader>Menu</DrawerHeader>
-          <DrawerBody>
-            <Link to="/" onClick={onClose}>
-              <Flex align="center" py={2}>
-                <Icon as={FaHome} mr={2} />
-                Menu
-              </Flex>
-            </Link>
-            <Link to="/basket" onClick={onClose}>
-              <Flex align="center" py={2}>
-                <Icon as={FaShoppingBasket} mr={2} />
-                Basket
-              </Flex>
-            </Link>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+            <Box w="full" maxW="container.md" px={8} color={textClr} fontFamily="Montserrat" css={`column-count: 2;`} gap={6} mt={28}>
+                <Box mb={6}>
+                    <Text fontWeight="bold" fontSize="clamp(10px, 7.2vw, 56px)" lineHeight="clamp(10px, 7.2vw, 56px)">
+                        Найдено 23 донера
+                    </Text>
+                </Box>
 
-
-
-      <Box pt={6}>
-        <Outlet />
-      </Box>
-
-      <Flex
-        as="nav"
-        justify="space-around"
-        pos="fixed"
-        bottom="0"
-        left="0"
-        right="0"
-        width="100%"
-        bg={bgColor}
-        p={2}
-        boxShadow="0 -1px 5px rgba(0, 0, 0, 0.1)"
-      >
-        <Link to="/">
-          <Flex direction="column" align="center">
-            <Icon as={FaHome} boxSize={6} />
-            <Box fontSize="sm">Menu</Box>
-          </Flex>
-        </Link>
-        <Link to="/basket">
-          <Flex direction="column" align="center">
-            <Icon as={FaShoppingBasket} boxSize={6} />
-            <Box fontSize="sm">Basket</Box>
-          </Flex>
-        </Link>
-      </Flex>
-    </Box>
-  );
-};
-
-export default Layout;
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+                <MyCard prices={prices} sizes={sizes} />
+            </Box>
+        </Center>
+    );
+}

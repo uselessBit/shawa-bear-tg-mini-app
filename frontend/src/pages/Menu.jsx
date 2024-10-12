@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {Box, Flex, Grid, Image, Text, Heading} from '@chakra-ui/react';
-import {Link} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Box, Flex, Grid, Image, Text, Heading } from '@chakra-ui/react';
+import { Link } from "react-router-dom";
 
 
-const ProductCard = ({product, onProductClick}) => {
+const ProductCard = ({ product, onProductClick }) => {
     return (
         <Link href="#" onClick={() => onProductClick(product.id)}> {/* Добавили ссылку */}
             <Box
@@ -18,13 +18,13 @@ const ProductCard = ({product, onProductClick}) => {
                 }}
             >
                 <Image src={product.imageUrl} alt={product.name} borderRadius="lg" w="full" h="full"
-                       objectFit="cover"/> {/* Картинка на всю карточку */}
+                    objectFit="cover" /> {/* Картинка на всю карточку */}
             </Box>
         </Link>
     );
 };
 
-const ProductGrid = ({products, onProductClick}) => {
+const ProductGrid = ({ products, onProductClick }) => {
     return (
         <Grid
             templateColumns="repeat(2, 1fr)" // 2 колонки на всех устройствах
@@ -33,7 +33,7 @@ const ProductGrid = ({products, onProductClick}) => {
 
 
             {products.map((product) => (
-                <ProductCard key={product.id} product={product} onProductClick={onProductClick}/>
+                <ProductCard key={product.id} product={product} onProductClick={onProductClick} />
             ))}
         </Grid>
     );
@@ -79,7 +79,7 @@ const Menu = () => {
     return (
         <Box>
             {products.length > 0 ? (
-                <ProductGrid products={products} onProductClick={handleProductClick}/>
+                <ProductGrid products={products} onProductClick={handleProductClick} />
             ) : (
                 <Text>Loading products...</Text>
             )}
