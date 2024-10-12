@@ -11,7 +11,6 @@ import {
     Box,
     useDisclosure
 } from "@chakra-ui/react";
-import ProductDrawer from './ProductDrawer'; 
 
 export default function MyCard({ prices, sizes }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -100,8 +99,6 @@ export default function MyCard({ prices, sizes }) {
                     </Flex>
                 </CardFooter>
             </Card>
-
-            <ProductDrawer isOpen={isOpen} onClose={onClose} productInfo={productInfo} />
         </>
     );
 }
