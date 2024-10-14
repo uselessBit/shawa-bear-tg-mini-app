@@ -93,8 +93,8 @@ export default function ProductDrawer({ product }) {
                     <Flex flexWrap="wrap" width="full" gap={6} mb={6}>
                         {composition.map((item, index) => {
                             return (
-                                <Box backgroundColor={colors[index]} flex="1" borderRadius={16} p={4}>
-                                    <Image key={index} src={item} minW="clamp(50px, 17vw, 150px)" />
+                                <Box key={index} backgroundColor={colors[index]} flex="1" borderRadius={16} p={4}>
+                                    <Image src={item} minW="clamp(50px, 17vw, 150px)" />
                                 </Box>
                             );
                         })}
