@@ -9,25 +9,15 @@ import {
     CardFooter,
     useColorModeValue,
     Box,
-    useDisclosure
 } from "@chakra-ui/react";
-import MainDrawer from './MainDrawer';
 
-export default function MainCard({ title, prices, sizes, image }) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export default function MainCard({ product, onOpen }) {
     const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
 
     const formatPrice = (price) => {
         const [integer, decimal] = price.split(".");
         return { integer, decimal };
-    };
-
-    const productInfo = {
-        title,
-        sizes,
-        prices,
-        image
     };
 
     return (
@@ -44,7 +34,7 @@ export default function MainCard({ title, prices, sizes, image }) {
             >
                 <CardBody p={0}>
                     <Image
-                        src={image}
+                        src={product.image}
                         borderRadius={26}
                         pos="absolute"
                     />
@@ -64,13 +54,13 @@ export default function MainCard({ title, prices, sizes, image }) {
                             textAlign="center"
                             h="clamp(10px, 8vw, 66px)"
                         >
-                            {title}
+                            {product.title}
                         </Text>
                     </Stack>
                 </CardBody>
                 <CardFooter p={3}>
                     <Flex w="full" justifyContent="space-around">
-                        {prices.map((price, index) => {
+                        {product.prices.map((price, index) => {
                             const { integer, decimal } = formatPrice(price);
 
                             return (
@@ -81,7 +71,7 @@ export default function MainCard({ title, prices, sizes, image }) {
                                         textAlign="center"
                                         h="clamp(10px, 1vw, 16px)"
                                     >
-                                        {sizes[index]}
+                                        {product.sizes[index]}
                                     </Text>
                                     <Text
                                         fontWeight="bold"
@@ -102,8 +92,6 @@ export default function MainCard({ title, prices, sizes, image }) {
                     </Flex>
                 </CardFooter>
             </Card>
-
-            <MainDrawer isOpen={isOpen} onClose={onClose} product={productInfo} />
         </>
     );
 }
