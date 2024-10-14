@@ -30,6 +30,7 @@ export default function ProductDrawer({ product }) {
                 pos="absolute"
                 top={0}
                 w="container.md"
+                draggable="false"
             />
             <Center>
                 <Flex w="88%" mt="clamp(12px, 90vw, 670px)" fontFamily="Montserrat" flexDirection="column" alignItems="center">
