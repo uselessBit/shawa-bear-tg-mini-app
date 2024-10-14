@@ -44,6 +44,8 @@ export default function MainDrawer({ isOpen, onClose, children }) {
             setTopOffset(Math.max(newOffset, 32));
     
             startTouchY.current = currentY;
+        } if (contentRef.current.scrollTop !== 0) {
+            setScrollAtTop(false);
         }
     };
     
