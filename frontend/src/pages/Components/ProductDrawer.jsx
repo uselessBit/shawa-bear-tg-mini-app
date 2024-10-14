@@ -36,8 +36,9 @@ export default function ProductDrawer({ product }) {
                     <Text
                         fontWeight="extrabold"
                         fontSize="clamp(20px, 10vw, 60px)"
+                        lineHeight="clamp(20px, 10vw, 60px)"
                         textAlign="center"
-                        mb={4}
+                        mb={6}
                     >
                         Донер {product.title}
                     </Text>
@@ -89,7 +90,7 @@ export default function ProductDrawer({ product }) {
 
                     <Text fontWeight="semibold" fontSize="clamp(10px, 6vw, 46px)" my={4}>Состав</Text>
 
-                    <Flex flexWrap="wrap" width="full" gap={6}>
+                    <Flex flexWrap="wrap" width="full" gap={6} mb={6}>
                         {composition.map((item, index) => {
                             return (
                                 <Box backgroundColor={colors[index]} flex="1" borderRadius={16} p={4}>

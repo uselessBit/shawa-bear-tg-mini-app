@@ -1,9 +1,7 @@
 import React from "react";
-import { Box, Center, useColorModeValue, Text, useDisclosure } from "@chakra-ui/react";
+import { Box, Center, useColorModeValue, Text } from "@chakra-ui/react";
 import Header from "./Components/Header"
 import MainCard from "./Components/MainCard"
-import MainDrawer from "./Components/MainDrawer"
-import ProductDrawer from "./Components/ProductDrawer"
 
 export default function Layout() {
     const textClr = useColorModeValue("textColor.100", "textColor.900");
@@ -19,7 +17,12 @@ export default function Layout() {
         image
     };
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const productInfo2 = {
+        title: "Не чикен",
+        sizes: ["300г", "400г", "500г"],
+        prices: ["7.5", "9.5", "11.5"],
+        image: "shava1.png"
+    };
 
     return (
         <>
@@ -33,22 +36,10 @@ export default function Layout() {
                         </Text>
                     </Box>
 
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
-                    <MainCard product={productInfo} onOpen={onOpen} />
+                    <MainCard product={productInfo} />
+                    <MainCard product={productInfo2} />
                 </Box>
             </Center>
-
-            <MainDrawer isOpen={isOpen} onClose={onClose} children={
-                <ProductDrawer product={productInfo} />
-            } />
         </>
     );
 }

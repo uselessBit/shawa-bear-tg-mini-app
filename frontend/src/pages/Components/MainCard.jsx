@@ -9,11 +9,16 @@ import {
     CardFooter,
     useColorModeValue,
     Box,
+    useDisclosure
 } from "@chakra-ui/react";
+import ProductDrawer from "./ProductDrawer"
+import MainDrawer from "./MainDrawer"
 
-export default function MainCard({ product, onOpen }) {
+export default function MainCard({ product }) {
     const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const formatPrice = (price) => {
         const [integer, decimal] = price.split(".");
@@ -92,6 +97,10 @@ export default function MainCard({ product, onOpen }) {
                     </Flex>
                 </CardFooter>
             </Card>
+
+            <MainDrawer isOpen={isOpen} onClose={onClose} children={
+                <ProductDrawer product={product} />
+            } />
         </>
     );
 }
