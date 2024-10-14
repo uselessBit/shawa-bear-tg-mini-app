@@ -11,8 +11,9 @@ import {
     Box,
     useDisclosure
 } from "@chakra-ui/react";
+import MainDrawer from './MainDrawer';
 
-export default function MyCard({ prices, sizes }) {
+export default function MainCard({ title, prices, sizes, image }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
@@ -23,9 +24,10 @@ export default function MyCard({ prices, sizes }) {
     };
 
     const productInfo = {
-        title: "Донер Чикен",
+        title,
         sizes,
-        prices
+        prices,
+        image
     };
 
     return (
@@ -42,7 +44,7 @@ export default function MyCard({ prices, sizes }) {
             >
                 <CardBody p={0}>
                     <Image
-                        src='shava1.png'
+                        src={image}
                         borderRadius={26}
                         pos="absolute"
                     />
@@ -62,7 +64,7 @@ export default function MyCard({ prices, sizes }) {
                             textAlign="center"
                             h="clamp(10px, 8vw, 66px)"
                         >
-                            Чикен
+                            {title}
                         </Text>
                     </Stack>
                 </CardBody>
@@ -84,6 +86,7 @@ export default function MyCard({ prices, sizes }) {
                                     <Text
                                         fontWeight="bold"
                                         fontSize="clamp(18px, 6vw, 42px)"
+                                        textAlign="center"
                                     >
                                         {integer}
                                         <Text as="span" fontSize="clamp(10px, 3vw, 22px)">
@@ -99,6 +102,8 @@ export default function MyCard({ prices, sizes }) {
                     </Flex>
                 </CardFooter>
             </Card>
+
+            <MainDrawer isOpen={isOpen} onClose={onClose} product={productInfo} />
         </>
     );
 }
