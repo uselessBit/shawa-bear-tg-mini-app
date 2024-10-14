@@ -11,21 +11,18 @@ import {
     Box,
     useDisclosure
 } from "@chakra-ui/react";
+import ProductDrawer from "./ProductDrawer"
+import MainDrawer from "./MainDrawer"
 
-export default function MyCard({ prices, sizes }) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export default function MainCard({ product }) {
     const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const formatPrice = (price) => {
         const [integer, decimal] = price.split(".");
         return { integer, decimal };
-    };
-
-    const productInfo = {
-        title: "Донер Чикен",
-        sizes,
-        prices
     };
 
     return (
@@ -42,7 +39,7 @@ export default function MyCard({ prices, sizes }) {
             >
                 <CardBody p={0}>
                     <Image
-                        src='shava1.png'
+                        src={product.image}
                         borderRadius={26}
                         pos="absolute"
                     />
@@ -62,13 +59,13 @@ export default function MyCard({ prices, sizes }) {
                             textAlign="center"
                             h="clamp(10px, 8vw, 66px)"
                         >
-                            Чикен
+                            {product.title}
                         </Text>
                     </Stack>
                 </CardBody>
                 <CardFooter p={3}>
                     <Flex w="full" justifyContent="space-around">
-                        {prices.map((price, index) => {
+                        {product.prices.map((price, index) => {
                             const { integer, decimal } = formatPrice(price);
 
                             return (
@@ -79,11 +76,12 @@ export default function MyCard({ prices, sizes }) {
                                         textAlign="center"
                                         h="clamp(10px, 1vw, 16px)"
                                     >
-                                        {sizes[index]}
+                                        {product.sizes[index]}
                                     </Text>
                                     <Text
                                         fontWeight="bold"
                                         fontSize="clamp(18px, 6vw, 42px)"
+                                        textAlign="center"
                                     >
                                         {integer}
                                         <Text as="span" fontSize="clamp(10px, 3vw, 22px)">
@@ -99,6 +97,10 @@ export default function MyCard({ prices, sizes }) {
                     </Flex>
                 </CardFooter>
             </Card>
+
+            <MainDrawer isOpen={isOpen} onClose={onClose} children={
+                <ProductDrawer product={product} />
+            } />
         </>
     );
 }
