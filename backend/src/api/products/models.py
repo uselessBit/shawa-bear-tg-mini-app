@@ -2,6 +2,7 @@ from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.database import Base
 
+
 class Product(Base):
     __tablename__ = "products"
     __table_args__ = {"extend_existing": True}
@@ -12,6 +13,30 @@ class Product(Base):
     image_url: Mapped[str] = mapped_column(nullable=True)
 
     price: Mapped[list["Price"]] = relationship(back_populates="product")
+    ingredients: Mapped[list["Ingredient"]] = relationship(
+        back_populates="products",
+        secondary="product_ingredient"
+    )
+
+
+class ProductIngredient(Base):
+    __tablename__ = "product_ingredient"
+
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"), primary_key=True)
+    ingredient_id: Mapped[int] = mapped_column(ForeignKey("ingredients.ingredient_id"), primary_key=True)
+
+
+class Ingredient(Base):
+    __tablename__ = "ingredients"
+
+    ingredient_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    image_url: Mapped[str] = mapped_column(nullable=True)
+
+    products: Mapped[list["Product"]] = relationship(
+        back_populates="ingredients",
+        secondary="product_ingredient"
+    )
 
 
 class Size(Base):
