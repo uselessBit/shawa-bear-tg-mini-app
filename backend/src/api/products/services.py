@@ -1,41 +1,39 @@
-from itertools import product
 from typing import Any, Sequence
 
 import sqlalchemy
-from fastapi.responses import JSONResponse
 from fastapi import UploadFile, HTTPException
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import JSONResponse
 from sqlalchemy.orm import selectinload
-from src.api.products.models import Product, Ingredient, ProductIngredient
+from src.api.products.models import Product, Ingredient, ProductIngredient, Size
 from src.api.products.schemas import ProductCreate, ProductUpdate, IngredientCreate, IngredientUpdate, ProductResponse, \
-    IngredientResponse
+    IngredientResponse, SizeCreate, SizeUpdate
 from src.api.products.utils import save_image, delete_image
 
 
 class ProductService:
 
     @staticmethod
-    async def create(product: ProductCreate, file: UploadFile | None, session: AsyncSession) -> JSONResponse:
+    async def create(product_data: ProductCreate, file: UploadFile | None, session: AsyncSession) -> JSONResponse:
         async with session.begin():
-            query = select(Ingredient).where(Ingredient.ingredient_id.in_(product.ingredient_ids))
+            query = select(Ingredient).where(Ingredient.ingredient_id.in_(product_data.ingredient_ids))
             result = await session.execute(query)
             ingredients = result.scalars().all()
 
-            if len(ingredients) != len(product.ingredient_ids):
-                missing_ids = set(product.ingredient_ids) - {ingredient.ingredient_id for ingredient in ingredients}
+            if len(ingredients) != len(product_data.ingredient_ids):
+                missing_ids = set(product_data.ingredient_ids) - {ingredient.ingredient_id for ingredient in ingredients}
                 raise HTTPException(status_code=404, detail=f"Ingredients not found with ids: {missing_ids}")
 
             image_url = await save_image(file) if file else None
 
             new_product = Product(
-                name=product.name, description=product.description, image_url=image_url
+                name=product_data.name, description=product_data.description, image_url=image_url
             )
             session.add(new_product)
 
 
-        for ingredient_id in product.ingredient_ids:
+        for ingredient_id in product_data.ingredient_ids:
             await ProductIngredientService.create(product_id=new_product.product_id,
                                                     ingredient_id=ingredient_id,
                                                     session=session)
@@ -171,8 +169,32 @@ class IngredientService:
 
 
 class SizeService:
-    ...
+    @staticmethod
+    async def create(size: SizeCreate, session: AsyncSession) -> JSONResponse:
+        async with session.begin():
+            new_size = Size(name=size.name, grams=size.grams)
+            session.add(new_size)
+        data = {"message": "Size created successfully"}
+        return JSONResponse(content=data, status_code=200)
 
+    @staticmethod
+    async def get(session: AsyncSession) -> Sequence[Size]:
+        query = select(Size)
+        results = await session.execute(query)
+        return results.scalars().all()
+
+    @staticmethod
+    async def update(size_id: int, size_data: SizeUpdate, session: AsyncSession) -> JSONResponse:
+        async with session.begin():
+            size = await session.get(Size, size_id)
+            if size:
+                if size_data.name:
+                    size.name = size_data.name
+                if size_data.grams:
+                    size.grams = size_data.grams
+                data = {"message": "Size updated successfully"}
+                return JSONResponse(content=data, status_code=200)
+            raise HTTPException(status_code=404, detail="Size not found")
 
 class PriceService:
     ...

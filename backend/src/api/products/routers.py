@@ -5,10 +5,10 @@ from fastapi import APIRouter, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import JSONResponse
 
-from src.api.products.models import Product, Ingredient
+from src.api.products.models import Product, Ingredient, Size
 from src.api.products.schemas import ProductCreate, ProductResponse, ProductUpdate, IngredientCreate, \
-    IngredientResponse, IngredientUpdate
-from src.api.products.services import ProductService, IngredientService
+    IngredientResponse, IngredientUpdate, SizeCreate, SizeResponse, SizeUpdate
+from src.api.products.services import ProductService, IngredientService, SizeService
 from src.database import get_session
 
 router = APIRouter(prefix="/products", tags=["Products"])
@@ -57,3 +57,14 @@ async def update_ingredient(ingredient_id: int,
                             session: AsyncSession = Depends(get_session)) -> JSONResponse:
     return await IngredientService.update(ingredient_id, ingredient, file, session)
 
+@router.post("/create_size")
+async def create_size(size: SizeCreate, session: AsyncSession = Depends(get_session)) -> JSONResponse:
+    return await SizeService.create(size, session)
+
+@router.get("/get_size", response_model=list[SizeResponse])
+async def get_size(session: AsyncSession = Depends(get_session)) -> Sequence[Size]:
+    return await SizeService.get(session)
+
+@router.patch("/update_size/{size_id}")
+async def update_size(size_id: int, size: SizeUpdate, session: AsyncSession = Depends(get_session)):
+    return await SizeService.update(size_id, size, session)

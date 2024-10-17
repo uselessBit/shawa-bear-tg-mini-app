@@ -69,9 +69,8 @@ class SizeResponse(BaseModel):
 
 
 class SizeUpdate(BaseModel):
-    size_id: int
-    name: str
-    grams: int
+    name: str = Field(None)
+    grams: int = Field(None)
 
 
 class PriceCreate(BaseModel):
