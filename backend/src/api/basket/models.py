@@ -8,7 +8,7 @@ class Basket(Base):
     basket_id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.user_id'))
 
-    user: Mapped["User"] = relationship(back_populates="basket")
+    user: Mapped["User"] = relationship(back_populates="baskets")
     basket_items: Mapped[list["BasketItem"]] = relationship(back_populates="basket")
 
 class BasketItem(Base):
@@ -16,8 +16,8 @@ class BasketItem(Base):
 
     basket_item_id: Mapped[int] = mapped_column(primary_key=True)
     basket_id: Mapped[int] = mapped_column(ForeignKey("baskets.basket_id"))
-    price_id: Mapped[int] = mapped_column(ForeignKey("users.user_id"))
+    price_id: Mapped[int] = mapped_column(ForeignKey("prices.price_id"))
     quantity: Mapped[int] = mapped_column(nullable=False, default=1)
 
-    price: Mapped["Price"] = relationship(back_populates="basket_item")
-    basket: Mapped["Basket"] = relationship(back_populates="basket_item")
+    price: Mapped["Price"] = relationship("Price", back_populates="basket_items")
+    basket: Mapped["Basket"] = relationship(back_populates="basket_items")

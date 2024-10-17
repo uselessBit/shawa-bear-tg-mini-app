@@ -17,9 +17,9 @@ async def send_welcome(message: Message):
         username=message.from_user.username,
         language_code=message.from_user.language_code,
     )
-    async for session in get_session():
-        user = await get_user_by_id(message.from_user.id, session)
-        if not user:
-            await create_user(user=user_create, db=session)
+    session = get_session()
+    user = await get_user_by_id(message.from_user.id, session)
+    if not user:
+        await create_user(user=user_create, db=session)
 
     await message.answer("Welcome!")
