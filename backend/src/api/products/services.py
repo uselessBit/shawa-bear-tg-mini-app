@@ -6,9 +6,9 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import JSONResponse
 from sqlalchemy.orm import selectinload
-from src.api.products.models import Product, Ingredient, ProductIngredient, Size
+from src.api.products.models import Product, Ingredient, ProductIngredient, Size, Price
 from src.api.products.schemas import ProductCreate, ProductUpdate, IngredientCreate, IngredientUpdate, ProductResponse, \
-    IngredientResponse, SizeCreate, SizeUpdate
+    IngredientResponse, SizeCreate, SizeUpdate, PriceCreate, PriceResponse, PriceUpdate, SizeResponse
 from src.api.products.utils import save_image, delete_image
 
 
@@ -197,4 +197,62 @@ class SizeService:
             raise HTTPException(status_code=404, detail="Size not found")
 
 class PriceService:
-    ...
+    @staticmethod
+    async def create(price_data: PriceCreate, session: AsyncSession) -> JSONResponse:
+        async with session.begin():
+            query = select(Product).where(Product.product_id == price_data.product_id)
+            result = await session.execute(query)
+            product = result.scalar_one_or_none()
+            if not product:
+                HTTPException(status_code=404, detail=f"Product with id {price_data.product_id} not found")
+
+            query = select(Size).where(Size.size_id == price_data.size_id)
+            result = await session.execute(query)
+            size = result.scalar_one_or_none()
+            if not size:
+                HTTPException(status_code=404, detail=f"Size with id {price_data.size_id} not found")
+
+            price = Price(size_id=price_data.size_id, product_id=price_data.product_id, price=price_data.price)
+            session.add(price)
+        data = {"message": "Price created successfully"}
+        return JSONResponse(content=data, status_code=200)
+
+
+
+    @staticmethod
+    async def get(session: AsyncSession) -> list[PriceResponse]:
+        query = select(Price).options(selectinload(Price.product).selectinload(Product.ingredients), selectinload(Price.size))
+        result = await session.execute(query)
+        prices = result.scalars().all()
+
+        # b = [IngredientResponse.model_validate(ingredient, from_attributes=True) for ingredient in prices[0].product.ingredients]
+        price_responses = []
+        for price in prices:
+            price_response = PriceResponse(
+                price_id=price.price_id,
+                size=SizeResponse(
+                    size_id=price.size.size_id,
+                    name=price.size.name,
+                    grams=price.size.grams
+                ),
+                products=ProductResponse(
+                    product_id=price.product.product_id,
+                    name=price.product.name,
+                    description=price.product.description,
+                    image_url=price.product.image_url,
+                    ingredient_ids=[IngredientResponse(
+                        ingredient_id=ingredient.ingredient_id,
+                        name=ingredient.name,
+                        image_url=ingredient.image_url
+                    ) for ingredient in price.product.ingredients]
+                ),
+                price=price.price
+            )
+            price_responses.append(price_response)
+
+        return price_responses
+
+
+    @staticmethod
+    async def update(price_id: int, price_data: PriceUpdate, session: AsyncSession) -> JSONResponse:
+        ...

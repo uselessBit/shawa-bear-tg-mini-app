@@ -5,10 +5,10 @@ from fastapi import APIRouter, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import JSONResponse
 
-from src.api.products.models import Product, Ingredient, Size
+from src.api.products.models import Product, Ingredient, Size, Price
 from src.api.products.schemas import ProductCreate, ProductResponse, ProductUpdate, IngredientCreate, \
-    IngredientResponse, IngredientUpdate, SizeCreate, SizeResponse, SizeUpdate
-from src.api.products.services import ProductService, IngredientService, SizeService
+    IngredientResponse, IngredientUpdate, SizeCreate, SizeResponse, SizeUpdate, PriceCreate, PriceResponse, PriceUpdate
+from src.api.products.services import ProductService, IngredientService, SizeService, PriceService
 from src.database import get_session
 
 router = APIRouter(prefix="/products", tags=["Products"])
@@ -68,3 +68,15 @@ async def get_size(session: AsyncSession = Depends(get_session)) -> Sequence[Siz
 @router.patch("/update_size/{size_id}")
 async def update_size(size_id: int, size: SizeUpdate, session: AsyncSession = Depends(get_session)):
     return await SizeService.update(size_id, size, session)
+
+@router.post("/create_price")
+async def create_price(price: PriceCreate, session: AsyncSession = Depends(get_session)) -> JSONResponse:
+    return await PriceService.create(price, session)
+
+@router.get("/get_price")
+async def get_price(session: AsyncSession = Depends(get_session)) -> list[PriceResponse]:
+    return await PriceService.get(session)
+
+@router.patch("/update_price/{price_id}")
+async def update_price(price_id: int, price: PriceUpdate, session: AsyncSession = Depends(get_session)) -> JSONResponse:
+    return await PriceService.update(price_id, price, session)

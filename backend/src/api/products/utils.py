@@ -6,7 +6,7 @@ import aiofiles
 from fastapi import UploadFile
 
 
-async def save_image(file: UploadFile, directory: str = "../../../../frontend/media") -> str:
+async def save_image(file: UploadFile, directory: str = "../media") -> str:
     filename = f"{uuid.uuid4()}{Path(file.filename).suffix}"
 
     base_dir = Path(__file__).parent

@@ -81,9 +81,9 @@ class PriceCreate(BaseModel):
 
 class PriceResponse(BaseModel):
     price_id: int
-    size_id: int
-    product_id: int
+    size: SizeResponse
     price: float
+    products: ProductResponse
 
 
 class PriceUpdate(BaseModel):

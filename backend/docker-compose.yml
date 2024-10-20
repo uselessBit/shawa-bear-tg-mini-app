@@ -1,0 +1,33 @@
+version: "3.11"
+
+services:
+  db:
+    image: postgres:15
+    container_name: db_app
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    command: -p 5440
+    expose:
+      - 5440
+    env_file:
+      - .env-production
+
+
+  app:
+    build:
+      context: .
+    env_file:
+      - .env-production
+    container_name: shava-app
+    ports:
+      - 443:443
+    volumes:
+      - media:/media
+    command: sh entrypoint.sh
+    depends_on:
+      - db
+
+volumes:
+  media:
