@@ -16,6 +16,7 @@ import MainDrawer from "./MainDrawer"
 
 export default function MainCard({ product }) {
     const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
+    const textClr = useColorModeValue("textColor.100", "textColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,6 +37,7 @@ export default function MainCard({ product }) {
                 backgroundColor={boxClr} 
                 cursor="pointer"
                 onClick={onOpen} 
+                color={textClr}
             >
                 <CardBody p={0}>
                     <Image

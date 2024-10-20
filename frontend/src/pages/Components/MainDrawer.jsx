@@ -101,6 +101,7 @@ export default function MainDrawer({ isOpen, onClose, children }) {
                 borderTopRadius={26}
                 backgroundColor={boxClr}
                 h="calc(100% - 32px)"
+                color={textClr}
             >
                 <Center>
                     <Box

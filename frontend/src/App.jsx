@@ -27,13 +27,59 @@ const theme = extendTheme({
         accentColor: {
             100: "#FFCF0D",
             900: "#FFCF0D",
-        }
+        },
     },
     shadows: {
         light: "5px 5px 10px rgba(0, 0, 0, 0.03), -5px -5px 10px rgba(255, 255, 255, 1)",
         dark: "5px 5px 10px rgba(0, 0, 0, 0.3), -5px -5px 10px rgba(26, 26, 26, 1)",
         selectLight: "0px 5px 10px rgba(0, 0, 0, 0.05)",
         selectDark: "0xp 5px 10px rgba(0, 0, 0, 0.05)",
+        botContainerLight: "0px -4px 20px rgba(0, 0, 0, 0.05)",
+        buttonLight: "0px 2px 20px rgba(255, 207, 13, 0.7)",
+    },
+    components: {
+        Button: {
+            variants: {
+                "main-button": {
+                    bg: "#FFCF0D",
+                    color: "#252525",
+                    flex: 1,
+                    borderRadius: 16,
+                    h: 14,
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    shadow: "buttonLight",
+                    fontFamily: "Montserrat",
+                },
+            },
+        },
+        Container: {
+            variants: {
+                "bot-container": {
+                    bg: "boxColor.100",
+                    w: "full",
+                    maxW: "container.md",
+                    px: 8,
+                    py: 4,
+                    shadow: "botContainerLight",
+                    zIndex: 10,
+                    pos: "fixed",
+                    bottom: 0,
+                    borderTopRadius: 26,
+                },
+            },
+        },
+    },
+    styles: {
+        global: {
+            "*": {
+                "-webkit-tap-highlight-color": "transparent",
+            },
+            "*:focus": {
+                outline: "none",
+                boxShadow: "none",
+            },
+        },
     },
 });
 
@@ -42,7 +88,12 @@ export default function App() {
 
     return (
         <ChakraProvider theme={theme}>
-            <Box bg={bgColor} minHeight="100vh" w={"100%"} fontFamily="Montserrat">
+            <Box
+                bg={bgColor}
+                minHeight="100vh"
+                w={"100%"}
+                fontFamily="Montserrat"
+            >
                 <Router>
                     <Routes>
                         <Route path="/" element={<Layout />}>
