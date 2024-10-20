@@ -255,4 +255,11 @@ class PriceService:
 
     @staticmethod
     async def update(price_id: int, price_data: PriceUpdate, session: AsyncSession) -> JSONResponse:
-        ...
+        async with session.begin():
+            price = await session.get(Price, price_id)
+            if price:
+                if price_data.price:
+                    price.price = price_data.price
+                data = {"message": "Price updated successfully"}
+                return JSONResponse(content=data, status_code=200)
+            raise HTTPException(status_code=404, detail="Price not found")

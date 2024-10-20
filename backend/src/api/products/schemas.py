@@ -87,6 +87,4 @@ class PriceResponse(BaseModel):
 
 
 class PriceUpdate(BaseModel):
-    size_id: int
-    product_id: int
     price: float
