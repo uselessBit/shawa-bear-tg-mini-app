@@ -4,6 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from src.api.products.routers import router as products_router
 from src.api.users.routers import router as users_router
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -19,6 +20,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/media", StaticFiles(directory="/media"), name="media")
 
 app.include_router(users_router)
 app.include_router(products_router)

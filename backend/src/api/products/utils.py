@@ -6,7 +6,7 @@ import aiofiles
 from fastapi import UploadFile
 
 
-async def save_image(file: UploadFile, directory: str = "../../../../frontend/media") -> str:
+async def save_image(file: UploadFile, directory: str | None = "/media") -> str:
     filename = f"{uuid.uuid4()}{Path(file.filename).suffix}"
 
     base_dir = Path(__file__).parent
@@ -25,7 +25,7 @@ async def save_image(file: UploadFile, directory: str = "../../../../frontend/me
 
     return filename
 
-async def delete_image(filename: str, directory: str = "../../../../frontend/media") -> None:
+async def delete_image(filename: str, directory: str | None = "/media") -> None:
     base_dir = Path(__file__).parent
     abs_directory = base_dir / directory
     file_path = abs_directory / filename

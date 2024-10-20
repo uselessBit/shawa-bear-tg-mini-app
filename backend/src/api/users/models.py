@@ -1,7 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column
-
-from src.db import Base
-
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from src.database import Base
 
 class User(Base):
     __tablename__ = "users"
@@ -12,3 +10,5 @@ class User(Base):
     last_name: Mapped[str] = mapped_column()
     username: Mapped[str] = mapped_column()
     language_code: Mapped[str] = mapped_column()
+
+    baskets: Mapped[list["Basket"]] = relationship(back_populates="user")

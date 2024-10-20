@@ -31,9 +31,10 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from src.db import Base
-from src.api.users.models import User
-from src.api.products.models import Product
+from src.database import Base
+from src.api.users.models import *
+from src.api.products.models import *
+from src.api.basket.models import *
 
 target_metadata = Base.metadata
 
