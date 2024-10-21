@@ -3,6 +3,7 @@ import {
     extendTheme,
     Box,
     useColorModeValue,
+    transition,
 } from "@chakra-ui/react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout.jsx";
@@ -50,6 +51,10 @@ const theme = extendTheme({
                     fontWeight: "bold",
                     shadow: "buttonLight",
                     fontFamily: "Montserrat",
+                    _active: {
+                        outline: "none",
+                        boxShadow: "none",
+                    },
                 },
             },
         },
@@ -73,7 +78,7 @@ const theme = extendTheme({
     styles: {
         global: {
             "*": {
-                "-webkit-tap-highlight-color": "transparent",
+                WebkitTapHighlightColor: "transparent",
             },
             "*:focus": {
                 outline: "none",

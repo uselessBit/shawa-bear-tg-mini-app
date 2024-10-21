@@ -7,9 +7,12 @@ import {
     Button,
     Container,
     Flex,
+    useDisclosure,
 } from "@chakra-ui/react";
 import Header from "./Components/Header";
 import MainCard from "./Components/MainCard";
+import MainDrawer from "./Components/MainDrawer";
+import BasketDrawer from "./Components/BasketDrawer";
 
 export default function Layout() {
     const textClr = useColorModeValue("textColor.100", "textColor.900");
@@ -17,6 +20,8 @@ export default function Layout() {
     const sizes = ["300г", "400г", "500г"];
     const title = "Чикен";
     const image = "shava1.png";
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const productInfo = {
         title,
@@ -46,7 +51,8 @@ export default function Layout() {
                         column-count: 2;
                     `}
                     gap={6}
-                    my={28}
+                    mt={28}
+                    mb="105px"
                 >
                     <Box mb={6}>
                         <Text
@@ -71,10 +77,18 @@ export default function Layout() {
 
                 <Container variant="bot-container">
                     <Flex>
-                        <Button variant="main-button">Корзина</Button>
+                        <Button variant="main-button" onClick={onOpen}>
+                            Корзина
+                        </Button>
                     </Flex>
                 </Container>
             </Center>
+
+            <MainDrawer
+                isOpen={isOpen}
+                onClose={onClose}
+                children={<BasketDrawer />}
+            />
         </>
     );
 }
