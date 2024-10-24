@@ -180,7 +180,7 @@ export default function ProductDrawer({ product }) {
                         >
                             -
                         </Button>
-                        <Text fontSize={24} fontWeight="bold">
+                        <Text fontSize={24} fontWeight="bold" width={6} textAlign="center">
                             {amount}
                         </Text>
                         <Button
