@@ -2,20 +2,18 @@ import React, { useState } from "react";
 import {
     Flex,
     Text,
+    Box,
     useColorModeValue,
     Center,
     Image,
     Container,
     Button,
-    useDisclosure,
 } from "@chakra-ui/react";
-import ConfirnOrderDrawer from "./ConfirnOrderDrawer"
-import MainDrawer from "./MainDrawer"
 
-export default function BaskettDrawer() {
+export default function ConfirnOrderDrawer() {
+    const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
-
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const bgColor = useColorModeValue("bgColor.100", "bgColor.900");
 
     let [amount, setAmount] = useState(1);
 
@@ -154,14 +152,10 @@ export default function BaskettDrawer() {
                             </Text>
                         </Text>
 
-                        <Button variant="main-button" onClick={onOpen}>Заказать</Button>
+                        <Button variant="main-button">Заказать</Button>
                     </Flex>
                 </Container>
             </Center>
-
-            <MainDrawer isOpen={isOpen} onClose={onClose} children={
-                <ConfirnOrderDrawer />
-            } />
         </>
     );
 }
