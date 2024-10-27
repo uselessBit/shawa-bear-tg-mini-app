@@ -12,7 +12,7 @@ import {
 import ConfirnOrderDrawer from "./ConfirnOrderDrawer"
 import MainDrawer from "./MainDrawer"
 
-export default function BaskettDrawer() {
+export default function BaskettDrawer({ onDrawerClose }) {
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
 
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,7 +49,7 @@ export default function BaskettDrawer() {
     const { integer, decimal } = formatPrice(selectedPrice);
 
     const basket = (parseFloat(selectedPrice) * amount).toString();
-    const [ iBasket, dBasket ] = basket.split(".");
+    const [iBasket, dBasket] = basket.split(".");
 
     return (
         <>
@@ -102,7 +102,7 @@ export default function BaskettDrawer() {
                                     </Text>
                                     <Text
                                         opacity="0.5"
-                                        fontSize="clamp(10px, 4vw, 46px)"
+                                        fontSize="clamp(10px, 4vw, 36px)"
                                         height="clamp(20px, 9vw, 50px)"
                                         textAlign="center"
                                         fontWeight="normal"
@@ -141,12 +141,13 @@ export default function BaskettDrawer() {
                     <Flex gap={8} alignItems="center">
                         <Text
                             fontWeight="extrabold"
-                            fontSize="clamp(18px, 12vw, 82px)"
+                            fontSize="clamp(18px, 12vw, 62px)"
+                            lineHeight="clamp(18px, 10vw, 42px)"
                             textAlign="center"
                             fontFamily="Montserrat"
                         >
                             {iBasket}
-                            <Text as="span" fontSize="clamp(10px, 7vw, 62px)">
+                            <Text as="span" fontSize="clamp(10px, 7vw, 32px)">
                                 {dBasket !== undefined ? "." + dBasket : ""}
                                 <Text as="span" color={accentColor}>
                                     р
@@ -154,14 +155,10 @@ export default function BaskettDrawer() {
                             </Text>
                         </Text>
 
-                        <Button variant="main-button" onClick={onOpen}>Заказать</Button>
+                        <Button variant="main-button" onClick={() => { onOpen(); onDrawerClose(); }}>Заказать</Button>
                     </Flex>
                 </Container>
             </Center>
-
-            <MainDrawer isOpen={isOpen} onClose={onClose} children={
-                <ConfirnOrderDrawer />
-            } />
         </>
     );
 }

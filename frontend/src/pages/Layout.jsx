@@ -13,15 +13,23 @@ import Header from "./Components/Header";
 import MainCard from "./Components/MainCard";
 import MainDrawer from "./Components/MainDrawer";
 import BasketDrawer from "./Components/BasketDrawer";
+import ConfirnOrderDrawer from "./Components/ConfirnOrderDrawer";
 
 export default function Layout() {
     const textClr = useColorModeValue("textColor.100", "textColor.900");
+
     const prices = ["6.5", "8.5", "10.5"];
     const sizes = ["300г", "400г", "500г"];
     const title = "Чикен";
     const image = "shava1.png";
 
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isBasketOpen, onOpen: onBasketOpen, onClose: onBasketClose } = useDisclosure();
+    const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure();
+
+    const handleOrderClick = () => {
+        onBasketClose(); 
+        onConfirmOpen(); 
+    };
 
     const productInfo = {
         title,
@@ -41,7 +49,6 @@ export default function Layout() {
         <>
             <Center>
                 <Header />
-
                 <Box
                     w="full"
                     maxW="container.md"
@@ -65,30 +72,35 @@ export default function Layout() {
                     </Box>
 
                     <MainCard product={productInfo} />
+                    <MainCard product={productInfo2} />
                     <MainCard product={productInfo} />
+                    <MainCard product={productInfo2} />
                     <MainCard product={productInfo} />
+                    <MainCard product={productInfo2} />
                     <MainCard product={productInfo} />
+                    <MainCard product={productInfo2} />
                     <MainCard product={productInfo} />
-                    <MainCard product={productInfo} />
-                    <MainCard product={productInfo} />
+                    <MainCard product={productInfo2} />
                     <MainCard product={productInfo} />
                     <MainCard product={productInfo2} />
                 </Box>
 
                 <Container variant="bot-container">
                     <Flex>
-                        <Button variant="main-button" onClick={onOpen}>
+                        <Button variant="main-button" onClick={onBasketOpen}>
                             Корзина
                         </Button>
                     </Flex>
                 </Container>
             </Center>
 
-            <MainDrawer
-                isOpen={isOpen}
-                onClose={onClose}
-                children={<BasketDrawer />}
-            />
+            <MainDrawer isOpen={isBasketOpen} onClose={onBasketClose}>
+                <BasketDrawer onDrawerClose={handleOrderClick} />
+            </MainDrawer>
+
+            <MainDrawer isOpen={isConfirmOpen} onClose={onConfirmClose}>
+                <ConfirnOrderDrawer />
+            </MainDrawer>
         </>
     );
 }
