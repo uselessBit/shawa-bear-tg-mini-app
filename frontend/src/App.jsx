@@ -1,10 +1,9 @@
 import {
-    ChakraProvider,
     extendTheme,
     Box,
     useColorModeValue,
-    transition,
 } from "@chakra-ui/react";
+import { Provider } from "@/components/ui/provider"
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout.jsx";
 import Menu from "./pages/Menu.jsx";
@@ -92,7 +91,7 @@ export default function App() {
     const bgColor = useColorModeValue("bgColor.100", "bgColor.900");
 
     return (
-        <ChakraProvider theme={theme}>
+        <Provider theme={theme}>
             <Box
                 bg={bgColor}
                 minHeight="100vh"
@@ -109,6 +108,6 @@ export default function App() {
                     </Routes>
                 </Router>
             </Box>
-        </ChakraProvider>
+        </Provider>
     );
 }

@@ -8,7 +8,16 @@ import {
     Image,
     Container,
     Button,
+    createListCollection,
 } from "@chakra-ui/react";
+import {
+    SelectContent,
+    SelectItem,
+    SelectLabel,
+    SelectRoot,
+    SelectTrigger,
+    SelectValueText,
+} from "@/components/ui/select"
 
 export default function ConfirnOrderDrawer() {
     const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
@@ -47,7 +56,16 @@ export default function ConfirnOrderDrawer() {
     const { integer, decimal } = formatPrice(selectedPrice);
 
     const basket = (parseFloat(selectedPrice) * amount).toString();
-    const [ iBasket, dBasket ] = basket.split(".");
+    const [iBasket, dBasket] = basket.split(".");
+
+    const frameworks = createListCollection({
+        items: [
+            { label: "React.js", value: "react" },
+            { label: "Vue.js", value: "vue" },
+            { label: "Angular", value: "angular" },
+            { label: "Svelte", value: "svelte" },
+        ],
+    })
 
     return (
         <>
@@ -68,7 +86,19 @@ export default function ConfirnOrderDrawer() {
                         mb={6}
                     >
                         Самовывоз
-                        
+                        <SelectRoot collection={frameworks} size="sm" width="320px">
+                            <SelectLabel>Select framework</SelectLabel>
+                            <SelectTrigger>
+                                <SelectValueText placeholder="Select movie" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {frameworks.items.map((movie) => (
+                                    <SelectItem item={movie} key={movie.value}>
+                                        {movie.label}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </SelectRoot>
                     </Text>
                 </Flex>
 
