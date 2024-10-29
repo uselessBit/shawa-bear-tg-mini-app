@@ -1,47 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Flex,
     Text,
-    Box,
     useColorModeValue,
     Center,
-    Image,
     Container,
     Button,
-    createListCollection,
 } from "@chakra-ui/react";
-import {
-    SelectContent,
-    SelectItem,
-    SelectLabel,
-    SelectRoot,
-    SelectTrigger,
-    SelectValueText,
-} from "@/components/ui/select"
 
 export default function ConfirnOrderDrawer() {
-    const boxClr = useColorModeValue("boxColor.100", "boxColor.900");
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
-    const bgColor = useColorModeValue("bgColor.100", "bgColor.900");
-
-    let [amount, setAmount] = useState(1);
-
-    const formatPrice = (price) => {
-        const [integer, decimal] = price.split(".");
-        return { integer, decimal };
-    };
-
-    const handleAddAmount = () => {
-        setAmount((prevAmount) =>
-            prevAmount < 9 ? prevAmount + 1 : prevAmount
-        );
-    };
-
-    const handleSubAmount = () => {
-        setAmount((prevAmount) =>
-            prevAmount > 0 ? prevAmount - 1 : prevAmount
-        );
-    };
 
     const productInfo = {
         title: "Чикен",
@@ -51,22 +19,10 @@ export default function ConfirnOrderDrawer() {
         selectedIndex: 1,
     };
 
-    const selectedSize = productInfo.sizes[productInfo.selectedIndex];
     const selectedPrice = productInfo.prices[productInfo.selectedIndex];
-    const { integer, decimal } = formatPrice(selectedPrice);
 
     const basket = (parseFloat(selectedPrice) * amount).toString();
     const [iBasket, dBasket] = basket.split(".");
-
-    const frameworks = createListCollection({
-        items: [
-            { label: "React.js", value: "react" },
-            { label: "Vue.js", value: "vue" },
-            { label: "Angular", value: "angular" },
-            { label: "Svelte", value: "svelte" },
-        ],
-    })
-
     return (
         <>
             <Center>
@@ -86,19 +42,6 @@ export default function ConfirnOrderDrawer() {
                         mb={6}
                     >
                         Самовывоз
-                        <SelectRoot collection={frameworks} size="sm" width="320px">
-                            <SelectLabel>Select framework</SelectLabel>
-                            <SelectTrigger>
-                                <SelectValueText placeholder="Select movie" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {frameworks.items.map((movie) => (
-                                    <SelectItem item={movie} key={movie.value}>
-                                        {movie.label}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </SelectRoot>
                     </Text>
                 </Flex>
 

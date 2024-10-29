@@ -7,15 +7,10 @@ import {
     Image,
     Container,
     Button,
-    useDisclosure,
 } from "@chakra-ui/react";
-import ConfirnOrderDrawer from "./ConfirnOrderDrawer"
-import MainDrawer from "./MainDrawer"
 
 export default function BaskettDrawer({ onDrawerClose }) {
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
-
-    const { isOpen, onOpen, onClose } = useDisclosure();
 
     let [amount, setAmount] = useState(1);
 
