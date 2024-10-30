@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Flex,
     Text,
@@ -6,23 +6,23 @@ import {
     Center,
     Container,
     Button,
+    InputGroup,
+    InputLeftAddon,
+    Input,
+    Select,
+    Textarea,
 } from "@chakra-ui/react";
 
 export default function ConfirnOrderDrawer() {
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
+    const [isSelectOpen, setIsSelectOpen] = useState(false);
 
-    const productInfo = {
-        title: "Чикен",
-        sizes: ["300г", "400г", "500г"],
-        prices: ["7.5", "9.5", "11.5"],
-        image: "shava1.png",
-        selectedIndex: 1,
-    };
+    const handleOpenSelect = () => setIsSelectOpen(true);
+    const handleCloseSelect = () => setIsSelectOpen(false);
 
-    const selectedPrice = productInfo.prices[productInfo.selectedIndex];
-
-    const basket = (parseFloat(selectedPrice) * amount).toString();
+    const basket = "9.5";
     const [iBasket, dBasket] = basket.split(".");
+
     return (
         <>
             <Center>
@@ -43,6 +43,51 @@ export default function ConfirnOrderDrawer() {
                     >
                         Самовывоз
                     </Text>
+                    <Flex direction="column" gap={4} w="full">
+                        <Select
+                            placeholder={isSelectOpen ? '' : 'Выберите адрес'}
+                            w="full"
+                            onFocus={handleOpenSelect}
+                            onBlur={handleCloseSelect}
+                        >
+                            <option value='option1'>Минск, Крутая улица, 13</option>
+                            <option value='option2'>Минск, Крутая улица, 14</option>
+                            <option value='option3'>Минск, Крутая улица, 15</option>
+                        </Select>
+
+                        <Input placeholder='Имя' />
+
+                        <InputGroup>
+                            <InputLeftAddon>+375</InputLeftAddon>
+                            <Input type='tel' placeholder='Номер телефона' />
+                        </InputGroup>
+
+                        <Select
+                            placeholder={isSelectOpen ? '' : 'Через сколько заберёте'}
+                            w="full"
+                            onFocus={handleOpenSelect}
+                            onBlur={handleCloseSelect}
+                        >
+                            <option value='option1'>5 мин</option>
+                            <option value='option2'>10 мин</option>
+                            <option value='option3'>15 мин</option>
+                            <option value='option3'>20 мин</option>
+                            <option value='option3'>25 мин</option>
+                            <option value='option3'>30 мин</option>
+                        </Select>
+
+                        <Select
+                            placeholder={isSelectOpen ? 'Способ оплаты' : ''}
+                            w="full"
+                            onClick={handleOpenSelect}
+                            onBlur={handleCloseSelect}
+                        >
+                            <option value='option1'>Картой</option>
+                            <option value='option2'>Наличными</option>
+                        </Select>
+
+                        <Textarea placeholder='Комментарий к заказу' resize="none" />
+                    </Flex>
                 </Flex>
 
                 <Container variant="bot-container">
