@@ -89,7 +89,7 @@ export default function BaskettDrawer({ onDrawerClose }) {
                                     textAlign="center"
                                 >
                                     {integer}
-                                    <Text as="span" fontSize="clamp(10px, 7vw, 62px)">
+                                    <Text as="span" fontSize="clamp(10px, 7vw, 42px)">
                                         .{decimal}
                                         <Text as="span" color={accentColor}>
                                             р
@@ -98,8 +98,8 @@ export default function BaskettDrawer({ onDrawerClose }) {
                                 </Text>
                                 <Text
                                     opacity="0.5"
-                                    fontSize="clamp(10px, 4vw, 36px)"
-                                    height="clamp(20px, 9vw, 50px)"
+                                    fontSize="clamp(10px, 4vw, 32px)"
+                                    height="clamp(20px, 9vw, 72px)"
                                     textAlign="center"
                                     fontWeight="normal"
                                 >
