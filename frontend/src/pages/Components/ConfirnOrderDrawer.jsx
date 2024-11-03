@@ -15,10 +15,6 @@ import {
 
 export default function ConfirnOrderDrawer() {
     const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
-    const [isSelectOpen, setIsSelectOpen] = useState(false);
-
-    const handleOpenSelect = () => setIsSelectOpen(true);
-    const handleCloseSelect = () => setIsSelectOpen(false);
 
     const basket = "9.5";
     const [iBasket, dBasket] = basket.split(".");
@@ -45,10 +41,8 @@ export default function ConfirnOrderDrawer() {
                     </Text>
                     <Flex direction="column" gap={4} w="full">
                         <Select
-                            placeholder={isSelectOpen ? '' : 'Выберите адрес'}
+                            placeholder='Выберите адрес'
                             w="full"
-                            onFocus={handleOpenSelect}
-                            onBlur={handleCloseSelect}
                         >
                             <option value='option1'>Минск, Крутая улица, 13</option>
                             <option value='option2'>Минск, Крутая улица, 14</option>
@@ -63,10 +57,8 @@ export default function ConfirnOrderDrawer() {
                         </InputGroup>
 
                         <Select
-                            placeholder={isSelectOpen ? '' : 'Через сколько заберёте'}
+                            placeholder='Через сколько заберёте'
                             w="full"
-                            onFocus={handleOpenSelect}
-                            onBlur={handleCloseSelect}
                         >
                             <option value='option1'>5 мин</option>
                             <option value='option2'>10 мин</option>
@@ -77,10 +69,8 @@ export default function ConfirnOrderDrawer() {
                         </Select>
 
                         <Select
-                            placeholder={isSelectOpen ? 'Способ оплаты' : ''}
+                            placeholder='Способ оплаты'
                             w="full"
-                            onClick={handleOpenSelect}
-                            onBlur={handleCloseSelect}
                         >
                             <option value='option1'>Картой</option>
                             <option value='option2'>Наличными</option>
