@@ -73,8 +73,20 @@ export default function MainDrawer({ isOpen, onClose, children }) {
             setTopOffset(32);
             setScrollAtTop(false);
             setTouchHandledOnce(false);
+        } else {
+            window.history.pushState(null, null, window.location.pathname);
+
+            const handlePopState = () => {
+                onClose(); 
+            };
+
+            window.addEventListener('popstate', handlePopState);
+
+            return () => {
+                window.removeEventListener('popstate', handlePopState);
+            };
         }
-    }, [isOpen]);
+    }, [isOpen, onClose]);
 
     return (
         <Drawer
@@ -101,6 +113,7 @@ export default function MainDrawer({ isOpen, onClose, children }) {
                 borderTopRadius={26}
                 backgroundColor={boxClr}
                 h="calc(100% - 32px)"
+                color={textClr}
             >
                 <Center>
                     <Box

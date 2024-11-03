@@ -1,23 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     Flex,
     Text,
-    IconButton,
-    useColorModeValue,
     Center,
     Image,
     Box,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem
 } from "@chakra-ui/react";
-import icons from "../../icons";
 
 export default function ProductDrawer() {
-    const textClr = useColorModeValue("textColor.100", "textColor.900");
-    const accentColor = useColorModeValue("accentColor.100", "accentColor.900");
-
     return (
         <>
             <Center>
@@ -39,24 +29,6 @@ export default function ProductDrawer() {
 
                     <Box position="relative">
                         <Image src="Profile.png" borderRadius={60} />
-
-                        <Menu>
-                            <MenuButton
-                                icon={icons.changePicture({ color: textClr })}
-                                backgroundColor={accentColor}
-                                borderRadius={32}
-                                position="absolute"
-                                right={8}
-                                top={8}
-                                w={16}
-                                h={16}
-                                _hover="none"
-                            >{icons.changePicture({ color: textClr })}</MenuButton>
-                            <MenuList>
-                                <MenuItem>Загрузить с устройства</MenuItem>
-                                <MenuItem>Сделать фото</MenuItem>
-                            </MenuList>
-                        </Menu>
                     </Box>
 
                     <Text
