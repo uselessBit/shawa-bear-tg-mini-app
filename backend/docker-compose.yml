@@ -4,6 +4,8 @@ services:
   db:
     image: postgres:15
     container_name: db_app
+    networks:
+      - my_network
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
@@ -26,8 +28,26 @@ services:
     volumes:
       - media:/media
     command: sh entrypoint.sh
+    networks:
+      - my_network
     depends_on:
       - db
 
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - my_network
+    depends_on:
+      - db
+    restart: always
+
+
 volumes:
   media:
+
+networks:
+  my_network:
