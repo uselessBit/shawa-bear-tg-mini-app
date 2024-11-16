@@ -25,6 +25,7 @@ async def save_image(file: UploadFile, directory: str | None = "/media") -> str:
 
     return filename
 
+
 async def delete_image(filename: str, directory: str | None = "/media") -> None:
     base_dir = Path(__file__).parent
     abs_directory = base_dir / directory
@@ -37,4 +38,3 @@ async def delete_image(filename: str, directory: str | None = "/media") -> None:
             print(f"An error occurred while deleting file {filename}: {e}")
     else:
         print(f"File {filename} does not exist.")
-

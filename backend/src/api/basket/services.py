@@ -10,7 +10,11 @@ from src.api.basket.schemas import BasketItemCreate, BasketResponse, BasketItemR
 class BasketService:
     @staticmethod
     async def get_user_basket(user_id: int, session: AsyncSession) -> BasketResponse:
-        query = select(Basket).where(user_id == Basket.user_id).options(joinedload(Basket.items))
+        query = (
+            select(Basket)
+            .where(user_id == Basket.user_id)
+            .options(joinedload(Basket.items))
+        )
         result = await session.execute(query)
         basket = result.unique().scalar_one_or_none()
         if not basket:

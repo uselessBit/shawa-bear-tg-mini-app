@@ -5,7 +5,13 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from src.api.main import app
-from src.config import TEST_DB_HOST, TEST_DB_NAME, TEST_DB_PASS, TEST_DB_PORT, TEST_DB_USER
+from src.config import (
+    TEST_DB_HOST,
+    TEST_DB_NAME,
+    TEST_DB_PASS,
+    TEST_DB_PORT,
+    TEST_DB_USER,
+)
 from src.database import Base, get_session
 
 TEST_DATABASE_URL = f"postgresql+asyncpg://{TEST_DB_USER}:{TEST_DB_PASS}@{TEST_DB_HOST}:{TEST_DB_PORT}/{TEST_DB_NAME}"
@@ -13,7 +19,9 @@ TEST_DATABASE_URL = f"postgresql+asyncpg://{TEST_DB_USER}:{TEST_DB_PASS}@{TEST_D
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=True)
 Base.metadata.bind = test_engine
 
-async_session = async_sessionmaker(test_engine, class_=AsyncSession, expire_on_commit=False)
+async_session = async_sessionmaker(
+    test_engine, class_=AsyncSession, expire_on_commit=False
+)
 
 
 async def override_get_session() -> AsyncGenerator[AsyncSession, None]:

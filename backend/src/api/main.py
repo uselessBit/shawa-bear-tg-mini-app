@@ -30,5 +30,9 @@ app.include_router(basket_router)
 
 if __name__ == "__main__":
     uvicorn.run(
-        "main:app", reload=True, port=8000, ssl_keyfile="../../localhost-key.pem", ssl_certfile="../../localhost.pem"
+        "main:app",
+        reload=True,
+        port=8000,
+        ssl_keyfile="../../localhost-key.pem",
+        ssl_certfile="../../localhost.pem",
     )
