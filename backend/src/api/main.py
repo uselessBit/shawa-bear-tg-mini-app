@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/media", StaticFiles(directory="src/api/media"), name="media")
+app.mount("/media", StaticFiles(directory="./media"), name="media")
 
 app.include_router(users_router)
 app.include_router(products_router)
