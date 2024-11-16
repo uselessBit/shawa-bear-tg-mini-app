@@ -10,5 +10,3 @@ class User(Base):
     last_name: Mapped[str] = mapped_column()
     username: Mapped[str] = mapped_column()
     language_code: Mapped[str] = mapped_column()
-
-    baskets: Mapped[list["Basket"]] = relationship(back_populates="user")

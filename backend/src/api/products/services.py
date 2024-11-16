@@ -128,7 +128,6 @@ class ProductIngredientService:
             session.add(new_product_ingredient)
 
 
-
 class IngredientService:
     @staticmethod
     async def create(ingredient: IngredientCreate, file: UploadFile | None, session: AsyncSession) -> JSONResponse:

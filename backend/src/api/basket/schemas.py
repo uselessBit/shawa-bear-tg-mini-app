@@ -1,18 +1,18 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
-class AddBasketItem(BaseModel):
-    user_id: int
-    product_id: str
-    quantity: str
+class BasketItemCreate(BaseModel):
+    price_id: int
+    quantity: int = Field(..., ge=1)
+
+
+class BasketItemResponse(BaseModel):
+    basket_item_id: int
+    price_id: int
+    quantity: int
 
 
 class BasketResponse(BaseModel):
     basket_id: int
     user_id: int
-    product_id: int
-    quantity: int
-    total_price: int
-
-    # class Config:
-    #     from_attributes = True
+    items: list[BasketItemResponse]

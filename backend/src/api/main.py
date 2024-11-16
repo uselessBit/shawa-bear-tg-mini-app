@@ -4,6 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from src.api.products.routers import router as products_router
 from src.api.users.routers import router as users_router
+from src.api.basket.routers import router as basket_router
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
@@ -25,6 +26,7 @@ app.mount("/media", StaticFiles(directory="./media"), name="media")
 
 app.include_router(users_router)
 app.include_router(products_router)
+app.include_router(basket_router)
 
 if __name__ == "__main__":
     uvicorn.run(

@@ -1,27 +1,65 @@
-from typing import Any
-
-from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from fastapi import HTTPException
+from sqlalchemy.orm import joinedload
 
-from src.api.basket.models import Basket
-from src.api.basket.schemas import AddBasketItem, BasketResponse
+from src.api.basket.models import Basket, BasketItem
+from src.api.basket.schemas import BasketItemCreate, BasketResponse, BasketItemResponse
 
 
-async def create(basket: AddBasketItem, db: AsyncSession) -> dict[str, Any]:
-    async with db.begin():
-        new_user = Basket(
+class BasketService:
+    @staticmethod
+    async def get_user_basket(user_id: int, session: AsyncSession) -> BasketResponse:
+        query = select(Basket).where(user_id == Basket.user_id).options(joinedload(Basket.items))
+        result = await session.execute(query)
+        basket = result.unique().scalar_one_or_none()
+        if not basket:
+            raise HTTPException(status_code=404, detail="Basket not found")
+
+        return BasketResponse(
+            basket_id=basket.basket_id,
             user_id=basket.user_id,
-            product_id=basket.product_id,
-            quantity=basket.quantity,
-            total_price=...
+            items=[
+                BasketItemResponse(
+                    basket_item_id=item.basket_item_id,
+                    price_id=item.price_id,
+                    quantity=item.quantity,
+                )
+                for item in basket.items
+            ],
         )
-        db.add(new_user)
-        return {"message": "User created successfully"}
 
+    @staticmethod
+    async def add_item(
+        user_id: int, item_data: BasketItemCreate, session: AsyncSession
+    ) -> None:
+        async with session.begin():
+            query = select(Basket).where(user_id == Basket.user_id)
+            result = await session.execute(query)
+            basket = result.scalar()
 
-async def get_by_user_id(user_id: int, db: AsyncSession) -> BasketResponse:
-    async with db.begin():
-        query = Select(Basket).where(user_id == User.user_id)
-        result = await db.execute(query)
-        user = result.scalar_one_or_none()
-    return user
+            if not basket:
+                basket = Basket(user_id=user_id)
+                session.add(basket)
+                await session.flush()
+
+            new_item = BasketItem(
+                basket_id=basket.basket_id,
+                price_id=item_data.price_id,
+                quantity=item_data.quantity,
+            )
+            session.add(new_item)
+
+    @staticmethod
+    async def remove_item(basket_item_id: int, session: AsyncSession) -> None:
+        async with session.begin():
+            query = select(BasketItem).where(
+                basket_item_id == BasketItem.basket_item_id
+            )
+            result = await session.execute(query)
+            item = result.scalar()
+
+            if not item:
+                raise HTTPException(status_code=404, detail="Basket item not found")
+
+            await session.delete(item)

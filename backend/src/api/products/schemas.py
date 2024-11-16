@@ -42,7 +42,7 @@ class ProductResponse(BaseModel):
     product_id: int
     name: str
     description: str
-    image_url: str
+    image_url: str | None
     ingredient_ids: list[IngredientResponse]
 
 
