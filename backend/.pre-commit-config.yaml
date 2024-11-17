@@ -1,0 +1,5 @@
+repos:
+  - repo: ssh://git@gitlab.tcsbank.ru:7999/crawlers/codestyle.git
+    rev: v3.4.0
+    hooks:
+      - id: cerebro-python-codestyle
