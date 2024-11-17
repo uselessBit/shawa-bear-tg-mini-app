@@ -1,4 +1,3 @@
-import os
 import uuid
 from pathlib import Path
 
@@ -33,7 +32,7 @@ async def delete_image(filename: str, directory: str | None = "/media") -> None:
 
     if file_path.exists() and file_path.is_file():
         try:
-            os.remove(file_path)
+            Path.unlink(file_path)
         except Exception as e:
             print(f"An error occurred while deleting file {filename}: {e}")
     else:

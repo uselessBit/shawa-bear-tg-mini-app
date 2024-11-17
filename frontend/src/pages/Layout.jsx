@@ -27,8 +27,8 @@ export default function Layout() {
     const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure();
 
     const handleOrderClick = () => {
-        onBasketClose(); 
-        onConfirmOpen(); 
+        onBasketClose();
+        onConfirmOpen();
     };
 
     const productInfo = {

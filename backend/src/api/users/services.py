@@ -24,7 +24,6 @@ class UserService:
     @staticmethod
     async def get_by_id(user_id: int, db: AsyncSession) -> UserResponse:
         async with db.begin():
-            query = Select(User).where(user_id == User.user_id)
+            query = Select(User).where(User.user_id == user_id)
             result = await db.execute(query)
-            user = result.scalar_one_or_none()
-        return user
+            return result.scalar_one_or_none()

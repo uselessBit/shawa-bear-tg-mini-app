@@ -1,9 +1,9 @@
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from schemas import UserCreate
 from database import get_session
-from service import get_user_by_id, create_user
+from schemas import UserCreate
+from service import create_user, get_user_by_id
 
 router = Router(name="message_handlers")
 

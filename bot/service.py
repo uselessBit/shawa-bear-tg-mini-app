@@ -1,10 +1,9 @@
 from typing import Any
 
-from sqlalchemy import Select
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from models import User
 from schemas import UserCreate, UserResponse
+from sqlalchemy import Select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 async def create_user(user: UserCreate, db: AsyncSession) -> dict[str, Any]:

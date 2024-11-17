@@ -24,38 +24,38 @@ export default function MainDrawer({ isOpen, onClose, children }) {
     const handleTouchStart = (e) => {
         if (drawerRef.current && contentRef.current) {
             const scrollTop = contentRef.current.scrollTop;
-    
+
             setScrollAtTop(scrollTop === 0);
-    
+
             if (scrollTop === 0 && !touchHandledOnce) {
                 startTouchY.current = e.touches[0].clientY;
                 startTime.current = Date.now();
-                setTouchHandledOnce(true); 
+                setTouchHandledOnce(true);
             }
         }
     };
-    
+
     const handleTouchMove = (e) => {
         if (scrollAtTop && touchHandledOnce) {
             const currentY = e.touches[0].clientY;
             const deltaY = currentY - startTouchY.current;
-    
+
             const newOffset = topOffset + deltaY;
             setTopOffset(Math.max(newOffset, 32));
-    
+
             startTouchY.current = currentY;
         } if (contentRef.current.scrollTop !== 0) {
             setScrollAtTop(false);
         }
     };
-    
+
     const handleTouchEnd = () => {
         if (scrollAtTop && touchHandledOnce) {
             const endTime = Date.now();
             const elapsedTime = endTime - startTime.current;
             const swipeDistance = topOffset - 32;
             const swipeVelocity = Math.abs(swipeDistance / elapsedTime);
-    
+
             if (swipeVelocity > 0.5 || topOffset > window.innerHeight / 3) {
                 onClose();
             } else {
@@ -64,10 +64,10 @@ export default function MainDrawer({ isOpen, onClose, children }) {
                 setTimeout(() => setAnimatingBack(false), 300);
             }
         }
-    
+
         setTouchHandledOnce(false);
     };
-    
+
     useEffect(() => {
         if (!isOpen) {
             setTopOffset(32);
@@ -77,7 +77,7 @@ export default function MainDrawer({ isOpen, onClose, children }) {
             window.history.pushState(null, null, window.location.pathname);
 
             const handlePopState = () => {
-                onClose(); 
+                onClose();
             };
 
             window.addEventListener('popstate', handlePopState);

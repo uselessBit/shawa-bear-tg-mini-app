@@ -28,15 +28,15 @@ export default function MainCard({ product }) {
 
     return (
         <>
-            <Card 
-                borderRadius={26} 
-                w="full" 
-                mb={6} 
-                css={`break-inside: avoid;`} 
-                boxShadow="light" 
-                backgroundColor={boxClr} 
+            <Card
+                borderRadius={26}
+                w="full"
+                mb={6}
+                css={`break-inside: avoid;`}
+                boxShadow="light"
+                backgroundColor={boxClr}
                 cursor="pointer"
-                onClick={onOpen} 
+                onClick={onOpen}
                 color={textClr}
             >
                 <CardBody p={0}>

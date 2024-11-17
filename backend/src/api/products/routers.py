@@ -1,30 +1,29 @@
 from collections.abc import Sequence
-from typing import Any
 
 from fastapi import APIRouter, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import JSONResponse
 
-from src.api.products.models import Product, Ingredient, Size, Price
+from src.api.products.models import Ingredient, Product, Size
 from src.api.products.schemas import (
-    ProductCreate,
-    ProductResponse,
-    ProductUpdate,
     IngredientCreate,
     IngredientResponse,
     IngredientUpdate,
-    SizeCreate,
-    SizeResponse,
-    SizeUpdate,
     PriceCreate,
     PriceResponse,
     PriceUpdate,
+    ProductCreate,
+    ProductResponse,
+    ProductUpdate,
+    SizeCreate,
+    SizeResponse,
+    SizeUpdate,
 )
 from src.api.products.services import (
-    ProductService,
     IngredientService,
-    SizeService,
     PriceService,
+    ProductService,
+    SizeService,
 )
 from src.database import get_session
 
@@ -48,9 +47,7 @@ async def get_products(
 
 
 @router.get("/get_product_by_name/{product_name}", response_model=ProductResponse)
-async def get_product_by_name(
-    product_name: str, session: AsyncSession = Depends(get_session)
-) -> Product:
+async def get_product_by_name(product_name: str, session: AsyncSession = Depends(get_session)) -> Product:
     return await ProductService.get_by_name(product_name, session)
 
 
@@ -91,9 +88,7 @@ async def update_ingredient(
 
 
 @router.post("/create_size")
-async def create_size(
-    size: SizeCreate, session: AsyncSession = Depends(get_session)
-) -> JSONResponse:
+async def create_size(size: SizeCreate, session: AsyncSession = Depends(get_session)) -> JSONResponse:
     return await SizeService.create(size, session)
 
 
@@ -103,16 +98,12 @@ async def get_size(session: AsyncSession = Depends(get_session)) -> Sequence[Siz
 
 
 @router.patch("/update_size/{size_id}")
-async def update_size(
-    size_id: int, size: SizeUpdate, session: AsyncSession = Depends(get_session)
-):
+async def update_size(size_id: int, size: SizeUpdate, session: AsyncSession = Depends(get_session)) -> JSONResponse:
     return await SizeService.update(size_id, size, session)
 
 
 @router.post("/create_price")
-async def create_price(
-    price: PriceCreate, session: AsyncSession = Depends(get_session)
-) -> JSONResponse:
+async def create_price(price: PriceCreate, session: AsyncSession = Depends(get_session)) -> JSONResponse:
     return await PriceService.create(price, session)
 
 
@@ -124,7 +115,5 @@ async def get_price(
 
 
 @router.patch("/update_price/{price_id}")
-async def update_price(
-    price_id: int, price: PriceUpdate, session: AsyncSession = Depends(get_session)
-) -> JSONResponse:
+async def update_price(price_id: int, price: PriceUpdate, session: AsyncSession = Depends(get_session)) -> JSONResponse:
     return await PriceService.update(price_id, price, session)

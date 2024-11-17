@@ -1,38 +1,35 @@
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
-import sqlalchemy
-from fastapi import UploadFile, HTTPException
-from sqlalchemy import select, delete
+from fastapi import HTTPException, UploadFile
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.responses import JSONResponse
 from sqlalchemy.orm import selectinload
-from src.api.products.models import Product, Ingredient, ProductIngredient, Size, Price
+from starlette.responses import JSONResponse
+
+from src.api.products.models import Ingredient, Price, Product, ProductIngredient, Size
 from src.api.products.schemas import (
-    ProductCreate,
-    ProductUpdate,
     IngredientCreate,
-    IngredientUpdate,
-    ProductResponse,
     IngredientResponse,
-    SizeCreate,
-    SizeUpdate,
+    IngredientUpdate,
     PriceCreate,
     PriceResponse,
     PriceUpdate,
+    ProductCreate,
+    ProductResponse,
+    ProductUpdate,
+    SizeCreate,
     SizeResponse,
+    SizeUpdate,
 )
-from src.api.products.utils import save_image, delete_image
+from src.api.products.utils import delete_image, save_image
 
 
 class ProductService:
     @staticmethod
-    async def create(
-        product_data: ProductCreate, file: UploadFile | None, session: AsyncSession
-    ) -> JSONResponse:
+    async def create(product_data: ProductCreate, file: UploadFile | None, session: AsyncSession) -> JSONResponse:
         async with session.begin():
-            query = select(Ingredient).where(
-                Ingredient.ingredient_id.in_(product_data.ingredient_ids)
-            )
+            query = select(Ingredient).where(Ingredient.ingredient_id.in_(product_data.ingredient_ids))
             result = await session.execute(query)
             ingredients = result.scalars().all()
 
@@ -137,37 +134,25 @@ class ProductIngredientService:
     @staticmethod
     async def create(product_id: int, ingredient_id: int, session: AsyncSession) -> Any:
         async with session.begin():
-            new_product_ingredient = ProductIngredient(
-                product_id=product_id, ingredient_id=ingredient_id
-            )
+            new_product_ingredient = ProductIngredient(product_id=product_id, ingredient_id=ingredient_id)
             session.add(new_product_ingredient)
 
     @staticmethod
-    async def update(
-        product_id: int, product_data: ProductUpdate, session: AsyncSession
-    ) -> Any:
-        query = delete(ProductIngredient).where(
-            ProductIngredient.product_id == product_id
-        )
+    async def update(product_id: int, product_data: ProductUpdate, session: AsyncSession) -> Any:
+        query = delete(ProductIngredient).where(ProductIngredient.product_id == product_id)
         result = await session.execute(query)
 
         if result.rowcount == 0:
-            raise HTTPException(
-                status_code=404, detail="No products found with the given product_id"
-            )
+            raise HTTPException(status_code=404, detail="No products found with the given product_id")
 
         for ingredient_id in product_data.ingredient_ids:
-            new_product_ingredient = ProductIngredient(
-                product_id=product_id, ingredient_id=ingredient_id
-            )
+            new_product_ingredient = ProductIngredient(product_id=product_id, ingredient_id=ingredient_id)
             session.add(new_product_ingredient)
 
 
 class IngredientService:
     @staticmethod
-    async def create(
-        ingredient: IngredientCreate, file: UploadFile | None, session: AsyncSession
-    ) -> JSONResponse:
+    async def create(ingredient: IngredientCreate, file: UploadFile | None, session: AsyncSession) -> JSONResponse:
         image_url = await save_image(file) if file else None
         async with session.begin():
             new_ingredient = Ingredient(name=ingredient.name, image_url=image_url)
@@ -222,9 +207,7 @@ class SizeService:
         return results.scalars().all()
 
     @staticmethod
-    async def update(
-        size_id: int, size_data: SizeUpdate, session: AsyncSession
-    ) -> JSONResponse:
+    async def update(size_id: int, size_data: SizeUpdate, session: AsyncSession) -> JSONResponse:
         async with session.begin():
             size = await session.get(Size, size_id)
             if size:
@@ -277,7 +260,6 @@ class PriceService:
         result = await session.execute(query)
         prices = result.scalars().all()
 
-        # b = [IngredientResponse.model_validate(ingredient, from_attributes=True) for ingredient in prices[0].product.ingredients]
         price_responses = []
         for price in prices:
             price_response = PriceResponse(
@@ -308,9 +290,7 @@ class PriceService:
         return price_responses
 
     @staticmethod
-    async def update(
-        price_id: int, price_data: PriceUpdate, session: AsyncSession
-    ) -> JSONResponse:
+    async def update(price_id: int, price_data: PriceUpdate, session: AsyncSession) -> JSONResponse:
         async with session.begin():
             price = await session.get(Price, price_id)
             if price:

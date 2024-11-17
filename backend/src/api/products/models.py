@@ -1,6 +1,5 @@
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 
 from src.database import Base
 
@@ -15,20 +14,14 @@ class Product(Base):
     image_url: Mapped[str] = mapped_column(nullable=True)
 
     prices: Mapped[list["Price"]] = relationship(back_populates="product")
-    ingredients: Mapped[list["Ingredient"]] = relationship(
-        back_populates="products", secondary="product_ingredient"
-    )
+    ingredients: Mapped[list["Ingredient"]] = relationship(back_populates="products", secondary="product_ingredient")
 
 
 class ProductIngredient(Base):
     __tablename__ = "product_ingredient"
 
-    product_id: Mapped[int] = mapped_column(
-        ForeignKey("products.product_id"), primary_key=True
-    )
-    ingredient_id: Mapped[int] = mapped_column(
-        ForeignKey("ingredients.ingredient_id"), primary_key=True
-    )
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"), primary_key=True)
+    ingredient_id: Mapped[int] = mapped_column(ForeignKey("ingredients.ingredient_id"), primary_key=True)
 
 
 class Ingredient(Base):
@@ -38,9 +31,7 @@ class Ingredient(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     image_url: Mapped[str] = mapped_column(nullable=True)
 
-    products: Mapped[list["Product"]] = relationship(
-        back_populates="ingredients", secondary="product_ingredient"
-    )
+    products: Mapped[list["Product"]] = relationship(back_populates="ingredients", secondary="product_ingredient")
 
 
 class Size(Base):
@@ -63,6 +54,4 @@ class Price(Base):
 
     product: Mapped["Product"] = relationship(back_populates="prices")
     size: Mapped["Size"] = relationship(back_populates="prices")
-    basket_items: Mapped[list["BasketItem"]] = relationship(
-        "BasketItem", back_populates="price"
-    )
+    basket_items: Mapped[list["BasketItem"]] = relationship("BasketItem", back_populates="price")

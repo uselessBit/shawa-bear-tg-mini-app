@@ -1,20 +1,16 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from fastapi import HTTPException
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from src.api.basket.models import Basket, BasketItem
-from src.api.basket.schemas import BasketItemCreate, BasketResponse, BasketItemResponse
+from src.api.basket.schemas import BasketItemCreate, BasketItemResponse, BasketResponse
 
 
 class BasketService:
     @staticmethod
     async def get_user_basket(user_id: int, session: AsyncSession) -> BasketResponse:
-        query = (
-            select(Basket)
-            .where(user_id == Basket.user_id)
-            .options(joinedload(Basket.items))
-        )
+        query = select(Basket).where(Basket.user_id == user_id).options(joinedload(Basket.items))
         result = await session.execute(query)
         basket = result.unique().scalar_one_or_none()
         if not basket:
@@ -34,11 +30,9 @@ class BasketService:
         )
 
     @staticmethod
-    async def add_item(
-        user_id: int, item_data: BasketItemCreate, session: AsyncSession
-    ) -> None:
+    async def add_item(user_id: int, item_data: BasketItemCreate, session: AsyncSession) -> None:
         async with session.begin():
-            query = select(Basket).where(user_id == Basket.user_id)
+            query = select(Basket).where(Basket.user_id == user_id)
             result = await session.execute(query)
             basket = result.scalar()
 
@@ -57,9 +51,7 @@ class BasketService:
     @staticmethod
     async def remove_item(basket_item_id: int, session: AsyncSession) -> None:
         async with session.begin():
-            query = select(BasketItem).where(
-                basket_item_id == BasketItem.basket_item_id
-            )
+            query = select(BasketItem).where(BasketItem.basket_item_id == basket_item_id)
             result = await session.execute(query)
             item = result.scalar()
 

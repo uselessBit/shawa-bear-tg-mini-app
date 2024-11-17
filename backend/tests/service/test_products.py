@@ -7,9 +7,7 @@ from src.api.products.models import Product
 
 @pytest.mark.asyncio()
 async def test_create_product(db_session: AsyncSession, ac: AsyncClient):
-    product_data = (
-        '{"name": "Test Product", "description": "A test product", "price": 100}'
-    )
+    product_data = '{"name": "Test Product", "description": "A test product", "price": 100}'
 
     response = await ac.post(
         "/products/create_product",

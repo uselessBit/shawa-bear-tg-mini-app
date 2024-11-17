@@ -1,7 +1,8 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from datetime import UTC, datetime
+
 from fastapi import HTTPException
-from datetime import datetime
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.orders.models import Order
 from src.api.orders.schemas import OrderCreate, OrderResponse
@@ -14,7 +15,7 @@ class OrderService:
             new_order = Order(
                 basket_id=order_data.basket_id,
                 total_price=order_data.total_price,
-                order_date=datetime.utcnow(),
+                order_date=datetime.now(tz=UTC),
             )
             session.add(new_order)
             await session.flush()

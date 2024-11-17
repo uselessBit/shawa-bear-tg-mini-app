@@ -19,9 +19,7 @@ TEST_DATABASE_URL = f"postgresql+asyncpg://{TEST_DB_USER}:{TEST_DB_PASS}@{TEST_D
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=True)
 Base.metadata.bind = test_engine
 
-async_session = async_sessionmaker(
-    test_engine, class_=AsyncSession, expire_on_commit=False
-)
+async_session = async_sessionmaker(test_engine, class_=AsyncSession, expire_on_commit=False)
 
 
 async def override_get_session() -> AsyncGenerator[AsyncSession, None]:
@@ -58,7 +56,7 @@ async def ac(event_loop) -> AsyncGenerator:
         yield ac
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture()
 async def db_session(init_db, event_loop) -> AsyncGenerator[AsyncSession, None]:
     async with async_session() as session:
         yield session

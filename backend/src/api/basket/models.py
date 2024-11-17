@@ -10,9 +10,7 @@ class Basket(Base):
     basket_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(nullable=False)
 
-    items: Mapped[list["BasketItem"]] = relationship(
-        "BasketItem", back_populates="basket"
-    )
+    items: Mapped[list["BasketItem"]] = relationship("BasketItem", back_populates="basket")
     orders: Mapped[list["Order"]] = relationship("Order", back_populates="basket")
 
 
@@ -20,9 +18,7 @@ class BasketItem(Base):
     __tablename__ = "basket_items"
 
     basket_item_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    basket_id: Mapped[int] = mapped_column(
-        ForeignKey("baskets.basket_id"), nullable=False
-    )
+    basket_id: Mapped[int] = mapped_column(ForeignKey("baskets.basket_id"), nullable=False)
     price_id: Mapped[int] = mapped_column(ForeignKey("prices.price_id"), nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False, default=1)
 

@@ -1,12 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
-from src.api.products.routers import router as products_router
-from src.api.users.routers import router as users_router
 from src.api.basket.routers import router as basket_router
 from src.api.orders.routers import router as orders_router
-from fastapi.staticfiles import StaticFiles
+from src.api.products.routers import router as products_router
+from src.api.users.routers import router as users_router
 
 app = FastAPI()
 

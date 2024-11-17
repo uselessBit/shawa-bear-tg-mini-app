@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -8,7 +9,7 @@ class IngredientCreate(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def to_py_dict(cls, data):
+    def to_py_dict(cls, data: str) -> dict:
         return json.loads(data)
 
 
@@ -23,7 +24,7 @@ class IngredientUpdate(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def to_py_dict(cls, data):
+    def to_py_dict(cls, data: str) -> dict[str, Any]:
         return json.loads(data)
 
 
@@ -34,7 +35,7 @@ class ProductCreate(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def to_py_dict(cls, data):
+    def to_py_dict(cls, data: Any) -> dict[str, Any]:
         return json.loads(data)
 
 
@@ -53,7 +54,7 @@ class ProductUpdate(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def to_py_dict(cls, data):
+    def to_py_dict(cls, data: Any) -> dict[str, Any]:
         return json.loads(data)
 
 
