@@ -13,6 +13,7 @@ class Basket(Base):
     items: Mapped[list["BasketItem"]] = relationship(
         "BasketItem", back_populates="basket"
     )
+    orders: Mapped[list["Order"]] = relationship("Order", back_populates="basket")
 
 
 class BasketItem(Base):

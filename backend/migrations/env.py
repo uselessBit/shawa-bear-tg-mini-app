@@ -35,6 +35,7 @@ from src.database import Base
 from src.api.users.models import *
 from src.api.products.models import *
 from src.api.basket.models import *
+from src.api.orders.models import *
 
 target_metadata = Base.metadata
 
