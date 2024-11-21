@@ -53,11 +53,7 @@
 ├── src
     ├── clients/
     ├── server/
-    ├── service/
-        ├── adapters/
-        ├── interfaces
-        ├── schemas
-        ├── errors          
+    ├── service/         
     ├── settings/
     ├── container.py
     ├── __main__.py
