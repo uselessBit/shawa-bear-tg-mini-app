@@ -26,7 +26,7 @@ class SizeService(SizeServiceI):
             query = select(Size)
             results = await session.execute(query)
             sizes = results.scalars().all()
-            return [SizeResponse(size_id=item.size_id, grams=item.grams)
+            return [SizeResponse(size_id=item.size_id, name=item.name, grams=item.grams)
                     for item in sizes]
 
     async def update(self, size_id: int, size_data: SizeUpdate) -> None:
