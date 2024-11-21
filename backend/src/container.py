@@ -17,25 +17,19 @@ from src.services.user.interface import UserServiceI
 from src.services.user.service import UserService
 from src.settings.database import DatabaseSettings
 from src.clients.database.engine import async_engine, Database
-from sqlalchemy.ext.asyncio import AsyncEngine, async_scoped_session
+from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio import AsyncSession
+from collections.abc import AsyncGenerator
+
 
 class DependencyContainer(containers.DeclarativeContainer):
-    wiring_config = containers.WiringConfiguration(
-        modules=[
-            "src.server.routers.v1",
-        ],
-    )
-
     database_settings: Singleton["DatabaseSettings"] = Singleton(DatabaseSettings)
     async_engine: Singleton["AsyncEngine"] = Singleton(
         async_engine,
         database_settings=database_settings.provided,
     )
     database: Factory["Database"] = Factory(Database, engine=async_engine.provided)
-    database_session: Resource[async_scoped_session[AsyncSession]] = Resource(
-        database.provided.get_session()
-    )
+    database_session: Resource["AsyncGenerator[AsyncSession, None]"] = Resource(database.provided.get_session)
 
     user_service: Factory["UserServiceI"] = Factory(UserService, session=database_session)
     size_service: Factory["SizeServiceI"] = Factory(SizeService, session=database_session)

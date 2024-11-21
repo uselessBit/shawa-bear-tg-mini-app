@@ -1,5 +1,7 @@
 from collections.abc import AsyncGenerator
 from asyncio import current_task
+from contextlib import asynccontextmanager
+
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -18,10 +20,15 @@ def async_engine(database_settings: DatabaseSettings) -> AsyncEngine:
 class Database:
     def __init__(self, engine: AsyncEngine) -> None:
         self.engine = engine
-        self._session_factory = async_sessionmaker(self.engine, expire_on_commit=False)
+        self.session = async_scoped_session(
+            async_sessionmaker(self.engine, expire_on_commit=False),
+            scopefunc=current_task
+        )
 
-    def get_session(self) -> async_scoped_session[AsyncSession]:
-        return async_scoped_session(self._session_factory, scopefunc=current_task)
+    @asynccontextmanager
+    async def get_session(self) -> AsyncGenerator[AsyncSession, None]:
+        async with self.session() as session:
+            yield session
 
 
 # alembic revision --autogenerate -m 'initial'
