@@ -12,7 +12,7 @@ from sqlalchemy import select
 
 
 class SizeService(SizeServiceI):
-    def __init__(self, session: async_scoped_session[AsyncSession]) -> None:
+    def __init__(self, session: Callable[..., AsyncSession]) -> None:
         self.session = session
 
     async def create(self, size: SizeCreate) -> None:
