@@ -10,7 +10,7 @@ from src.services.ingredient.schemas import IngredientResponse, IngredientUpdate
 router = APIRouter(prefix="/ingredient", tags=["Ingredient"])
 
 async def get_ingredient_service() -> IngredientServiceI:
-    return container.order_service()
+    return container.ingredient_service()
 
 @router.post("/create_ingredient")
 async def create_ingredient(
