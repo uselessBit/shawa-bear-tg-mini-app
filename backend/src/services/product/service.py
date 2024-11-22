@@ -30,7 +30,7 @@ class ProductService(ProductServiceI):
                     missing_ids = set(product_data.ingredient_ids) - {
                         ingredient.ingredient_id for ingredient in ingredients
                     }
-                    raise IngredientNotFoundError
+                    raise IngredientNotFoundError(f"Ingredients with ids: {missing_ids} not found")
 
                 image_url = await save_image(file) if file else None
 
