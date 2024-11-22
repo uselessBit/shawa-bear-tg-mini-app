@@ -5,6 +5,7 @@
 - Postgres
 - ReactJS
 - ChakraUI
+- Aiogram3
 
 #### Architecture
 
