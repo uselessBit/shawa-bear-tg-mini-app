@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
-from src.container import DependencyContainer, container
+from src.container import container
 from src.services.order.interface import OrderServiceI
 from src.services.order.schemas import OrderCreate, OrderResponse
 

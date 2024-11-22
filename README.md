@@ -1,61 +1,63 @@
 # Telegram mini app
 
-## Backend
+#### Stack:
+- FastAPI
+- Postgres
+- ReactJS
+- ChakraUI
 
-### Architecture
-
-- src
-  - server
-    - app.py
-    - handle_errors.py
-    - routers
-      - v1
-        - routers.py
-        - size_router.py
-        - ingredient_router.py
-        - product_router.py
-        - price_router.py
-        - basket_router.py
-        - order_router.py
-        - user_router.py
-  - services
-    - size
-      - service.py
-      - interface.py
-      - schemas.py
-      - errors.py
-    - ingredient
-    - product
-    - price
-    - basket
-    - order
-    - user
-    - errors.py
-  - clients
-    - database
-      - models
-        - size.py
-        - ingredient.py
-        - product.py
-        - price.py
-        - basket.py
-        - order.py
-        - user.py
-      - engine.py
-  - settings
-    - config.py
-  - main.py
-  - container.py
-- tests
-
+#### Architecture
 
 ```yaml
 ├── src
     ├── clients/
     ├── server/
-    ├── service/         
+      ├── routers/
+      ├── app.py
+      ├── handle_errors.py
+    ├── services/         
     ├── settings/
     ├── container.py
     ├── __main__.py
 └──  tests
+```
+
+## Local Developing
+
+### Backend
+
+Create venv
+```bash
+python3 -m venv .venv
+```
+
+Activate env
+
+Mac/Linux:
+```bash
+source .venv/bin/activate
+```
+Windows:
+```bash
+.venv/scripts/activate
+```
+Apply migrations
+```bash
+alembic upgrade head
+```
+Run uvicorn
+
+Mac/Linux:
+```bash
+uvicorn src.server.app:create_application --factory --host 0.0.0.0 --port 443 --ssl-keyfile localhost-key.pem --ssl-certfile localhost.pem
+```
+Windows:
+```bash
+uvicorn src.server.app:create_application --factory --host 127.0.0.1 --port 443 --ssl-keyfile localhost-key.pem --ssl-certfile localhost.pem
+```
+
+
+Or just use(only for Mac/Linux)
+```bash
+docker-compose up --build
 ```
