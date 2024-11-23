@@ -6,6 +6,7 @@ from fastapi import UploadFile, File
 
 from src.services.ingredient.interface import IngredientServiceI
 from src.services.ingredient.schemas import IngredientResponse, IngredientUpdate, IngredientCreate
+from src.services.schemas import Image
 
 router = APIRouter(prefix="/ingredient", tags=["Ingredient"])
 
@@ -18,7 +19,11 @@ async def create_ingredient(
         file: UploadFile | None = File(None),
         ingredient_service: IngredientServiceI = Depends(get_ingredient_service),
 ) -> JSONResponse:
-    await ingredient_service.create(ingredient, file)
+    image = Image()
+    if file:
+        image.file_bytes = await file.read()
+        image.filename = file.filename
+    await ingredient_service.create(ingredient, image)
     return JSONResponse(content={"message": "Ingredient created successfully"}, status_code=200)
 
 
@@ -36,5 +41,9 @@ async def update_ingredient(
         file: UploadFile | None = File(None),
         ingredient_service: IngredientServiceI = Depends(get_ingredient_service),
 ) -> JSONResponse:
-    await ingredient_service.update(ingredient_id, ingredient, file)
+    image = Image()
+    if file:
+        image.file_bytes = await file.read()
+        image.filename = file.filename
+    await ingredient_service.update(ingredient_id, ingredient, image)
     return JSONResponse(content={"message": "Ingredient updated successfully"}, status_code=200)

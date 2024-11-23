@@ -9,6 +9,8 @@ from src.services.product.schemas import ProductResponse, ProductCreate, Product
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
+
+from src.services.schemas import Image
 from src.services.utils import save_image, delete_image
 from sqlalchemy.orm import selectinload
 
@@ -19,7 +21,7 @@ class ProductService(ProductServiceI):
         self.session = session
         self.product_ingredient_service = product_ingredient_service
 
-    async def create(self, product_data: ProductCreate, file: UploadFile | None) -> None:
+    async def create(self, product_data: ProductCreate, image: Image) -> None:
         async with self.session() as session:
             async with session.begin():
                 query = select(Ingredient).where(Ingredient.ingredient_id.in_(product_data.ingredient_ids))
@@ -32,7 +34,7 @@ class ProductService(ProductServiceI):
                     }
                     raise IngredientNotFoundError(f"Ingredients with ids: {missing_ids} not found")
 
-                image_url = await save_image(file) if file else None
+                image_url = await save_image(image, "media/products") if image.filename else None
 
                 new_product = Product(
                     name=product_data.name,
@@ -84,8 +86,8 @@ class ProductService(ProductServiceI):
                 return product
             raise ProductNotFoundError
 
-    async def update(self, product_id: int, product_data: ProductUpdate, file: UploadFile | None) -> None:
-        image_url = await save_image(file) if file else None
+    async def update(self, product_id: int, product_data: ProductUpdate, image: Image) -> None:
+        image_url = await save_image(image, "media/products") if image.filename else None
         async with self.session() as session:
             async with session.begin():
                 product = await session.get(Product, product_id)
@@ -101,7 +103,7 @@ class ProductService(ProductServiceI):
                         )
                     if image_url:
                         if filename := product.image_url:
-                            await delete_image(str(filename))
+                            await delete_image(str(filename), "media/products")
                         product.image_url = image_url
                     else:
                         raise ProductNotFoundError

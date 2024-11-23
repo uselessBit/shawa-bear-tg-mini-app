@@ -6,9 +6,12 @@ from src.clients.database.models.product import Product
 from src.services.product.schemas import ProductResponse, ProductCreate
 from fastapi import UploadFile
 
+from src.services.schemas import Image
+
+
 class ProductServiceI(Protocol):
     @abstractmethod
-    async def create(self, product_data: ProductCreate, file: UploadFile | None) -> None:
+    async def create(self, product_data: ProductCreate, image: Image) -> None:
         ...
 
     @abstractmethod
@@ -20,7 +23,7 @@ class ProductServiceI(Protocol):
         ...
 
     @abstractmethod
-    async def update(self, product_id: int, product_data: ProductUpdate, file: UploadFile | None) -> None:
+    async def update(self, product_id: int, product_data: ProductUpdate, image: Image) -> None:
         ...
 
 
