@@ -77,13 +77,29 @@ class ProductService(ProductServiceI):
 
             return product_responses
 
-    async def get_by_name(self, product_name: str) -> Product:
+    async def get_by_name(self, product_name: str) -> ProductResponse:
         async with self.session() as session:
-            query = select(Product).where(Product.name == product_name)
+            query = select(Product).options(selectinload(Product.ingredients)).where(Product.name == product_name)
             result = await session.execute(query)
             product = result.scalar()
             if product:
-                return product
+                ingredient_responses = [
+                    IngredientResponse(
+                        ingredient_id=ingredient.ingredient_id,
+                        name=ingredient.name,
+                        image_url=ingredient.image_url,
+                    )
+                    for ingredient in product.ingredients
+                ]
+
+                product_response = ProductResponse(
+                    product_id=product.product_id,
+                    name=product.name,
+                    description=product.description,
+                    image_url=product.image_url,
+                    ingredient_ids=ingredient_responses,
+                )
+                return product_response
             raise ProductNotFoundError
 
     async def update(self, product_id: int, product_data: ProductUpdate, image: Image) -> None:

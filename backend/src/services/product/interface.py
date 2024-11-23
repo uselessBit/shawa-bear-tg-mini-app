@@ -19,7 +19,7 @@ class ProductServiceI(Protocol):
         ...
 
     @abstractmethod
-    async def get_by_name(self, product_name: str) -> Product:
+    async def get_by_name(self, product_name: str) -> ProductResponse:
         ...
 
     @abstractmethod

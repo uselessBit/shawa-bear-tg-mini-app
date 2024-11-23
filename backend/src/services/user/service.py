@@ -37,6 +37,6 @@ class UserService(UserServiceI):
             user_id=user.user_id,
             first_name=user.first_name,
             last_name=user.last_name,
-            user_name=user.username,
+            username=user.username,
             language_code=user.language_code,
         )
