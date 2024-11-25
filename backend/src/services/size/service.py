@@ -17,9 +17,9 @@ class SizeService(SizeServiceI):
 
     async def create(self, size: SizeCreate) -> None:
         async with self.session() as session:
-            async with session.begin():
-                new_size = Size(name=size.name, grams=size.grams)
+            new_size = Size(name=size.name, grams=size.grams)
             session.add(new_size)
+            await session.commit()
 
     async def get_all(self) -> list[SizeResponse]:
         async with self.session() as session:
@@ -31,12 +31,12 @@ class SizeService(SizeServiceI):
 
     async def update(self, size_id: int, size_data: SizeUpdate) -> None:
         async with self.session() as session:
-            async with session.begin():
-                size = await session.get(Size, size_id)
+            size = await session.get(Size, size_id)
             if size:
                 if size_data.name:
                     size.name = size_data.name
                 if size_data.grams:
                     size.grams = size_data.grams
+                await session.commit()
             else:
                 raise SizeNotFoundError
