@@ -5,3 +5,4 @@ localhost.pem
 .env-production
 .vscode
 media
+*.pyc
