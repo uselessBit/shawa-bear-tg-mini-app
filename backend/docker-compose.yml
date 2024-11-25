@@ -9,46 +9,6 @@ services:
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-    command: -p 5440
-    expose:
-      - 5440
-    env_file:
-      - .env-production
-
-
-  app:
-    build:
-      context: .
-    env_file:
-      - .env-production
-    container_name: shava-app
-    ports:
-      - 443:443
-    volumes:
-      - media:/media
-    command: sh entrypoint.sh
-    networks:
-      - my_network
-    depends_on:
-      - db
-
-  adminer:
-    image: adminer
-    ports:
-      - "8080:8080"
-    expose:
-      - "8080"version: "3.11"
-
-services:
-  db:
-    image: postgres:15
-    container_name: db_app
-    networks:
-      - my_network
-    environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     command: -p 5440
     expose:
@@ -79,19 +39,6 @@ services:
       - "8080:8080"
     expose:
       - "8080"
-    networks:
-      - my_network
-    depends_on:
-      - db
-    restart: always
-
-
-volumes:
-  media:
-
-networks:
-  my_network:
-
     networks:
       - my_network
     depends_on:
