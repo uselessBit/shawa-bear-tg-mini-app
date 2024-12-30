@@ -10,6 +10,9 @@ class SizeResponse(BaseModel):
     name: str
     grams: int
 
+    class Config:
+        from_attributes = True
+
 
 class SizeUpdate(BaseModel):
     name: str = Field(None)

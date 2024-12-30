@@ -5,10 +5,9 @@ from src.clients.database.models.size import Size
 from src.services.errors import SizeNotFoundError
 from src.services.size.interface import SizeServiceI
 from src.services.size.schemas import SizeCreate, SizeUpdate
-from sqlalchemy.ext.asyncio import AsyncSession, async_scoped_session
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-
-
+from pydantic import TypeAdapter
 
 
 class SizeService(SizeServiceI):
@@ -26,8 +25,8 @@ class SizeService(SizeServiceI):
             query = select(Size)
             results = await session.execute(query)
             sizes = results.scalars().all()
-            return [SizeResponse(size_id=item.size_id, name=item.name, grams=item.grams)
-                    for item in sizes]
+            type_adapter = TypeAdapter(list[SizeResponse])
+            return type_adapter.validate_python(sizes)
 
     async def update(self, size_id: int, size_data: SizeUpdate) -> None:
         async with self.session() as session:
