@@ -18,5 +18,3 @@ class UvicornSettings(BaseSettings):
     port: int = 8000
 
     model_config = SettingsConfigDict(env_prefix="server_")
-
-    model_config = SettingsConfigDict(env_prefix="server_")

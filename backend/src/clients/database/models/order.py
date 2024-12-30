@@ -9,7 +9,7 @@ class Order(Base):
 
     order_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     basket_id: Mapped[int] = mapped_column(ForeignKey("baskets.basket_id"), nullable=False)
-    order_date: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+    order_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     total_price: Mapped[float] = mapped_column(Float, nullable=False)
 
     basket: Mapped["Basket"] = relationship("Basket", back_populates="orders")

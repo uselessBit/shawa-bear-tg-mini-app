@@ -22,7 +22,7 @@ class OrderService(OrderServiceI):
                     order_date=datetime.now(tz=UTC),
                 )
                 session.add(new_order)
-                await session.flush()
+                # await session.flush()
 
     async def get_order(self, order_id: int) -> OrderResponse:
         async with self.session() as session:

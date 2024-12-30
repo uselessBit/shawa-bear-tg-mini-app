@@ -18,9 +18,9 @@ class IngredientService(IngredientServiceI):
     async def create(self, ingredient: IngredientCreate, image: Image) -> None:
         async with self.session() as session:
             image_url = await save_image(image, "media/ingredients") if image.filename else None
-            async with session.begin():
-                new_ingredient = Ingredient(name=ingredient.name, image_url=image_url)
-                session.add(new_ingredient)
+            new_ingredient = Ingredient(name=ingredient.name, image_url=image_url)
+            session.add(new_ingredient)
+            await session.commit()
 
     async def get(self) -> list[IngredientResponse]:
         async with self.session() as session:
@@ -34,14 +34,14 @@ class IngredientService(IngredientServiceI):
         async with self.session() as session:
             image_url = await save_image(image, "media/ingredients") if image.filename else None
 
-            async with session.begin():
-                ingredient = await session.get(Ingredient, ingredient_id)
-                if ingredient:
-                    if ingredient_data.name:
-                        ingredient.name = ingredient_data.name
-                    if image_url:
-                        if filename := ingredient.image_url:
-                            await delete_image(str(filename), "media/ingredients")
-                        ingredient.image_url = image_url
-                else:
-                    raise IngredientNotFoundError
+            ingredient = await session.get(Ingredient, ingredient_id)
+            if ingredient:
+                if ingredient_data.name:
+                    ingredient.name = ingredient_data.name
+                if image_url:
+                    if filename := ingredient.image_url:
+                        await delete_image(str(filename), "media/ingredients")
+                    ingredient.image_url = image_url
+                await session.commit()
+            else:
+                raise IngredientNotFoundError

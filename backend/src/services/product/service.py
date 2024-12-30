@@ -121,8 +121,8 @@ class ProductService(ProductServiceI):
                         if filename := product.image_url:
                             await delete_image(str(filename), "media/products")
                         product.image_url = image_url
-                    else:
-                        raise ProductNotFoundError
+                else:
+                    raise ProductNotFoundError
 
 
 class ProductIngredientService(ProductIngredientServiceI):
