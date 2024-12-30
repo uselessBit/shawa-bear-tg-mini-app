@@ -33,4 +33,3 @@ def downgrade():
         type_=sa.DateTime(timezone=False),
         existing_type=sa.DateTime(timezone=True),
     )
-    # ### end Alembic commands ###
