@@ -5,14 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from src.clients.database.models.basket import Basket, BasketItem
+from src.services.base import BaseService
 from src.services.basket.schemas import BasketItemCreate, BasketItemResponse, BasketResponse
 from src.services.errors import BasketNotFoundError, BasketItemNotFoundError
 from src.services.basket.interface import BasketServiceI
 
 
-class BasketService(BasketServiceI):
-    def __init__(self, session: Callable[..., AsyncSession]) -> None:
-        self.session = session
+class BasketService(BaseService, BasketServiceI):
 
     async def get_user_basket(self, user_id: int) -> BasketResponse:
         async with self.session() as session:

@@ -1,6 +1,7 @@
 from typing import Callable
 
 from src.clients.database.models.user import User
+from src.services.base import BaseService
 from src.services.errors import UserNotFoundError
 from src.services.user.interface import UserServiceI
 from src.services.user.schemas import UserCreate, UserResponse
@@ -8,9 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 
-class UserService(UserServiceI):
-    def __init__(self, session: Callable[..., AsyncSession]) -> None:
-        self.session = session
+class UserService(BaseService, UserServiceI):
 
     async def create(self, user: UserCreate) -> None:
         async with self.session() as session:

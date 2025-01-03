@@ -1,5 +1,6 @@
 from typing import Callable
 
+from src.services.base import BaseService
 from src.services.size.schemas import SizeResponse
 from src.clients.database.models.size import Size
 from src.services.errors import SizeNotFoundError
@@ -10,9 +11,7 @@ from sqlalchemy import select
 from pydantic import TypeAdapter
 
 
-class SizeService(SizeServiceI):
-    def __init__(self, session: Callable[..., AsyncSession]) -> None:
-        self.session = session
+class SizeService(BaseService, SizeServiceI):
 
     async def create(self, size: SizeCreate) -> None:
         async with self.session() as session:

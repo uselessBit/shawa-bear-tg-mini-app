@@ -2,6 +2,7 @@ from typing import Callable
 
 from src.clients.database.models.product import Product
 from src.clients.database.models.size import Size
+from src.services.base import BaseService
 from src.services.ingredient.schemas import IngredientResponse
 from src.services.errors import PriceNotFoundError, SizeNotFoundError, ProductNotFoundError
 from src.services.price.interface import PriceServiceI
@@ -14,9 +15,7 @@ from src.services.product.schemas import ProductResponse
 from src.services.size.schemas import SizeResponse
 from pydantic import TypeAdapter
 
-class PriceService(PriceServiceI):
-    def __init__(self, session: Callable[..., AsyncSession]) -> None:
-        self.session = session
+class PriceService(BaseService, PriceServiceI):
 
     async def create(self, price_data: PriceCreate) -> None:
         async with self.session() as session:

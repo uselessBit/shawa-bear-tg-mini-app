@@ -1,6 +1,7 @@
 from datetime import datetime, UTC
 from typing import Callable
 
+from src.services.base import BaseService
 from src.services.errors import OrderNotFoundError
 from src.services.order.interface import OrderServiceI
 from src.clients.database.models.order import Order
@@ -9,9 +10,7 @@ from sqlalchemy import select
 from src.services.order.schemas import OrderCreate, OrderResponse
 from pydantic import TypeAdapter
 
-class OrderService(OrderServiceI):
-    def __init__(self, session: Callable[..., AsyncSession]) -> None:
-        self.session = session
+class OrderService(BaseService, OrderServiceI):
 
     async def create_order(self, order_data: OrderCreate) -> None:
         async with self.session() as session:

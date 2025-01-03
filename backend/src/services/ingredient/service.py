@@ -1,5 +1,6 @@
 from typing import Callable
 from src.clients.database.models.ingredient import Ingredient
+from src.services.base import BaseService
 from src.services.errors import IngredientNotFoundError
 from src.services.ingredient.interface import IngredientServiceI
 from src.services.ingredient.schemas import IngredientCreate, IngredientUpdate, IngredientResponse
@@ -10,9 +11,7 @@ from src.services.schemas import Image
 from src.services.utils import delete_image, save_image
 
 
-class IngredientService(IngredientServiceI):
-    def __init__(self, session: Callable[..., AsyncSession]) -> None:
-        self.session = session
+class IngredientService(BaseService, IngredientServiceI):
 
     async def create(self, ingredient: IngredientCreate, image: Image) -> None:
         async with self.session() as session:

@@ -2,6 +2,7 @@ from typing import Callable
 
 from src.clients.database.models.ingredient import Ingredient
 from src.clients.database.models.product import Product, ProductIngredient
+from src.services.base import BaseService
 from src.services.ingredient.schemas import IngredientResponse
 from src.services.errors import ProductNotFoundError, IngredientNotFoundError
 from src.services.product.interface import ProductServiceI, ProductIngredientServiceI
@@ -15,10 +16,10 @@ from src.services.utils import save_image, delete_image
 from sqlalchemy.orm import selectinload
 
 
-class ProductService(ProductServiceI):
+class ProductService(BaseService, ProductServiceI):
     def __init__(self, session: Callable[..., AsyncSession],
                  product_ingredient_service: ProductIngredientServiceI) -> None:
-        self.session = session
+        super().__init__(session)
         self.product_ingredient_service = product_ingredient_service
 
     async def create(self, product_data: ProductCreate, image: Image) -> None:
@@ -92,9 +93,7 @@ class ProductService(ProductServiceI):
                     raise ProductNotFoundError
 
 
-class ProductIngredientService(ProductIngredientServiceI):
-    def __init__(self, session: Callable[..., AsyncSession]) -> None:
-        self.session = session
+class ProductIngredientService(BaseService, ProductIngredientServiceI):
 
     async def create(self, product_id: int, ingredient_id: int) -> None:
         async with self.session() as session:
