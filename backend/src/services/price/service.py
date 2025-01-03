@@ -12,7 +12,7 @@ from sqlalchemy import select
 from src.clients.database.models.price import Price
 from src.services.product.schemas import ProductResponse
 from src.services.size.schemas import SizeResponse
-
+from pydantic import TypeAdapter
 
 class PriceService(PriceServiceI):
     def __init__(self, session: Callable[..., AsyncSession]) -> None:
@@ -48,35 +48,9 @@ class PriceService(PriceServiceI):
             )
             result = await session.execute(query)
             prices = result.scalars().all()
+            type_adapter = TypeAdapter(list[PriceResponse])
+            return type_adapter.validate_python(prices)
 
-            price_responses = []
-            for price in prices:
-                price_response = PriceResponse(
-                    price_id=price.price_id,
-                    size=SizeResponse(
-                        size_id=price.size.size_id,
-                        name=price.size.name,
-                        grams=price.size.grams,
-                    ),
-                    products=ProductResponse(
-                        product_id=price.product.product_id,
-                        name=price.product.name,
-                        description=price.product.description,
-                        image_url=price.product.image_url,
-                        ingredient_ids=[
-                            IngredientResponse(
-                                ingredient_id=ingredient.ingredient_id,
-                                name=ingredient.name,
-                                image_url=ingredient.image_url,
-                            )
-                            for ingredient in price.product.ingredients
-                        ],
-                    ),
-                    price=price.price,
-                )
-                price_responses.append(price_response)
-
-            return price_responses
 
     async def update(self, price_id: int, price_data: PriceUpdate) -> None:
         async with self.session() as session:

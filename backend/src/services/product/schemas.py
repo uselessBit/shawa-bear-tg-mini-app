@@ -22,7 +22,10 @@ class ProductResponse(BaseModel):
     name: str
     description: str
     image_url: str | None
-    ingredient_ids: list[IngredientResponse]
+    ingredients: list[IngredientResponse]
+
+    class Config:
+        from_attributes = True
 
 
 class ProductUpdate(BaseModel):

@@ -9,7 +9,7 @@ from src.services.product.schemas import ProductResponse, ProductCreate, Product
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
-
+from pydantic import TypeAdapter
 from src.services.schemas import Image
 from src.services.utils import save_image, delete_image
 from sqlalchemy.orm import selectinload
@@ -54,53 +54,20 @@ class ProductService(ProductServiceI):
             query = select(Product).options(selectinload(Product.ingredients))
             result = await session.execute(query)
             products = result.scalars().all()
+            type_adapter = TypeAdapter(list[ProductResponse])
+            return type_adapter.validate_python(products)
 
-            product_responses = []
-            for response_product in products:
-                ingredient_responses = [
-                    IngredientResponse(
-                        ingredient_id=ingredient.ingredient_id,
-                        name=ingredient.name,
-                        image_url=ingredient.image_url,
-                    )
-                    for ingredient in response_product.ingredients
-                ]
-
-                product_response = ProductResponse(
-                    product_id=response_product.product_id,
-                    name=response_product.name,
-                    description=response_product.description,
-                    image_url=response_product.image_url,
-                    ingredient_ids=ingredient_responses,
-                )
-                product_responses.append(product_response)
-
-            return product_responses
 
     async def get_by_name(self, product_name: str) -> ProductResponse:
         async with self.session() as session:
             query = select(Product).options(selectinload(Product.ingredients)).where(Product.name == product_name)
             result = await session.execute(query)
             product = result.scalar()
-            if product:
-                ingredient_responses = [
-                    IngredientResponse(
-                        ingredient_id=ingredient.ingredient_id,
-                        name=ingredient.name,
-                        image_url=ingredient.image_url,
-                    )
-                    for ingredient in product.ingredients
-                ]
+            if not product:
+                raise ProductNotFoundError
+            type_adapter = TypeAdapter(ProductResponse)
+            return type_adapter.validate_python(product)
 
-                product_response = ProductResponse(
-                    product_id=product.product_id,
-                    name=product.name,
-                    description=product.description,
-                    image_url=product.image_url,
-                    ingredient_ids=ingredient_responses,
-                )
-                return product_response
-            raise ProductNotFoundError
 
     async def update(self, product_id: int, product_data: ProductUpdate, image: Image) -> None:
         image_url = await save_image(image, "media/products") if image.filename else None

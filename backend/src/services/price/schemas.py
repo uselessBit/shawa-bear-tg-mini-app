@@ -14,7 +14,10 @@ class PriceResponse(BaseModel):
     price_id: int
     size: SizeResponse
     price: float
-    products: ProductResponse
+    product: ProductResponse
+
+    class Config:
+        from_attributes = True
 
 
 class PriceUpdate(BaseModel):

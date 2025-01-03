@@ -7,7 +7,7 @@ from src.clients.database.models.order import Order
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from src.services.order.schemas import OrderCreate, OrderResponse
-
+from pydantic import TypeAdapter
 
 class OrderService(OrderServiceI):
     def __init__(self, session: Callable[..., AsyncSession]) -> None:
@@ -32,10 +32,5 @@ class OrderService(OrderServiceI):
 
             if not order:
                 raise OrderNotFoundError
-
-            return OrderResponse(
-                order_id=order.order_id,
-                basket_id=order.basket_id,
-                order_date=order.order_date,
-                total_price=order.total_price,
-            )
+            type_adapter = TypeAdapter(OrderResponse)
+            return type_adapter.validate_python(order)
