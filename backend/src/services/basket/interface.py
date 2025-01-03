@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from src.services.basket.schemas import BasketResponse, BasketItemCreate
+from src.services.basket.schemas import BasketItemCreate, BasketResponse
 
 
 class BasketServiceI(Protocol):

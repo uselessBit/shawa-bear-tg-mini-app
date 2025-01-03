@@ -14,9 +14,13 @@ async def errors_handler(request: Request, exc: errors.BaseError) -> JSONRespons
     message = exc.message
     logger.error(message)
     match exc:
-        case errors.UserNotFoundError() | errors.SizeNotFoundError() | errors.ProductNotFoundError() | (
-        errors.PriceNotFoundError() | errors.OrderNotFoundError() | errors.IngredientNotFoundError()) | (
-        errors.BasketNotFoundError() | errors.BasketItemNotFoundError()):
+        case (
+            errors.UserNotFoundError()
+            | errors.SizeNotFoundError()
+            | errors.ProductNotFoundError()
+            | (errors.PriceNotFoundError() | errors.OrderNotFoundError() | errors.IngredientNotFoundError())
+            | (errors.BasketNotFoundError() | errors.BasketItemNotFoundError())
+        ):
             status_code = status.HTTP_400_BAD_REQUEST
         case _:
             status_code = status.HTTP_501_NOT_IMPLEMENTED

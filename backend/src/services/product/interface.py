@@ -1,11 +1,7 @@
 from abc import abstractmethod
-from typing import Protocol, Sequence
+from typing import Protocol
 
-from src.services.product.schemas import ProductUpdate
-from src.clients.database.models.product import Product
-from src.services.product.schemas import ProductResponse, ProductCreate
-from fastapi import UploadFile
-
+from src.services.product.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.services.schemas import Image
 
 

@@ -1,18 +1,16 @@
-from typing import Callable
+from pydantic import TypeAdapter
+from sqlalchemy import select
+
 from src.clients.database.models.ingredient import Ingredient
 from src.services.base import BaseService
 from src.services.errors import IngredientNotFoundError
 from src.services.ingredient.interface import IngredientServiceI
-from src.services.ingredient.schemas import IngredientCreate, IngredientUpdate, IngredientResponse
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from pydantic import TypeAdapter
+from src.services.ingredient.schemas import IngredientCreate, IngredientResponse, IngredientUpdate
 from src.services.schemas import Image
 from src.services.utils import delete_image, save_image
 
 
 class IngredientService(BaseService, IngredientServiceI):
-
     async def create(self, ingredient: IngredientCreate, image: Image) -> None:
         async with self.session() as session:
             image_url = await save_image(image, "media/ingredients") if image.filename else None

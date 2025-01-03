@@ -1,10 +1,13 @@
+import logging
 import uuid
 from pathlib import Path
 
 import aiofiles
-from fastapi import UploadFile
 import anyio
+
 from src.services.schemas import Image
+
+logger = logging.getLogger(__name__)
 
 
 async def save_image(image: Image, directory: str | None = "media") -> str:
@@ -32,6 +35,6 @@ async def delete_image(filename: str, directory: str | None = "media") -> None:
         try:
             await anyio.to_thread.run_sync(file_path.unlink)
         except Exception as e:
-            print(f"An error occurred while deleting file {filename}: {e}")
+            logger.exception("An error occurred while deleting file %s: %s", filename, e)
     else:
-        print(f"File {filename} does not exist.")
+        logger.exception("File %s does not exist.", filename)

@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from src.services.size.schemas import SizeCreate, SizeUpdate, SizeResponse
+from src.services.size.schemas import SizeCreate, SizeResponse, SizeUpdate
 
 
 class SizeServiceI(Protocol):

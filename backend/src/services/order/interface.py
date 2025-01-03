@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from src.services.order.schemas import OrderResponse, OrderCreate
+from src.services.order.schemas import OrderCreate, OrderResponse
 
 
 class OrderServiceI(Protocol):

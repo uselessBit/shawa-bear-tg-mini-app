@@ -1,6 +1,8 @@
-from src.clients.database.base import Base
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from src.clients.database.base import Base
+
 
 class Price(Base):
     __tablename__ = "prices"

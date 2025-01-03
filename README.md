@@ -18,7 +18,7 @@ View layout in [Figma](https://www.figma.com/design/XvUYgGWgPnsX1pYS7OPXPV/%D0%A
       ├── routers/
       ├── app.py
       ├── handle_errors.py
-    ├── services/         
+    ├── services/
     ├── settings/
     ├── container.py
     ├── __main__.py

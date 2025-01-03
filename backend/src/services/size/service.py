@@ -1,18 +1,14 @@
-from typing import Callable
+from pydantic import TypeAdapter
+from sqlalchemy import select
 
-from src.services.base import BaseService
-from src.services.size.schemas import SizeResponse
 from src.clients.database.models.size import Size
+from src.services.base import BaseService
 from src.services.errors import SizeNotFoundError
 from src.services.size.interface import SizeServiceI
-from src.services.size.schemas import SizeCreate, SizeUpdate
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from pydantic import TypeAdapter
+from src.services.size.schemas import SizeCreate, SizeResponse, SizeUpdate
 
 
 class SizeService(BaseService, SizeServiceI):
-
     async def create(self, size: SizeCreate) -> None:
         async with self.session() as session:
             new_size = Size(name=size.name, grams=size.grams)

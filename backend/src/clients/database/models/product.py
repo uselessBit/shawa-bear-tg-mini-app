@@ -1,6 +1,8 @@
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from src.clients.database.base import Base
+
 
 class Product(Base):
     __tablename__ = "products"

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 
+
 class SizeCreate(BaseModel):
     name: str
     grams: int

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.clients.database.base import Base
 
+
 class Size(Base):
     __tablename__ = "sizes"
 

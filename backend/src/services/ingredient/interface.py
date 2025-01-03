@@ -1,8 +1,7 @@
 from abc import abstractmethod
-from typing import Protocol, Sequence
-from fastapi import UploadFile
-from src.clients.database.models.ingredient import Ingredient
-from src.services.ingredient.schemas import IngredientCreate, IngredientUpdate, IngredientResponse
+from typing import Protocol
+
+from src.services.ingredient.schemas import IngredientCreate, IngredientResponse, IngredientUpdate
 from src.services.schemas import Image
 
 

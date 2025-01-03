@@ -1,8 +1,10 @@
-from sqlalchemy import ForeignKey, DateTime, Float
+from datetime import datetime
+
+from sqlalchemy import DateTime, Float, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from src.clients.database.base import Base
 
-from datetime import datetime
 
 class Order(Base):
     __tablename__ = "orders"
