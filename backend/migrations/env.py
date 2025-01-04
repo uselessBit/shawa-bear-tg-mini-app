@@ -27,10 +27,13 @@ config.set_section_option(section, "DB_URL", database_settings.url)
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 from src.clients.database.base import Base
-# from src.api.users.models import *
-# from src.api.products.models import *
-# from src.api.basket.models import *
-# from src.api.orders.models import *
+from src.clients.database.models.basket import *
+from src.clients.database.models.ingredient import *
+from src.clients.database.models.order import *
+from src.clients.database.models.product import *
+from src.clients.database.models.price import *
+from src.clients.database.models.size import *
+from src.clients.database.models.user import *
 
 target_metadata = Base.metadata
 

@@ -17,6 +17,9 @@ class OrderService(BaseService, OrderServiceI):
                 basket_id=order_data.basket_id,
                 total_price=order_data.total_price,
                 order_date=datetime.now(tz=UTC),
+                payment_option=order_data.payment_option,
+                time_taken=order_data.time_taken,
+                comment=order_data.comment,
             )
             session.add(new_order)
             # await session.flush()
