@@ -42,3 +42,10 @@ class BasketNotFoundError(BaseError):
 class BasketItemNotFoundError(BaseError):
     def __init__(self, message: str = "Basket item not found error"):
         super().__init__(message)
+
+
+class KeyAlreadyExists(BaseError):
+    def __init__(self, name: str, message: str = "Name '{}' already exists"):
+        formatted_message = message.format(name)
+        super().__init__(formatted_message)
+        self.name = name
