@@ -6,6 +6,10 @@ import aiofiles
 import anyio
 
 from src.services.schemas import Image
+from sqlalchemy.exc import IntegrityError
+from src.services.errors import KeyAlreadyExists
+
+from sqlalchemy.ext.asyncio import AsyncSession
 
 logger = logging.getLogger(__name__)
 
@@ -38,3 +42,14 @@ async def delete_image(filename: str, directory: str | None = "media") -> None:
             logger.exception("An error occurred while deleting file %s: %s", filename, e)
     else:
         logger.exception("File %s does not exist.", filename)
+
+
+async def try_commit(session: AsyncSession, entity_name: str, callback=None, *callback_args,
+                     **callback_kwargs):
+    try:
+        await session.commit()
+    except IntegrityError as e:
+        await session.rollback()
+        if callback:
+            await callback(*callback_args, **callback_kwargs)
+        raise KeyAlreadyExists(name=entity_name) from e

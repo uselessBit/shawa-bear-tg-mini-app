@@ -1,12 +1,12 @@
 from pydantic import TypeAdapter
 from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
 
 from src.clients.database.models.size import Size
 from src.services.base import BaseService
-from src.services.errors import SizeNotFoundError, KeyAlreadyExists
+from src.services.errors import SizeNotFoundError
 from src.services.size.interface import SizeServiceI
 from src.services.size.schemas import SizeCreate, SizeResponse, SizeUpdate
+from src.services.utils import try_commit
 
 
 class SizeService(BaseService, SizeServiceI):
@@ -14,11 +14,7 @@ class SizeService(BaseService, SizeServiceI):
         async with self.session() as session:
             new_size = Size(name=size.name, grams=size.grams)
             session.add(new_size)
-            try:
-                await session.commit()
-            except IntegrityError as e:
-                await session.rollback()
-                raise KeyAlreadyExists(name=size.name) from e
+            await try_commit(session, size.name)
 
     async def get_all(self) -> list[SizeResponse]:
         async with self.session() as session:
@@ -36,6 +32,6 @@ class SizeService(BaseService, SizeServiceI):
                     size.name = size_data.name
                 if size_data.grams:
                     size.grams = size_data.grams
-                await session.commit()
+                await try_commit(session, size_data.name)
             else:
                 raise SizeNotFoundError

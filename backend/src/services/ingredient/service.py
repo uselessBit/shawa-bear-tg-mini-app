@@ -7,7 +7,7 @@ from src.services.errors import IngredientNotFoundError
 from src.services.ingredient.interface import IngredientServiceI
 from src.services.ingredient.schemas import IngredientCreate, IngredientResponse, IngredientUpdate
 from src.services.schemas import Image
-from src.services.utils import delete_image, save_image
+from src.services.utils import delete_image, save_image, try_commit
 
 
 class IngredientService(BaseService, IngredientServiceI):
@@ -16,7 +16,7 @@ class IngredientService(BaseService, IngredientServiceI):
             image_url = await save_image(image, "media/ingredients") if image.filename else None
             new_ingredient = Ingredient(name=ingredient.name, image_url=image_url)
             session.add(new_ingredient)
-            await session.commit()
+            await try_commit(session, ingredient.name, delete_image, "media/ingredients")
 
     async def get(self) -> list[IngredientResponse]:
         async with self.session() as session:
@@ -38,6 +38,6 @@ class IngredientService(BaseService, IngredientServiceI):
                     if filename := ingredient.image_url:
                         await delete_image(str(filename), "media/ingredients")
                     ingredient.image_url = image_url
-                await session.commit()
+                await try_commit(session, ingredient.name, delete_image, "media/ingredients")
             else:
                 raise IngredientNotFoundError

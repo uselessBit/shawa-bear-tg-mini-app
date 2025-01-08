@@ -12,7 +12,7 @@ from src.services.errors import IngredientNotFoundError, ProductNotFoundError
 from src.services.product.interface import ProductIngredientServiceI, ProductServiceI
 from src.services.product.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.services.schemas import Image
-from src.services.utils import delete_image, save_image
+from src.services.utils import delete_image, save_image, try_commit
 
 
 class ProductService(BaseService, ProductServiceI):
@@ -24,25 +24,26 @@ class ProductService(BaseService, ProductServiceI):
 
     async def create(self, product_data: ProductCreate, image: Image) -> None:
         async with self.session() as session:
-            async with session.begin():
-                query = select(Ingredient).where(Ingredient.ingredient_id.in_(product_data.ingredient_ids))
-                result = await session.execute(query)
-                ingredients = result.scalars().all()
+            query = select(Ingredient).where(Ingredient.ingredient_id.in_(product_data.ingredient_ids))
+            result = await session.execute(query)
+            ingredients = result.scalars().all()
 
-                if len(ingredients) != len(product_data.ingredient_ids):
-                    missing_ids = set(product_data.ingredient_ids) - {
-                        ingredient.ingredient_id for ingredient in ingredients
-                    }
-                    raise IngredientNotFoundError(f"Ingredients with ids: {missing_ids} not found")
+            if len(ingredients) != len(product_data.ingredient_ids):
+                missing_ids = set(product_data.ingredient_ids) - {
+                    ingredient.ingredient_id for ingredient in ingredients
+                }
+                raise IngredientNotFoundError(f"Ingredients with ids: {missing_ids} not found")
 
-                image_url = await save_image(image, "media/products") if image.filename else None
+            image_url = await save_image(image, "media/products") if image.filename else None
 
-                new_product = Product(
-                    name=product_data.name,
-                    description=product_data.description,
-                    image_url=image_url,
-                )
-                session.add(new_product)
+            new_product = Product(
+                name=product_data.name,
+                description=product_data.description,
+                image_url=image_url,
+            )
+            session.add(new_product)
+            await try_commit(session, new_product.name, delete_image, "media/products")
+            await session.flush()
 
             for ingredient_id in product_data.ingredient_ids:
                 await self.product_ingredient_service.create(
@@ -70,7 +71,7 @@ class ProductService(BaseService, ProductServiceI):
 
     async def update(self, product_id: int, product_data: ProductUpdate, image: Image) -> None:
         image_url = await save_image(image, "media/products") if image.filename else None
-        async with self.session() as session, session.begin():
+        async with self.session() as session:
             product = await session.get(Product, product_id)
             if product:
                 if product_data.name:
@@ -86,15 +87,17 @@ class ProductService(BaseService, ProductServiceI):
                     if filename := product.image_url:
                         await delete_image(str(filename), "media/products")
                     product.image_url = image_url
+                await try_commit(session, product_data.name, delete_image, "media/products")
             else:
                 raise ProductNotFoundError
 
 
 class ProductIngredientService(BaseService, ProductIngredientServiceI):
     async def create(self, product_id: int, ingredient_id: int) -> None:
-        async with self.session() as session, session.begin():
+        async with self.session() as session:
             new_product_ingredient = ProductIngredient(product_id=product_id, ingredient_id=ingredient_id)
             session.add(new_product_ingredient)
+            await try_commit(session, str(product_id))
 
     async def update(self, product_id: int, product_data: ProductUpdate) -> None:
         async with self.session() as session:
