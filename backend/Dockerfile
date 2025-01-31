@@ -9,7 +9,7 @@ RUN poetry config virtualenvs.in-project true && \
 
 COPY pyproject.toml poetry.lock /backend/
 
-RUN poetry install --no-interaction --only main
+RUN poetry install --no-interaction --only main --no-root
 
 COPY . .
 

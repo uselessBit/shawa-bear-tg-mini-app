@@ -10,6 +10,4 @@ if __name__ == "__main__":
     uvicorn.run(
         create_application,
         **settings.model_dump(),
-        ssl_keyfile="localhost-key.pem",
-        ssl_certfile="localhost.pem",
     )
