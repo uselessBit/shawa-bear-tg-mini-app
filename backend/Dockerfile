@@ -12,5 +12,3 @@ COPY pyproject.toml poetry.lock /backend/
 RUN poetry install --no-interaction --only main --no-root
 
 COPY . .
-
-#docker run -p 443:443 tg-mini-app

@@ -27,23 +27,23 @@ services:
       - 8000:8000
     volumes:
       - media:/media
-    command: sh entrypoint.sh
+    command: sh /backend/entrypoint.sh
     networks:
       - my_network
     depends_on:
       - db
-#
-#  adminer:
-#    image: adminer
-#    ports:
-#      - "8080:8080"
-#    expose:
-#      - "8080"
-#    networks:
-#      - my_network
-#    depends_on:
-#      - db
-#    restart: always
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - my_network
+    depends_on:
+      - db
+    restart: always
 
 
 volumes:
