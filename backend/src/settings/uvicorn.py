@@ -14,7 +14,7 @@ class UvicornSettings(BaseSettings):
     factory: bool = True
     access_log: bool = False
     loop: Literal["none", "auto", "asyncio", "uvloop"] = "asyncio"
-    host: str = "127.0.0.1"  # noqa: S104
-    port: int = 8080
+    host: str = "0.0.0.0"  # noqa: S104
+    port: int = 8000
 
     model_config = SettingsConfigDict(env_prefix="server_")
