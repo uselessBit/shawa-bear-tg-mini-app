@@ -3,31 +3,26 @@ version: "3.11"
 services:
   db:
     image: postgres:15
-    container_name: db_app
+    container_name: postgres
     networks:
       - my_network
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-    command: -p 5440
-    expose:
-      - 5440
-    env_file:
-      - ${ENV_FILE}
+    ports:
+      - "5432:5432"
 
 
-  app:
+  backend:
     build:
       context: .
-    env_file:
-      - ${ENV_FILE}
-    container_name: shava-app
+    container_name: backend
     ports:
-      - 443:443
+      - "8000:8000"
     volumes:
       - media:/media
-    command: sh entrypoint.sh
+    command: sh /backend/entrypoint.sh
     networks:
       - my_network
     depends_on:
@@ -37,8 +32,6 @@ services:
     image: adminer
     ports:
       - "8080:8080"
-    expose:
-      - "8080"
     networks:
       - my_network
     depends_on:

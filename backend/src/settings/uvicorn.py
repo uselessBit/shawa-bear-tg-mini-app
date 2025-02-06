@@ -1,11 +1,9 @@
-import os
 from typing import Literal
 
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-env_file = ".env-production" if os.getenv("ENV_FILE") == ".env-production" else ".env"
-load_dotenv(env_file)
+load_dotenv()
 
 
 class UvicornSettings(BaseSettings):
