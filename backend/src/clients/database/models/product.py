@@ -13,12 +13,12 @@ class Product(Base):
     description: Mapped[str] = mapped_column(nullable=False)
     image_url: Mapped[str] = mapped_column(nullable=True)
 
-    prices: Mapped[list["Price"]] = relationship(back_populates="product")
+    prices: Mapped[list["Price"]] = relationship(back_populates="product", cascade="all, delete-orphan")
     ingredients: Mapped[list["Ingredient"]] = relationship(back_populates="products", secondary="product_ingredient")
 
 
 class ProductIngredient(Base):
     __tablename__ = "product_ingredient"
 
-    product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id"), primary_key=True)
-    ingredient_id: Mapped[int] = mapped_column(ForeignKey("ingredients.ingredient_id"), primary_key=True)
+    product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id", ondelete="CASCADE"), primary_key=True)
+    ingredient_id: Mapped[int] = mapped_column(ForeignKey("ingredients.ingredient_id", ondelete="CASCADE"), primary_key=True)

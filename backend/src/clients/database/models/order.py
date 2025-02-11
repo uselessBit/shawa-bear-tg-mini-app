@@ -10,7 +10,7 @@ class Order(Base):
     __tablename__ = "orders"
 
     order_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    basket_id: Mapped[int] = mapped_column(ForeignKey("baskets.basket_id"), nullable=False)
+    basket_id: Mapped[int] = mapped_column(ForeignKey("baskets.basket_id", ondelete="CASCADE"), nullable=False)
     order_date: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=datetime.utcnow)
     total_price: Mapped[float] = mapped_column(Float, nullable=False)
     payment_option: Mapped[str] = mapped_column(String(50), nullable=False, default="Card")
