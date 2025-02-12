@@ -29,3 +29,9 @@ async def update_size(
 ) -> JSONResponse:
     await size_service.update(size_id, size)
     return JSONResponse(content={"message": "Size updated successfully"}, status_code=200)
+
+
+@router.delete("/delete_size/{size_id}")
+async def delete_size(size_id: int, size_service: SizeServiceI = Depends(get_size_service)) -> JSONResponse:
+    await size_service.delete(size_id)
+    return JSONResponse(content={"message": "Size deleted successfully"}, status_code=200)
