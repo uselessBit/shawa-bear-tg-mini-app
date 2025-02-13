@@ -12,6 +12,7 @@ from src.services.errors import IngredientNotFoundError, ProductNotFoundError
 from src.services.product.interface import ProductIngredientServiceI, ProductServiceI
 from src.services.product.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.services.schemas import Image
+from src.services.static import products_path, ingredients_not_found, relationship_not_found
 from src.services.utils import delete_image, save_image, try_commit
 
 
@@ -32,9 +33,9 @@ class ProductService(BaseService, ProductServiceI):
                 missing_ids = set(product_data.ingredient_ids) - {
                     ingredient.ingredient_id for ingredient in ingredients
                 }
-                raise IngredientNotFoundError(f"Ingredients with ids: {missing_ids} not found")
+                raise IngredientNotFoundError(ingredients_not_found.format(missing_ids=missing_ids))
 
-            image_url = await save_image(image, "media/products") if image.filename else None
+            image_url = await save_image(image, products_path) if image.filename else None
 
             new_product = Product(
                 name=product_data.name,
@@ -42,7 +43,7 @@ class ProductService(BaseService, ProductServiceI):
                 image_url=image_url,
             )
             session.add(new_product)
-            await try_commit(session, new_product.name, delete_image, "media/products")
+            await try_commit(session, new_product.name, delete_image, products_path)
             await session.flush()
 
             for ingredient_id in product_data.ingredient_ids:
@@ -70,7 +71,7 @@ class ProductService(BaseService, ProductServiceI):
             return type_adapter.validate_python(product)
 
     async def update(self, product_id: int, product_data: ProductUpdate, image: Image) -> None:
-        image_url = await save_image(image, "media/products") if image.filename else None
+        image_url = await save_image(image, products_path) if image.filename else None
         async with self.session() as session:
             product = await session.get(Product, product_id)
             if product:
@@ -85,9 +86,9 @@ class ProductService(BaseService, ProductServiceI):
                     )
                 if image_url:
                     if filename := product.image_url:
-                        await delete_image(str(filename), "media/products")
+                        await delete_image(str(filename), products_path)
                     product.image_url = image_url
-                await try_commit(session, product_data.name, delete_image, "media/products")
+                await try_commit(session, product_data.name, delete_image, products_path)
             else:
                 raise ProductNotFoundError
 
@@ -105,7 +106,7 @@ class ProductIngredientService(BaseService, ProductIngredientServiceI):
             result = await session.execute(query)
 
             if result.rowcount == 0:
-                raise ProductNotFoundError("No products found with the given product_id")
+                raise ProductNotFoundError(relationship_not_found)
 
             for ingredient_id in product_data.ingredient_ids:
                 new_product_ingredient = ProductIngredient(product_id=product_id, ingredient_id=ingredient_id)
