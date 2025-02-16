@@ -7,7 +7,7 @@ from src.services.order.schemas import OrderCreate, OrderResponse
 from src.services.static import create_message
 
 order_tag = "Order"
-router = APIRouter(prefix="/orders", tags=[order_tag])
+router = APIRouter(prefix="/order", tags=[order_tag])
 
 
 async def get_order_service() -> OrderServiceI:
