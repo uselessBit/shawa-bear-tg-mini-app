@@ -61,7 +61,7 @@ async def update_product(
 
 
 @router.delete("/delete_product/{product_id}")
-async def delete_ingredient(
+async def delete_product(
     product_id: int, product_service: ProductServiceI = Depends(get_product_service)
 ) -> JSONResponse:
     await product_service.delete(product_id)
