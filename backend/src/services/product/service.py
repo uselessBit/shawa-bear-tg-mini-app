@@ -12,7 +12,7 @@ from src.services.errors import IngredientNotFoundError, ProductNotFoundError
 from src.services.product.interface import ProductIngredientServiceI, ProductServiceI
 from src.services.product.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.services.schemas import Image
-from src.services.static import products_path, ingredients_not_found, relationship_not_found
+from src.services.static import ingredients_not_found, products_path, relationship_not_found
 from src.services.utils import delete_image, save_image, try_commit
 
 
@@ -91,6 +91,16 @@ class ProductService(BaseService, ProductServiceI):
                 await try_commit(session, product_data.name, delete_image, products_path)
             else:
                 raise ProductNotFoundError
+
+    async def delete(self, product_id: int) -> None:
+        async with self.session() as session:
+            product = await session.get(Product, product_id)
+            if not product:
+                raise ProductNotFoundError
+            if filename := product.image_url:
+                await delete_image(str(filename), products_path)
+            await session.delete(product)
+            await session.commit()
 
 
 class ProductIngredientService(BaseService, ProductIngredientServiceI):
