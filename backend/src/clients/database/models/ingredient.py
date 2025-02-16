@@ -11,4 +11,4 @@ class Ingredient(Base):
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     image_url: Mapped[str] = mapped_column(nullable=True)
 
-    products: Mapped[list["Product"]] = relationship(back_populates="ingredients", secondary="product_ingredient")
+    products: Mapped[list["Product"]] = relationship(back_populates="ingredients", secondary="product_ingredient")  # noqa: F821

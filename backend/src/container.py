@@ -47,7 +47,9 @@ class DependencyContainer(containers.DeclarativeContainer):
     )
     price_service: Factory["PriceServiceI"] = Factory(PriceService, session=database_session)
     basket_service: Factory["BasketServiceI"] = Factory(BasketService, session=database_session)
-    order_service: Factory["OrderServiceI"] = Factory(OrderService, session=database_session)
+    order_service: Factory["OrderServiceI"] = Factory(
+        OrderService, session=database_session, basket_service=basket_service
+    )
 
 
 container = DependencyContainer()
