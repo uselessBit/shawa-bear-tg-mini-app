@@ -17,3 +17,7 @@ class IngredientServiceI(Protocol):
     @abstractmethod
     async def update(self, ingredient_id: int, ingredient_data: IngredientUpdate, image: Image) -> None:
         ...
+
+    @abstractmethod
+    async def delete(self, ingredient_id: int) -> None:
+        ...

@@ -11,4 +11,4 @@ class Size(Base):
     name: Mapped[str] = mapped_column(String(30), nullable=False, unique=True)
     grams: Mapped[int] = mapped_column(nullable=False)
 
-    prices: Mapped[list["Price"]] = relationship(back_populates="size")
+    prices: Mapped[list["Price"]] = relationship(back_populates="size", cascade="all, delete-orphan")

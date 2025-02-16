@@ -16,3 +16,7 @@ class SizeServiceI(Protocol):
     @abstractmethod
     async def update(self, size_id: int, size_data: SizeUpdate) -> None:
         ...
+
+    @abstractmethod
+    async def delete(self, size_id: int) -> None:
+        ...

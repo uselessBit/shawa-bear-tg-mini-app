@@ -4,8 +4,10 @@ from starlette.responses import JSONResponse
 from src.container import container
 from src.services.order.interface import OrderServiceI
 from src.services.order.schemas import OrderCreate, OrderResponse
+from src.services.static import create_message
 
-router = APIRouter(prefix="/orders", tags=["Orders"])
+order_tag = "Order"
+router = APIRouter(prefix="/order", tags=[order_tag])
 
 
 async def get_order_service() -> OrderServiceI:
@@ -18,7 +20,7 @@ async def create_order(
     order_service: OrderServiceI = Depends(get_order_service),
 ) -> JSONResponse:
     await order_service.create_order(order_data)
-    return JSONResponse(content={"message": "Order created successfully"}, status_code=200)
+    return JSONResponse(content={"message": create_message.format(entity=order_tag)}, status_code=200)
 
 
 @router.get("/get/{order_id}", response_model=OrderResponse)

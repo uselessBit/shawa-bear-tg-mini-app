@@ -2,10 +2,12 @@ from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
 
 from src.container import container
+from src.services.static import create_message
 from src.services.user.interface import UserServiceI
 from src.services.user.schemas import UserCreate, UserResponse
 
-router = APIRouter(prefix="/users", tags=["Users"])
+user_tag = "Users"
+router = APIRouter(prefix="/users", tags=[user_tag])
 
 
 async def get_user_service() -> UserServiceI:
@@ -18,7 +20,7 @@ async def create_user(
     user_service: UserServiceI = Depends(get_user_service),
 ) -> JSONResponse:
     await user_service.create(user)
-    return JSONResponse(content={"message": "User created successfully"}, status_code=200)
+    return JSONResponse(content={"message": create_message.format(entity=user_tag)}, status_code=200)
 
 
 @router.get("/get_user_by_id", response_model=UserResponse)

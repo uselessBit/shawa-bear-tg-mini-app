@@ -35,3 +35,12 @@ class SizeService(BaseService, SizeServiceI):
                 await try_commit(session, size_data.name)
             else:
                 raise SizeNotFoundError
+
+    async def delete(self, size_id: int) -> None:
+        async with self.session() as session:
+            size = await session.get(Size, size_id)
+            if not size:
+                raise SizeNotFoundError
+
+            await session.delete(size)
+            await session.commit()

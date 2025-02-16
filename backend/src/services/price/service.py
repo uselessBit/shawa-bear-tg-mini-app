@@ -52,3 +52,11 @@ class PriceService(BaseService, PriceServiceI):
                     price.price = price_data.price
             else:
                 raise PriceNotFoundError
+
+    async def delete(self, price_id: int) -> None:
+        async with self.session() as session:
+            price = await session.get(Price, price_id)
+            if not price:
+                raise PriceNotFoundError
+            await session.delete(price)
+            await session.commit()

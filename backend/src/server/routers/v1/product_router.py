@@ -6,8 +6,10 @@ from src.container import container
 from src.services.product.interface import ProductServiceI
 from src.services.product.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.services.schemas import Image
+from src.services.static import create_message, delete_message, update_message
 
-router = APIRouter(prefix="/product", tags=["Product"])
+product_tag = "Product"
+router = APIRouter(prefix="/product", tags=[product_tag])
 
 
 async def get_product_service() -> ProductServiceI:
@@ -25,7 +27,7 @@ async def create_product(
         image.file_bytes = await file.read()
         image.filename = file.filename
     await product_service.create(product, image)
-    return JSONResponse(content={"message": "Product created successfully"}, status_code=200)
+    return JSONResponse(content={"message": create_message.format(entity=product_tag)}, status_code=200)
 
 
 @router.get("/get_products", response_model=list[ProductResponse])
@@ -55,4 +57,12 @@ async def update_product(
         image.file_bytes = await file.read()
         image.filename = file.filename
     await product_service.update(product_id, product_data, image)
-    return JSONResponse(content={"message": "Product updated successfully"}, status_code=200)
+    return JSONResponse(content={"message": update_message.format(entity=product_tag)}, status_code=200)
+
+
+@router.delete("/delete_product/{product_id}")
+async def delete_product(
+    product_id: int, product_service: ProductServiceI = Depends(get_product_service)
+) -> JSONResponse:
+    await product_service.delete(product_id)
+    return JSONResponse(content={"message": delete_message.format(entity=product_tag)}, status_code=200)
