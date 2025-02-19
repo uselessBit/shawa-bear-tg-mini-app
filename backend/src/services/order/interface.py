@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from src.services.order.schemas import OrderCreate, OrderResponse
+from src.services.order.schemas import OrderCreate, OrderResponse, OrderStatus
 
 
 class OrderServiceI(Protocol):
@@ -13,3 +13,6 @@ class OrderServiceI(Protocol):
 
     @abstractmethod
     async def get_all(self) -> list[OrderResponse]: ...
+
+    @abstractmethod
+    async def change_status(self, order_id: int, status: OrderStatus): ...

@@ -10,8 +10,10 @@ class Basket(Base):
     basket_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(nullable=False)
 
-    items: Mapped[list["BasketItem"]] = relationship("BasketItem", back_populates="basket", cascade="all, delete-orphan")
-    orders: Mapped[list["Order"]] = relationship("Order", back_populates="basket", cascade="all, delete-orphan")
+    items: Mapped[list["BasketItem"]] = relationship(
+        "BasketItem", back_populates="basket", cascade="all, delete-orphan"
+    )
+    orders: Mapped[list["Order"]] = relationship("Order", back_populates="basket", cascade="all, delete-orphan")  # noqa: F821
 
 
 class BasketItem(Base):
@@ -23,4 +25,4 @@ class BasketItem(Base):
     quantity: Mapped[int] = mapped_column(nullable=False, default=1)
 
     basket: Mapped["Basket"] = relationship("Basket", back_populates="items")
-    price: Mapped["Price"] = relationship("Price", back_populates="basket_items")
+    price: Mapped["Price"] = relationship("Price", back_populates="basket_items")  # noqa: F821
