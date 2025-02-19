@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from src.services.price.schemas import PriceCreate, PriceResponse, PriceUpdate
+from src.services.price.schemas import PriceCreate, PriceFilter, PriceResponse, PriceUpdate
 
 
 class PriceServiceI(Protocol):
@@ -16,3 +16,6 @@ class PriceServiceI(Protocol):
 
     @abstractmethod
     async def delete(self, price_id: int) -> None: ...
+
+    @abstractmethod
+    async def filter_price(self, price_filter: PriceFilter) -> list[PriceResponse]: ...

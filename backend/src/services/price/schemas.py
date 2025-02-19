@@ -22,3 +22,8 @@ class PriceResponse(BaseModel):
 
 class PriceUpdate(BaseModel):
     price: float
+
+
+class PriceFilter(BaseModel):
+    min_price: int | None = None
+    max_price: int | None = None

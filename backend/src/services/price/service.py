@@ -8,7 +8,7 @@ from src.clients.database.models.size import Size
 from src.services.base import BaseService
 from src.services.errors import PriceNotFoundError, ProductNotFoundError, SizeNotFoundError
 from src.services.price.interface import PriceServiceI
-from src.services.price.schemas import PriceCreate, PriceResponse, PriceUpdate
+from src.services.price.schemas import PriceCreate, PriceResponse, PriceUpdate, PriceFilter
 
 
 class PriceService(BaseService, PriceServiceI):
@@ -60,3 +60,19 @@ class PriceService(BaseService, PriceServiceI):
                 raise PriceNotFoundError
             await session.delete(price)
             await session.commit()
+
+    async def filter_price(self, price_filter: PriceFilter) -> list[PriceResponse]:
+        async with self.session() as session:
+            query = select(Price).options(
+                selectinload(Price.product).selectinload(Product.ingredients),
+                selectinload(Price.size),
+            )
+
+            if price_filter.min_price:
+                query = query.filter(Price.price >= price_filter.min_price)
+            if price_filter.max_price:
+                query = query.filter(Price.price <= price_filter.max_price)
+            result = await session.execute(query)
+            prices = result.scalars().all()
+            type_adapter = TypeAdapter(list[PriceResponse])
+            return type_adapter.validate_python(prices)
