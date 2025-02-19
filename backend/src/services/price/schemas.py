@@ -27,3 +27,5 @@ class PriceUpdate(BaseModel):
 class PriceFilter(BaseModel):
     min_price: int | None = None
     max_price: int | None = None
+    min_grams: int | None = None
+    max_grams: int | None = None
