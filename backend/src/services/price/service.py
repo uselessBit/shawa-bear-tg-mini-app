@@ -50,6 +50,8 @@ class PriceService(BaseService, PriceServiceI):
             if price:
                 if price_data.price:
                     price.price = price_data.price
+                if price_data.size_id:
+                    price.size_id = price_data.size_id
             else:
                 raise PriceNotFoundError
 
