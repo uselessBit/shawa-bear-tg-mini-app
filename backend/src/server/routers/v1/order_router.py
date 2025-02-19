@@ -31,3 +31,9 @@ async def get_order(
     order_service: OrderServiceI = Depends(get_order_service),
 ) -> OrderResponse:
     return await order_service.get_order(order_id)
+
+@router.get("/get_all", response_model=list[OrderResponse])
+async def get_all(
+        order_service: OrderServiceI = Depends(get_order_service),
+) -> list[OrderResponse]:
+    return await order_service.get_all()
