@@ -5,7 +5,7 @@ from starlette.responses import JSONResponse
 
 from src.container import container
 from src.services.price.interface import PriceServiceI
-from src.services.price.schemas import PriceCreate, PriceResponse, PriceUpdate
+from src.services.price.schemas import PriceCreate, PriceFilter, PriceResponse, PriceUpdate
 from src.services.static import create_message, delete_message, update_message
 
 price_tag = "Price"
@@ -39,3 +39,10 @@ async def update(
 async def delete(price_id: int, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
     await price_service.delete(price_id)
     return JSONResponse(content={"message": delete_message.format(entity=price_tag)}, status_code=200)
+
+
+@router.post("/filter/price")
+async def filter_price(
+    price_filter: PriceFilter, price_service: PriceServiceI = Depends(get_price_service)
+) -> list[PriceResponse]:
+    return await price_service.filter_price(price_filter)
