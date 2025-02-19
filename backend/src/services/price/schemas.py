@@ -22,6 +22,7 @@ class PriceResponse(BaseModel):
 
 class PriceUpdate(BaseModel):
     price: float
+    size_id: int
 
 
 class PriceFilter(BaseModel):

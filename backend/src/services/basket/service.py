@@ -2,10 +2,11 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 from src.clients.database.models.basket import Basket, BasketItem
+from src.clients.database.models.price import Price
 from src.services.base import BaseService
 from src.services.basket.interface import BasketServiceI
 from src.services.basket.schemas import BasketItemCreate, BasketItemResponse, BasketResponse
-from src.services.errors import BasketItemNotFoundError, BasketNotFoundError
+from src.services.errors import BasketItemNotFoundError, BasketNotFoundError, PriceNotFoundError
 
 
 class BasketService(BaseService, BasketServiceI):
@@ -40,12 +41,14 @@ class BasketService(BaseService, BasketServiceI):
                 basket = Basket(user_id=user_id)
                 session.add(basket)
                 await session.flush()
-
-            new_item = BasketItem(
-                basket_id=basket.basket_id,
-                price_id=item_data.price_id,
-                quantity=item_data.quantity,
-            )
+            if await session.get(Price, item_data.price_id):
+                new_item = BasketItem(
+                    basket_id=basket.basket_id,
+                    price_id=item_data.price_id,
+                    quantity=item_data.quantity,
+                )
+            else:
+                raise PriceNotFoundError
             session.add(new_item)
 
     async def remove_item(self, basket_item_id: int) -> None:
