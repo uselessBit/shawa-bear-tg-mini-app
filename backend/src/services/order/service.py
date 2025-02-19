@@ -10,7 +10,7 @@ from src.services.base import BaseService
 from src.services.basket.interface import BasketServiceI
 from src.services.errors import OrderNotFoundError
 from src.services.order.interface import OrderServiceI
-from src.services.order.schemas import OrderCreate, OrderResponse
+from src.services.order.schemas import OrderCreate, OrderResponse, OrderStatus
 
 
 class OrderService(BaseService, OrderServiceI):
@@ -50,3 +50,12 @@ class OrderService(BaseService, OrderServiceI):
             orders = results.scalars().all()
             type_adapter = TypeAdapter(list[OrderResponse])
             return type_adapter.validate_python(orders)
+
+    async def change_status(self, order_id: int, status: OrderStatus) -> None:
+        async with self.session() as session:
+            order = await session.get(Order, order_id)
+            if order:
+                order.status = status.value
+                await session.commit()
+            else:
+                raise OrderNotFoundError

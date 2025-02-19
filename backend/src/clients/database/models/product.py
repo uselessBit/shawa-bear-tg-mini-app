@@ -13,8 +13,8 @@ class Product(Base):
     description: Mapped[str] = mapped_column(nullable=False)
     image_url: Mapped[str] = mapped_column(nullable=True)
 
-    prices: Mapped[list["Price"]] = relationship(back_populates="product", cascade="all, delete-orphan")
-    ingredients: Mapped[list["Ingredient"]] = relationship(back_populates="products", secondary="product_ingredient")
+    prices: Mapped[list["Price"]] = relationship(back_populates="product", cascade="all, delete-orphan")  # noqa: F821
+    ingredients: Mapped[list["Ingredient"]] = relationship(back_populates="products", secondary="product_ingredient")  # noqa: F821
 
 
 class ProductIngredient(Base):

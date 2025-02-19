@@ -1,11 +1,11 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from starlette.responses import JSONResponse
 
 from src.container import container
 from src.services.order.interface import OrderServiceI
-from src.services.order.schemas import OrderCreate, OrderResponse
+from src.services.order.schemas import OrderCreate, OrderResponse, OrderStatus
 from src.services.static import create_message
 
 order_tag = "Order"
@@ -37,3 +37,12 @@ async def get_all(
         order_service: OrderServiceI = Depends(get_order_service),
 ) -> list[OrderResponse]:
     return await order_service.get_all()
+
+@router.patch("/change_status/{order_id}")
+async def change_status(
+        order_id: int,
+        status: OrderStatus,
+        order_service: OrderServiceI = Depends(get_order_service),
+) -> Response:
+    await order_service.change_status(order_id, status)
+    return Response(status_code=HTTPStatus.NO_CONTENT)
