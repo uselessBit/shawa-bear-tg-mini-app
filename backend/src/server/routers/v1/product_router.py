@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from fastapi import APIRouter, Depends, File, UploadFile
 from starlette.responses import JSONResponse
 
@@ -16,8 +18,8 @@ async def get_product_service() -> ProductServiceI:
     return container.product_service()
 
 
-@router.post("/create_product")
-async def create_product(
+@router.post("/create")
+async def create(
     product: ProductCreate,
     file: UploadFile | None = File(None),
     product_service: ProductServiceI = Depends(get_product_service),
@@ -27,26 +29,26 @@ async def create_product(
         image.file_bytes = await file.read()
         image.filename = file.filename
     await product_service.create(product, image)
-    return JSONResponse(content={"message": create_message.format(entity=product_tag)}, status_code=200)
+    return JSONResponse(content={"message": create_message.format(entity=product_tag)}, status_code=HTTPStatus.CREATED)
 
 
-@router.get("/get_products", response_model=list[ProductResponse])
-async def get_products(
+@router.get("/get_all", response_model=list[ProductResponse])
+async def get_all(
     product_service: ProductServiceI = Depends(get_product_service),
 ) -> list[ProductResponse]:
     return await product_service.get_all()
 
 
-@router.get("/get_product_by_name/{product_name}", response_model=ProductResponse)
-async def get_product_by_name(
+@router.get("/get_by_name/{product_name}", response_model=ProductResponse)
+async def get_by_name(
     product_name: str,
     product_service: ProductServiceI = Depends(get_product_service),
 ) -> Product:
     return await product_service.get_by_name(product_name)
 
 
-@router.patch("/update_product/{product_id}")
-async def update_product(
+@router.patch("/update/{product_id}")
+async def update(
     product_id: int,
     product_data: ProductUpdate,
     file: UploadFile | None = File(None),
@@ -60,8 +62,8 @@ async def update_product(
     return JSONResponse(content={"message": update_message.format(entity=product_tag)}, status_code=200)
 
 
-@router.delete("/delete_product/{product_id}")
-async def delete_product(
+@router.delete("/delete/{product_id}")
+async def delete(
     product_id: int, product_service: ProductServiceI = Depends(get_product_service)
 ) -> JSONResponse:
     await product_service.delete(product_id)

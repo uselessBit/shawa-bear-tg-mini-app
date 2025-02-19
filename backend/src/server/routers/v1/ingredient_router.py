@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from fastapi import APIRouter, Depends, File, UploadFile
 from starlette.responses import JSONResponse
 
@@ -15,8 +17,8 @@ async def get_ingredient_service() -> IngredientServiceI:
     return container.ingredient_service()
 
 
-@router.post("/create_ingredient")
-async def create_ingredient(
+@router.post("/create")
+async def create(
     ingredient: IngredientCreate,
     file: UploadFile | None = File(None),
     ingredient_service: IngredientServiceI = Depends(get_ingredient_service),
@@ -26,18 +28,20 @@ async def create_ingredient(
         image.file_bytes = await file.read()
         image.filename = file.filename
     await ingredient_service.create(ingredient, image)
-    return JSONResponse(content={"message": create_message.format(entity=ingredient_tag)}, status_code=200)
+    return JSONResponse(
+        content={"message": create_message.format(entity=ingredient_tag)}, status_code=HTTPStatus.CREATED
+    )
 
 
-@router.get("/get_ingredients", response_model=list[IngredientResponse])
-async def get_ingredient(
+@router.get("/get_all", response_model=list[IngredientResponse])
+async def get_all(
     ingredient_service: IngredientServiceI = Depends(get_ingredient_service),
 ) -> list[IngredientResponse]:
     return await ingredient_service.get()
 
 
-@router.patch("/update_ingredient/{ingredient_id}")
-async def update_ingredient(
+@router.patch("/update/{ingredient_id}")
+async def update(
     ingredient_id: int,
     ingredient: IngredientUpdate,
     file: UploadFile | None = File(None),
@@ -51,8 +55,8 @@ async def update_ingredient(
     return JSONResponse(content={"message": update_message.format(entity=ingredient_tag)}, status_code=200)
 
 
-@router.delete("/delete_ingredient/{ingredient_id}")
-async def delete_ingredient(
+@router.delete("/delete/{ingredient_id}")
+async def delete(
     ingredient_id: int, ingredient_service: IngredientServiceI = Depends(get_ingredient_service)
 ) -> JSONResponse:
     await ingredient_service.delete(ingredient_id)

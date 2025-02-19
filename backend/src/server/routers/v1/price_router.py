@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
 
@@ -14,26 +16,26 @@ async def get_price_service() -> PriceServiceI:
     return container.price_service()
 
 
-@router.post("/create_price")
-async def create_price(price: PriceCreate, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
+@router.post("/create")
+async def create(price: PriceCreate, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
     await price_service.create(price)
-    return JSONResponse(content={"message": create_message.format(entity=price_tag)}, status_code=200)
+    return JSONResponse(content={"message": create_message.format(entity=price_tag)}, status_code=HTTPStatus.CREATED)
 
 
-@router.get("/get_price")
-async def get_price(price_service: PriceServiceI = Depends(get_price_service)) -> list[PriceResponse]:
+@router.get("/get_all")
+async def get_all(price_service: PriceServiceI = Depends(get_price_service)) -> list[PriceResponse]:
     return await price_service.get_all()
 
 
-@router.patch("/update_price/{price_id}")
-async def update_price(
+@router.patch("/update/{price_id}")
+async def update(
     price_id: int, price: PriceUpdate, price_service: PriceServiceI = Depends(get_price_service)
 ) -> JSONResponse:
     await price_service.update(price_id, price)
     return JSONResponse(content={"message": update_message.format(entity=price_tag)}, status_code=200)
 
 
-@router.delete("/delete_price/{price_id}")
-async def delete_price(price_id: int, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
+@router.delete("/delete/{price_id}")
+async def delete(price_id: int, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
     await price_service.delete(price_id)
     return JSONResponse(content={"message": delete_message.format(entity=price_tag)}, status_code=200)
