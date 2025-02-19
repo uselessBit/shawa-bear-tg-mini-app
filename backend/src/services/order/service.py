@@ -42,3 +42,11 @@ class OrderService(BaseService, OrderServiceI):
                 raise OrderNotFoundError
             type_adapter = TypeAdapter(OrderResponse)
             return type_adapter.validate_python(order)
+
+    async def get_all(self) -> list[OrderResponse]:
+        async with self.session() as session:
+            query = select(Order)
+            results = await session.execute(query)
+            orders = results.scalars().all()
+            type_adapter = TypeAdapter(list[OrderResponse])
+            return type_adapter.validate_python(orders)
