@@ -41,7 +41,7 @@ async def delete(price_id: int, price_service: PriceServiceI = Depends(get_price
     return JSONResponse(content={"message": delete_message.format(entity=price_tag)}, status_code=200)
 
 
-@router.post("/filter/price")
+@router.post("/filter_price")
 async def filter_price(
     price_filter: PriceFilter, price_service: PriceServiceI = Depends(get_price_service)
 ) -> list[PriceResponse]:

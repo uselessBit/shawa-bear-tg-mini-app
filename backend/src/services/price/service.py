@@ -72,6 +72,10 @@ class PriceService(BaseService, PriceServiceI):
                 query = query.filter(Price.price >= price_filter.min_price)
             if price_filter.max_price:
                 query = query.filter(Price.price <= price_filter.max_price)
+            if price_filter.min_grams:
+                query = query.filter(Price.size.has(Size.grams >= price_filter.min_grams))
+            if price_filter.max_grams:
+                query = query.filter(Price.size.has(Size.grams <= price_filter.max_grams))
             result = await session.execute(query)
             prices = result.scalars().all()
             type_adapter = TypeAdapter(list[PriceResponse])
