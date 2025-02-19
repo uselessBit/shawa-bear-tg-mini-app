@@ -121,3 +121,4 @@ class ProductIngredientService(BaseService, ProductIngredientServiceI):
             for ingredient_id in product_data.ingredient_ids:
                 new_product_ingredient = ProductIngredient(product_id=product_id, ingredient_id=ingredient_id)
                 session.add(new_product_ingredient)
+            await session.commit()
