@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
 
@@ -29,7 +31,9 @@ async def add_item(
     basket_service: BasketServiceI = Depends(get_basket_service),
 ) -> JSONResponse:
     await basket_service.add_item(user_id, item_data)
-    return JSONResponse(content={"message": create_message.format(entity=basket_tag)}, status_code=200)
+    return JSONResponse(
+        content={"message": create_message.format(entity=basket_tag + " item")}, status_code=HTTPStatus.CREATED
+    )
 
 
 @router.delete("/remove_item/{basket_item_id}")
@@ -43,8 +47,8 @@ async def remove_item(
 
 @router.delete("/clear_basket/{basket_id}")
 async def clear_basket(
-        basket_id: int,
-        basket_service: BasketServiceI = Depends(get_basket_service),
+    basket_id: int,
+    basket_service: BasketServiceI = Depends(get_basket_service),
 ) -> JSONResponse:
     await basket_service.clear_basket(basket_id)
     return JSONResponse(content={"message": delete_message.format(entity=basket_tag)}, status_code=200)
