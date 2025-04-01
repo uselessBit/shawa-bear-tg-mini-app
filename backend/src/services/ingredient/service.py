@@ -15,7 +15,7 @@ class IngredientService(BaseService, IngredientServiceI):
     async def create(self, ingredient: IngredientCreate, image: Image) -> None:
         async with self.session() as session:
             image_url = await save_image(image, ingredients_path) if image.filename else None
-            new_ingredient = Ingredient(name=ingredient.name, image_url=image_url)
+            new_ingredient = Ingredient(image_url=image_url, **ingredient.model_dump())
             session.add(new_ingredient)
             await try_commit(session, ingredient.name, delete_image, ingredients_path)
 
@@ -35,6 +35,8 @@ class IngredientService(BaseService, IngredientServiceI):
             if ingredient:
                 if ingredient_data.name:
                     ingredient.name = ingredient_data.name
+                if ingredient_data.price:
+                    ingredient.price = ingredient_data.price
                 if image_url:
                     if filename := ingredient.image_url:
                         await delete_image(str(filename), ingredients_path)

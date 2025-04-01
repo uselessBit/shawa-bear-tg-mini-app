@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, model_validator
 
 class IngredientCreate(BaseModel):
     name: str
+    price: float | None
 
     @model_validator(mode="before")
     @classmethod
@@ -17,6 +18,7 @@ class IngredientResponse(BaseModel):
     ingredient_id: int
     name: str
     image_url: str | None
+    price: float | None
 
     class Config:
         from_attributes = True
@@ -24,6 +26,7 @@ class IngredientResponse(BaseModel):
 
 class IngredientUpdate(BaseModel):
     name: str = Field(None)
+    price: float | None
 
     @model_validator(mode="before")
     @classmethod

@@ -8,7 +8,7 @@ from src.clients.database.models.size import Size
 from src.services.base import BaseService
 from src.services.errors import PriceNotFoundError, ProductNotFoundError, SizeNotFoundError
 from src.services.price.interface import PriceServiceI
-from src.services.price.schemas import PriceCreate, PriceResponse, PriceUpdate, PriceFilter
+from src.services.price.schemas import PriceCreate, PriceFilter, PriceResponse, PriceUpdate
 
 
 class PriceService(BaseService, PriceServiceI):
