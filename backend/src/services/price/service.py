@@ -27,9 +27,7 @@ class PriceService(BaseService, PriceServiceI):
                 raise SizeNotFoundError
 
             price = Price(
-                size_id=price_data.size_id,
-                product_id=price_data.product_id,
-                price=price_data.price,
+                **price_data.model_dump(),
             )
             session.add(price)
 
@@ -47,13 +45,14 @@ class PriceService(BaseService, PriceServiceI):
     async def update(self, price_id: int, price_data: PriceUpdate) -> None:
         async with self.session() as session, session.begin():
             price = await session.get(Price, price_id)
-            if price:
-                if price_data.price:
-                    price.price = price_data.price
-                if price_data.size_id:
-                    price.size_id = price_data.size_id
-            else:
+            if not price:
                 raise PriceNotFoundError
+
+            update_data = price_data.model_dump(exclude_unset=True, exclude={"product_id", "price_id"})
+
+            for field, value in update_data.items():
+                if hasattr(price, field):
+                    setattr(price, field, value)
 
     async def delete(self, price_id: int) -> None:
         async with self.session() as session:

@@ -11,6 +11,11 @@ class Price(Base):
     size_id: Mapped[int] = mapped_column(ForeignKey("sizes.size_id", ondelete="CASCADE"))
     product_id: Mapped[int] = mapped_column(ForeignKey("products.product_id", ondelete="CASCADE"))
     price: Mapped[float] = mapped_column(nullable=False)
+    proteins: Mapped[int] = mapped_column(nullable=True)
+    fats: Mapped[int] = mapped_column(nullable=True)
+    carbohydrates: Mapped[int] = mapped_column(nullable=True)
+    calories: Mapped[int] = mapped_column(nullable=True)
+    is_custom: Mapped[bool] = mapped_column(nullable=False)
 
     product: Mapped["Product"] = relationship(back_populates="prices")  # noqa: F821
     size: Mapped["Size"] = relationship(back_populates="prices")  # noqa: F821
