@@ -8,7 +8,8 @@ class User(Base):
     __table_args__ = {"extend_existing": True}
 
     user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=False)
-    first_name: Mapped[str] = mapped_column()
-    last_name: Mapped[str] = mapped_column()
-    username: Mapped[str] = mapped_column()
-    language_code: Mapped[str] = mapped_column()
+    first_name: Mapped[str] = mapped_column(nullable=True)
+    last_name: Mapped[str] = mapped_column(nullable=True)
+    username: Mapped[str] = mapped_column(nullable=True)
+    language_code: Mapped[str] = mapped_column(nullable=True)
+    coins: Mapped[int] = mapped_column(nullable=True)
