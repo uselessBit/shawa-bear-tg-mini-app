@@ -22,7 +22,6 @@ View layout at [Figma](https://www.figma.com/design/XvUYgGWgPnsX1pYS7OPXPV/%D0%A
     ├── settings/
     ├── container.py
     ├── __main__.py
-└──  tests
 ```
 
 ## Local Developing
