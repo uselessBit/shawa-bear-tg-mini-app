@@ -16,7 +16,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: backend
     container_name: backend
     ports:
       - "8000:8000"
@@ -27,6 +27,17 @@ services:
       - my_network
     depends_on:
       - db
+
+  bot:
+    build:
+      context: bot
+    container_name: bot
+    ports:
+      - "8001:8001"
+    networks:
+      - my_network
+    depends_on:
+      - backend
 
   adminer:
     image: adminer

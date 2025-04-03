@@ -28,6 +28,6 @@ def create_application() -> CustomFastAPI:
         allow_headers=["*"],
     )
     patch_exception_handlers(app=server)
-    server.mount("/media", StaticFiles(directory="./media"), name="media")
+    server.mount("/media", StaticFiles(directory="/media"), name="media")
     server.include_router(api_v1_router)
     return server

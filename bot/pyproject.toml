@@ -6,7 +6,7 @@ authors = ["d.drik <27danik98@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 aiogram = "^3.19.0"
 python-dotenv = "^1.1.0"
 

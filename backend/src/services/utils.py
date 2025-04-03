@@ -1,6 +1,8 @@
 import logging
 import uuid
+from collections.abc import Callable
 from pathlib import Path
+from typing import ParamSpec, TypeVar
 
 import aiofiles
 import anyio
@@ -11,6 +13,8 @@ from src.services.errors import KeyAlreadyExists
 from src.services.schemas import Image
 
 logger = logging.getLogger(__name__)
+P = ParamSpec("P")
+T = TypeVar("T")
 
 
 async def save_image(image: Image, directory: str | None = "media") -> str:
@@ -43,7 +47,13 @@ async def delete_image(filename: str, directory: str | None = "media") -> None:
         logger.exception("File %s does not exist.", filename)
 
 
-async def try_commit(session: AsyncSession, entity_name: str, callback=None, *callback_args, **callback_kwargs):
+async def try_commit(
+    session: AsyncSession,
+    entity_name: str,
+    callback: Callable[P, T] | None = None,
+    *callback_args: P.args,
+    **callback_kwargs: P.kwargs,
+) -> None:
     try:
         await session.commit()
     except IntegrityError as e:
