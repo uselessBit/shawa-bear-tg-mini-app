@@ -1,11 +1,16 @@
-FROM python:3.12
+FROM python:3.11
 
 WORKDIR /bot
 
-COPY requirements.txt .
+RUN pip install --no-cache-dir poetry
 
-RUN pip install -r requirements.txt
+RUN poetry config virtualenvs.in-project true && \
+    poetry config virtualenvs.create false
+
+COPY pyproject.toml poetry.lock /bot/
+
+RUN poetry install --no-interaction --only main --no-root
 
 COPY . .
 
-CMD ["python", "-m", "main"]
+CMD ["python3", "-m", "src"]
