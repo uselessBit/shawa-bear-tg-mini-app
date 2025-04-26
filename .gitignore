@@ -3,3 +3,6 @@ media
 localhost-key.pem
 localhost.pem
 .env
+
+# Front
+./frontend/src/components/

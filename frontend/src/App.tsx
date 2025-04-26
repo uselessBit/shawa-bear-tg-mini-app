@@ -1,12 +1,13 @@
-import { Button, HStack } from "@chakra-ui/react"
+import { ChakraProvider, Box } from '@chakra-ui/react'
+import { ColorModeButton } from '@/components/ui/color-mode'
+import { system } from './theme.ts'
 
-function App() {
-  return (
-      <HStack>
-          <Button>Click me</Button>
-          <Button>Click me</Button>
-      </HStack>
-  )
+export default function App() {
+    return (
+        <ChakraProvider value={system}>
+            <Box bg="back" color="text" p={4}>
+                <ColorModeButton />
+            </Box>
+        </ChakraProvider>
+    )
 }
-
-export default App
