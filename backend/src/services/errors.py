@@ -44,7 +44,7 @@ class BasketItemNotFoundError(BaseError):
         super().__init__(message)
 
 
-class KeyAlreadyExists(BaseError):
+class KeyAlreadyExistsError(BaseError):
     def __init__(self, name: str, message: str = "Name '{}' already exists"):
         formatted_message = message.format(name)
         super().__init__(formatted_message)
