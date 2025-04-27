@@ -9,7 +9,7 @@ import anyio
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.services.errors import KeyAlreadyExists
+from src.services.errors import KeyAlreadyExistsError
 from src.services.schemas import Image
 
 logger = logging.getLogger(__name__)
@@ -60,4 +60,4 @@ async def try_commit(
         await session.rollback()
         if callback:
             await callback(*callback_args, **callback_kwargs)
-        raise KeyAlreadyExists(name=entity_name) from e
+        raise KeyAlreadyExistsError(name=entity_name) from e
