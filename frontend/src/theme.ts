@@ -1,8 +1,23 @@
 import { defineConfig, createSystem, defaultConfig } from '@chakra-ui/react'
 
 const config = defineConfig({
+    globalCss: {
+        body: {
+            backgroundColor: 'back',
+        },
+    },
     theme: {
         tokens: {
+            spacing: {
+                gap: { value: '16px' },
+            },
+            sizes: {
+                hb: { value: '40px' },
+            },
+            fonts: {
+                heading: { value: 'Montserrat Variable' },
+                body: { value: 'Montserrat Variable' },
+            },
             colors: {
                 'token-accent': { value: '#6ED209' },
                 'token-black': { value: '#151613' },

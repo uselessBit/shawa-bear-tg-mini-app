@@ -14,12 +14,14 @@
     "@chakra-ui/react": "^3.16.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@fontsource-variable/montserrat": "^5.2.5",
     "framer-motion": "^12.9.2",
     "next-themes": "^0.4.6",
     "panda-css": "^1.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.5.0",
+    "react-intersection-observer": "^9.16.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
