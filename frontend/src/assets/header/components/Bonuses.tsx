@@ -7,7 +7,7 @@ export default function Bonuses() {
         <Flex
             bg="gray"
             width="fit"
-            px="16px"
+            px="12px"
             rounded="full"
             alignItems="center"
             justifyContent="center"
@@ -18,7 +18,7 @@ export default function Bonuses() {
                 <RiBearSmileFill />
             </Icon>
 
-            <Text fontWeight="700" fontSize="xl" color="text">
+            <Text fontWeight="700" fontSize="lm" color="text">
                 666
             </Text>
         </Flex>

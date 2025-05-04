@@ -12,7 +12,7 @@ const config = defineConfig({
                 gap: { value: '16px' },
             },
             sizes: {
-                hb: { value: '40px' },
+                hb: { value: '32px' },
             },
             fonts: {
                 heading: { value: 'Montserrat Variable' },

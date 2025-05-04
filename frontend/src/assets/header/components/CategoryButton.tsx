@@ -17,11 +17,11 @@ export default function CategoryButton({
                 <Button
                     bg="gray"
                     rounded="full"
-                    h="38px"
-                    px="30px"
+                    h="hb"
+                    px="24px"
                     onClick={onClick}
                 >
-                    <Text color="text" fontWeight="600">
+                    <Text color="text" fontWeight="600" fontSize="xs">
                         {text}
                     </Text>
                 </Button>
@@ -29,12 +29,12 @@ export default function CategoryButton({
                 <Button
                     bg="back"
                     rounded="full"
-                    h="38px"
-                    px="30px"
+                    h="hb"
+                    px="24px"
                     opacity="50%"
                     onClick={onClick}
                 >
-                    <Text color="text" fontWeight="600">
+                    <Text color="text" fontWeight="600" fontSize="xs">
                         {text}
                     </Text>
                 </Button>

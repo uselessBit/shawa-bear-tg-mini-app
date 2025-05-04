@@ -37,7 +37,7 @@ export default function Header() {
 
             <PromoGroup />
 
-            <Box position="sticky" top="56px">
+            <Box position="sticky" top="48px" zIndex="2">
                 <CategoriesGroup />
             </Box>
         </>
