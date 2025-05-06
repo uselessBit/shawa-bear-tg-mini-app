@@ -13,6 +13,10 @@ class SizeNotFoundError(BaseError):
     def __init__(self, message: str = "Size not found error"):
         super().__init__(message)
 
+class CategoryNotFoundError(BaseError):
+    def __init__(self, message: str = "Category not found error"):
+        super().__init__(message)
+
 
 class ProductNotFoundError(BaseError):
     def __init__(self, message: str = "Product not found error"):

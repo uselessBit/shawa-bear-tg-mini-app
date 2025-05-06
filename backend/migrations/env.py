@@ -31,6 +31,7 @@ from src.clients.database.models.basket import *
 from src.clients.database.models.ingredient import *
 from src.clients.database.models.order import *
 from src.clients.database.models.product import *
+from src.clients.database.models.category import *
 from src.clients.database.models.price import *
 from src.clients.database.models.size import *
 from src.clients.database.models.user import *

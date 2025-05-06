@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from src.server.routers.v1 import (
     basket_router,
+    category_router,
     ingredient_router,
     order_router,
     price_router,
@@ -12,6 +13,7 @@ from src.server.routers.v1 import (
 
 api_v1_router = APIRouter(prefix="/api/v1")
 api_v1_router.include_router(size_router.router)
+api_v1_router.include_router(category_router.router)
 api_v1_router.include_router(ingredient_router.router)
 api_v1_router.include_router(product_router.router)
 api_v1_router.include_router(price_router.router)

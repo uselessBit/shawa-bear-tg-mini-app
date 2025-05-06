@@ -19,7 +19,7 @@ ERROR_STATUS_MAP = {
     errors.IngredientNotFoundError: HTTPStatus.BAD_REQUEST,
     errors.BasketNotFoundError: HTTPStatus.BAD_REQUEST,
     errors.BasketItemNotFoundError: HTTPStatus.BAD_REQUEST,
-    errors.KeyAlreadyExists: HTTPStatus.BAD_REQUEST,
+    errors.KeyAlreadyExistsError: HTTPStatus.BAD_REQUEST,
 }
 
 
