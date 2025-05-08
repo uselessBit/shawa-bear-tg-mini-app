@@ -5,6 +5,7 @@ from dependency_injector.providers import Factory, Resource, Singleton
 
 from src.clients.database.engine import Database, async_engine
 from src.services.basket.service import BasketService
+from src.services.category.service import CategoryService
 from src.services.ingredient.service import IngredientService
 from src.services.order.service import OrderService
 from src.services.price.service import PriceService
@@ -19,6 +20,7 @@ if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession
 
     from src.services.basket.interface import BasketServiceI
+    from src.services.category.interface import CategoryServiceI
     from src.services.ingredient.interface import IngredientServiceI
     from src.services.order.interface import OrderServiceI
     from src.services.price.interface import PriceServiceI
@@ -38,6 +40,7 @@ class DependencyContainer(containers.DeclarativeContainer):
 
     user_service: Factory["UserServiceI"] = Factory(UserService, session=database_session)
     size_service: Factory["SizeServiceI"] = Factory(SizeService, session=database_session)
+    category_service: Factory["CategoryServiceI"] = Factory(CategoryService, session=database_session)
     ingredient_service: Factory["IngredientServiceI"] = Factory(IngredientService, session=database_session)
     product_ingredient_service: Factory["ProductIngredientServiceI"] = Factory(
         ProductIngredientService, session=database_session

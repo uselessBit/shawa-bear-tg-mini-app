@@ -13,6 +13,10 @@ class SizeNotFoundError(BaseError):
     def __init__(self, message: str = "Size not found error"):
         super().__init__(message)
 
+class CategoryNotFoundError(BaseError):
+    def __init__(self, message: str = "Category not found error"):
+        super().__init__(message)
+
 
 class ProductNotFoundError(BaseError):
     def __init__(self, message: str = "Product not found error"):
@@ -44,7 +48,7 @@ class BasketItemNotFoundError(BaseError):
         super().__init__(message)
 
 
-class KeyAlreadyExists(BaseError):
+class KeyAlreadyExistsError(BaseError):
     def __init__(self, name: str, message: str = "Name '{}' already exists"):
         formatted_message = message.format(name)
         super().__init__(formatted_message)

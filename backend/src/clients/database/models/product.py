@@ -9,11 +9,13 @@ class Product(Base):
     __table_args__ = {"extend_existing": True}
 
     product_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.category_id", ondelete="CASCADE"), primary_key=True)
     name: Mapped[str] = mapped_column(String(30), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(nullable=False)
     image_url: Mapped[str] = mapped_column(nullable=True)
 
     prices: Mapped[list["Price"]] = relationship(back_populates="product", cascade="all, delete-orphan")  # noqa: F821
+    category: Mapped["Category"] = relationship(back_populates="products")  # noqa: F821
     ingredients: Mapped[list["Ingredient"]] = relationship(back_populates="products", secondary="product_ingredient")  # noqa: F821
 
 
