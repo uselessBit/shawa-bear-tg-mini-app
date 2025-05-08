@@ -26,12 +26,15 @@ export default function CategoriesGroup() {
 
     return (
         <Flex
-            bg="back"
+            bg="back/70"
+            backdropFilter="blur(16px)"
             gap="8px"
             overflowY="auto"
             scrollbar="hidden"
             w="100%"
-            p="gap"
+            px="gap"
+            py="8px"
+            my="8px"
         >
             {buttons.map((button, index) => (
                 <CategoryButton

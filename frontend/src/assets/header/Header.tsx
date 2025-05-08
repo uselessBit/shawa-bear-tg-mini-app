@@ -11,8 +11,9 @@ export default function Header() {
                 position="sticky"
                 top="0"
                 bg="back"
+                backdropFilter="blur(10px)"
                 p="gap"
-                zIndex="2"
+                zIndex="3"
                 w="100%"
             >
                 <Box position="relative">
@@ -37,7 +38,7 @@ export default function Header() {
 
             <PromoGroup />
 
-            <Box position="sticky" top="48px" zIndex="2">
+            <Box position="sticky" top="64px" zIndex="2">
                 <CategoriesGroup />
             </Box>
         </>
