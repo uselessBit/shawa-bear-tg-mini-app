@@ -6,3 +6,4 @@ localhost.pem
 
 # Front
 ./frontend/src/components/
+./frontend/node_modules/
