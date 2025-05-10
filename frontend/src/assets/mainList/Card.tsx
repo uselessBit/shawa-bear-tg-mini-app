@@ -1,6 +1,10 @@
 import { Text, Flex, Button, Image, Heading, Mark } from '@chakra-ui/react'
 
-export default function Card() {
+type CardProps = {
+    title: string
+}
+
+export default function Card({ title }: CardProps) {
     return (
         <Button
             borderWidth="1px"
@@ -20,7 +24,8 @@ export default function Card() {
                 flexDirection="column"
                 flex="2"
                 height="full"
-                py="12px"
+                pb="12px"
+                pt="6px"
                 justifyContent="space-between"
             >
                 <Heading
@@ -30,9 +35,8 @@ export default function Card() {
                     w="95%"
                     size="2xl"
                     fontWeight="600"
-                    lineHeight="22px"
                 >
-                    Чикен
+                    {title}
                 </Heading>
 
                 <Text
@@ -44,6 +48,7 @@ export default function Card() {
                     w="95%"
                     lineHeight="15px"
                     fontSize="xs"
+                    mb="4px"
                 >
                     стандартный лаваш, курица, помидор, огурец, салат, чесночный
                     соус, томатный соус

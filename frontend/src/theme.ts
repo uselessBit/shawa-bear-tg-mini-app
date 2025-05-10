@@ -5,6 +5,10 @@ const config = defineConfig({
         body: {
             backgroundColor: 'back',
         },
+        html: {
+            scrollBehavior: 'smooth',
+            scrollPaddingTop: '110px',
+        },
     },
     theme: {
         tokens: {

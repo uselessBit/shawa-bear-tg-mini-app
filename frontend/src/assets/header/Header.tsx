@@ -4,7 +4,17 @@ import ProfileButton from './components/ProfileButton.tsx'
 import PromoGroup from './components/PromoGroup.tsx'
 import CategoriesGroup from './components/CategoriesGroup.tsx'
 
-export default function Header() {
+type HeaderProps = {
+    categories: string[]
+    activeCategory: string
+    setActiveCategory: (category: string) => void
+}
+
+export default function Header({
+    categories,
+    activeCategory,
+    setActiveCategory,
+}: HeaderProps) {
     return (
         <>
             <Box
@@ -39,7 +49,11 @@ export default function Header() {
             <PromoGroup />
 
             <Box position="sticky" top="64px" zIndex="2">
-                <CategoriesGroup />
+                <CategoriesGroup
+                    categories={categories}
+                    activeCategory={activeCategory}
+                    setActiveCategory={setActiveCategory}
+                />
             </Box>
         </>
     )
