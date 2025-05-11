@@ -38,6 +38,9 @@ services:
       - my_network
     depends_on:
       - backend
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
 
   adminer:
     image: adminer
