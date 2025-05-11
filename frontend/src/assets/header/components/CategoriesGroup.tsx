@@ -1,6 +1,7 @@
-import { Flex } from '@chakra-ui/react'
+import { Flex, Skeleton } from '@chakra-ui/react'
 import { useRef, useEffect } from 'react'
 import CategoryButton from './CategoryButton.tsx'
+import { useCategories } from '@/hooks/useCategories'
 
 type CategoriesGroupProps = {
     categories: string[]
@@ -13,10 +14,11 @@ export default function CategoriesGroup({
     activeCategory,
     setActiveCategory,
 }: CategoriesGroupProps) {
+    const { loading } = useCategories()
+
     const containerRef = useRef<HTMLDivElement>(null)
     const buttonRefs = useRef<Map<string, HTMLButtonElement>>(new Map())
 
-    // Скролл к активной кнопке
     useEffect(() => {
         const button = buttonRefs.current.get(activeCategory)
         const container = containerRef.current
@@ -52,17 +54,23 @@ export default function CategoriesGroup({
             py="8px"
             my="8px"
         >
-            {categories.map((category) => (
-                <CategoryButton
-                    key={category}
-                    innerRef={(node) =>
-                        node && buttonRefs.current.set(category, node)
-                    }
-                    text={category}
-                    isActive={activeCategory === category}
-                    onClick={() => handleClick(category)}
-                />
-            ))}
+            {loading
+                ? Array(4)
+                      .fill(0)
+                      .map((_, i) => (
+                          <Skeleton key={i} h="32px" w="100px" rounded="26px" />
+                      ))
+                : categories.map((category) => (
+                      <CategoryButton
+                          key={category}
+                          innerRef={(node) =>
+                              node && buttonRefs.current.set(category, node)
+                          }
+                          text={category}
+                          isActive={activeCategory === category}
+                          onClick={() => handleClick(category)}
+                      />
+                  ))}
         </Flex>
     )
 }

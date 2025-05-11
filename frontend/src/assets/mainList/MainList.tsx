@@ -1,4 +1,4 @@
-import { Flex, Alert, Skeleton } from '@chakra-ui/react'
+import { Alert, Flex, Skeleton } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import Card from './components/Card'
 import CategoryTitle from './components/CategoryTitle'
@@ -30,10 +30,10 @@ export default function MainList({
 
     useEffect(() => {
         setIsAutoChangeBlocked(true)
-        const timeout = setTimeout(() => {
+
+        setTimeout(() => {
             setIsAutoChangeBlocked(false)
         }, 700)
-        return () => clearTimeout(timeout)
     }, [activeCategory])
 
     useEffect(() => {
@@ -55,40 +55,41 @@ export default function MainList({
 
     return (
         <Flex px="gap" flexDirection="column" gap="gap">
-            {loading
-                ? Array(6)
-                      .fill(0)
-                      .map((_, i) => (
-                          <Skeleton
-                              key={i}
-                              height="140px"
-                              borderRadius="26px"
-                          />
-                      ))
-                : categories.map((category) => (
-                      <Flex
-                          id={category}
-                          key={category}
-                          direction="column"
-                          gap="gap"
-                          minH="500px"
-                      >
-                          <CategoryTitle
-                              category={category}
-                              onVisibilityChange={handleVisibilityChange}
-                          />
+            {loading ? (
+                <>
+                    <Skeleton h="32px" rounded="26px" />
+                    {Array(6)
+                        .fill(0)
+                        .map((_, i) => (
+                            <Skeleton key={i} h="140px" rounded="26px" />
+                        ))}
+                </>
+            ) : (
+                categories.map((category) => (
+                    <Flex
+                        id={category}
+                        key={category}
+                        direction="column"
+                        gap="gap"
+                        minH="500px"
+                    >
+                        <CategoryTitle
+                            category={category}
+                            onVisibilityChange={handleVisibilityChange}
+                        />
 
-                          {getProductsByCategory(category).map((price) => (
-                              <Card
-                                  title={price.product.name}
-                                  key={`${price.product.product_id}-${price.size.size_id}`}
-                                  price={price.price}
-                                  ingredients={price.product.ingredients}
-                                  imageUrl={price.product.image_url}
-                              />
-                          ))}
-                      </Flex>
-                  ))}
+                        {getProductsByCategory(category).map((price) => (
+                            <Card
+                                title={price.product.name}
+                                key={`${price.product.product_id}-${price.size.size_id}`}
+                                price={price.price}
+                                ingredients={price.product.ingredients}
+                                imageUrl={price.product.image_url}
+                            />
+                        ))}
+                    </Flex>
+                ))
+            )}
         </Flex>
     )
 }

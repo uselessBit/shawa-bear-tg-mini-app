@@ -1,8 +1,9 @@
 import axios from 'axios'
-import { Price } from '@/types/Products'
+import { Price, Category } from '@/types/Products'
 import API_BASE_URL from '@/config'
 
 let cachedPrices: Price[] | null = null
+let cachedCategories: Category[] | null = null
 
 export const ProductService = {
     fetchAllPrices: async (): Promise<Price[]> => {
@@ -40,5 +41,20 @@ export const ProductService = {
         return ProductService.getUniqueProducts().filter(
             (price) => price.product.category.name === category
         )
+    },
+
+    fetchCategories: async (): Promise<Category[]> => {
+        if (cachedCategories) return cachedCategories
+
+        try {
+            const response = await axios.get<Category[]>(
+                `${API_BASE_URL}api/v1/category/`
+            )
+            cachedCategories = response.data
+            return cachedCategories
+        } catch (error) {
+            console.error('Error fetching categories:', error)
+            throw error
+        }
     },
 }
