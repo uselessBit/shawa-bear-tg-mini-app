@@ -16,7 +16,7 @@ async def get_category_service() -> CategoryServiceI:
     return container.category_service()
 
 
-@router.post("/create")
+@router.post("/")
 async def create(
     category: CategoryCreate, category_service: CategoryServiceI = Depends(get_category_service)
 ) -> JSONResponse:
@@ -24,12 +24,12 @@ async def create(
     return JSONResponse(content={"message": create_message.format(entity=category_tag)}, status_code=HTTPStatus.CREATED)
 
 
-@router.get("/get_all", response_model=list[CategoryResponse])
+@router.get("/", response_model=list[CategoryResponse])
 async def get_all(category_service: CategoryServiceI = Depends(get_category_service)) -> list[CategoryResponse]:
     return await category_service.get_all()
 
 
-@router.patch("/update/{category_id}")
+@router.patch("/{category_id}")
 async def update(
     category_id: int, category: CategoryUpdate, category_service: CategoryServiceI = Depends(get_category_service)
 ) -> JSONResponse:
@@ -37,7 +37,7 @@ async def update(
     return JSONResponse(content={"message": update_message.format(entity=category_tag)}, status_code=200)
 
 
-@router.delete("/delete/{category_id}")
+@router.delete("/{category_id}")
 async def delete(category_id: int, category_service: CategoryServiceI = Depends(get_category_service)) -> JSONResponse:
     await category_service.delete(category_id)
     return JSONResponse(content={"message": delete_message.format(entity=category_tag)}, status_code=200)

@@ -18,7 +18,7 @@ async def get_product_service() -> ProductServiceI:
     return container.product_service()
 
 
-@router.post("/create")
+@router.post("/")
 async def create(
     product: ProductCreate,
     file: UploadFile | None = File(None),
@@ -32,7 +32,7 @@ async def create(
     return JSONResponse(content={"message": create_message.format(entity=product_tag)}, status_code=HTTPStatus.CREATED)
 
 
-@router.get("/get_all", response_model=list[ProductResponse])
+@router.get("/", response_model=list[ProductResponse])
 async def get_all(
     product_service: ProductServiceI = Depends(get_product_service),
 ) -> list[ProductResponse]:
@@ -47,7 +47,7 @@ async def get_by_name(
     return await product_service.get_by_name(product_name)
 
 
-@router.patch("/update/{product_id}")
+@router.patch("/{product_id}")
 async def update(
     product_id: int,
     product_data: ProductUpdate,
@@ -62,7 +62,7 @@ async def update(
     return JSONResponse(content={"message": update_message.format(entity=product_tag)}, status_code=200)
 
 
-@router.delete("/delete/{product_id}")
+@router.delete("/{product_id}")
 async def delete(
     product_id: int, product_service: ProductServiceI = Depends(get_product_service)
 ) -> JSONResponse:

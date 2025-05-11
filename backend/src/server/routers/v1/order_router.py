@@ -16,7 +16,7 @@ async def get_order_service() -> OrderServiceI:
     return container.order_service()
 
 
-@router.post("/create", response_model=OrderResponse)
+@router.post("/", response_model=OrderResponse)
 async def create_order(
     order_data: OrderCreate,
     order_service: OrderServiceI = Depends(get_order_service),
@@ -25,14 +25,14 @@ async def create_order(
     return JSONResponse(content={"message": create_message.format(entity=order_tag)}, status_code=HTTPStatus.CREATED)
 
 
-@router.get("/get/{order_id}", response_model=OrderResponse)
+@router.get("/{order_id}", response_model=OrderResponse)
 async def get_order(
     order_id: int,
     order_service: OrderServiceI = Depends(get_order_service),
 ) -> OrderResponse:
     return await order_service.get_order(order_id)
 
-@router.get("/get_all", response_model=list[OrderResponse])
+@router.get("/", response_model=list[OrderResponse])
 async def get_all(
         order_service: OrderServiceI = Depends(get_order_service),
 ) -> list[OrderResponse]:

@@ -17,7 +17,7 @@ async def get_ingredient_service() -> IngredientServiceI:
     return container.ingredient_service()
 
 
-@router.post("/create")
+@router.post("/")
 async def create(
     ingredient: IngredientCreate,
     file: UploadFile | None = File(None),
@@ -33,14 +33,14 @@ async def create(
     )
 
 
-@router.get("/get_all", response_model=list[IngredientResponse])
+@router.get("/", response_model=list[IngredientResponse])
 async def get_all(
     ingredient_service: IngredientServiceI = Depends(get_ingredient_service),
 ) -> list[IngredientResponse]:
     return await ingredient_service.get()
 
 
-@router.patch("/update/{ingredient_id}")
+@router.patch("/{ingredient_id}")
 async def update(
     ingredient_id: int,
     ingredient: IngredientUpdate,
@@ -55,7 +55,7 @@ async def update(
     return JSONResponse(content={"message": update_message.format(entity=ingredient_tag)}, status_code=200)
 
 
-@router.delete("/delete/{ingredient_id}")
+@router.delete("/{ingredient_id}")
 async def delete(
     ingredient_id: int, ingredient_service: IngredientServiceI = Depends(get_ingredient_service)
 ) -> JSONResponse:
