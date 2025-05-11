@@ -13,7 +13,7 @@ export default function CategoryTitle({
 }: CategoryTitleProps) {
     const { ref, inView } = useInView({
         threshold: 0,
-        rootMargin: '-90px 0px -30% 0px',
+        rootMargin: '-80px 0px -35% 0px',
     })
 
     useEffect(() => {
