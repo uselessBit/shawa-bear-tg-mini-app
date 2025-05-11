@@ -16,7 +16,7 @@ async def get_basket_service() -> BasketServiceI:
     return container.basket_service()
 
 
-@router.get("/get_basket/{user_id}", response_model=BasketResponse)
+@router.get("/{user_id}", response_model=BasketResponse)
 async def get_basket(
     user_id: int,
     basket_service: BasketServiceI = Depends(get_basket_service),
@@ -45,7 +45,7 @@ async def remove_item(
     return JSONResponse(content={"message": "Item removed from basket"}, status_code=200)
 
 
-@router.delete("/clear_basket/{basket_id}")
+@router.delete("/{basket_id}")
 async def clear_basket(
     basket_id: int,
     basket_service: BasketServiceI = Depends(get_basket_service),

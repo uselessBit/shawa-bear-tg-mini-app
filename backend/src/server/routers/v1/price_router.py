@@ -16,18 +16,18 @@ async def get_price_service() -> PriceServiceI:
     return container.price_service()
 
 
-@router.post("/create")
+@router.post("/")
 async def create(price: PriceCreate, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
     await price_service.create(price)
     return JSONResponse(content={"message": create_message.format(entity=price_tag)}, status_code=HTTPStatus.CREATED)
 
 
-@router.get("/get_all")
+@router.get("/")
 async def get_all(price_service: PriceServiceI = Depends(get_price_service)) -> list[PriceResponse]:
     return await price_service.get_all()
 
 
-@router.patch("/update/{price_id}")
+@router.patch("/{price_id}")
 async def update(
     price_id: int, price: PriceUpdate, price_service: PriceServiceI = Depends(get_price_service)
 ) -> JSONResponse:
@@ -35,7 +35,7 @@ async def update(
     return JSONResponse(content={"message": update_message.format(entity=price_tag)}, status_code=200)
 
 
-@router.delete("/delete/{price_id}")
+@router.delete("/{price_id}")
 async def delete(price_id: int, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
     await price_service.delete(price_id)
     return JSONResponse(content={"message": delete_message.format(entity=price_tag)}, status_code=200)

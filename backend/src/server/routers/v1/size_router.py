@@ -16,18 +16,18 @@ async def get_size_service() -> SizeServiceI:
     return container.size_service()
 
 
-@router.post("/create")
+@router.post("/")
 async def create(size: SizeCreate, size_service: SizeServiceI = Depends(get_size_service)) -> JSONResponse:
     await size_service.create(size)
     return JSONResponse(content={"message": create_message.format(entity=size_tag)}, status_code=HTTPStatus.CREATED)
 
 
-@router.get("/get_all", response_model=list[SizeResponse])
+@router.get("/", response_model=list[SizeResponse])
 async def get_all(size_service: SizeServiceI = Depends(get_size_service)) -> list[SizeResponse]:
     return await size_service.get_all()
 
 
-@router.patch("/update/{size_id}")
+@router.patch("/{size_id}")
 async def update(
     size_id: int, size: SizeUpdate, size_service: SizeServiceI = Depends(get_size_service)
 ) -> JSONResponse:
@@ -35,7 +35,7 @@ async def update(
     return JSONResponse(content={"message": update_message.format(entity=size_tag)}, status_code=200)
 
 
-@router.delete("/delete/{size_id}")
+@router.delete("/{size_id}")
 async def delete(size_id: int, size_service: SizeServiceI = Depends(get_size_service)) -> JSONResponse:
     await size_service.delete(size_id)
     return JSONResponse(content={"message": delete_message.format(entity=size_tag)}, status_code=200)
