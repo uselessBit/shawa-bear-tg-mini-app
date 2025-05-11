@@ -1,10 +1,20 @@
 import { Text, Flex, Button, Image, Heading, Mark } from '@chakra-ui/react'
+import API_SHORT_URL from '@/config.ts'
+import { Ingredient } from '@/types/Products.ts'
 
 type CardProps = {
     title: string
+    price: number
+    imageUrl: string
+    ingredients: Ingredient[]
 }
 
-export default function Card({ title }: CardProps) {
+export default function Card({
+    title,
+    price,
+    imageUrl,
+    ingredients,
+}: CardProps) {
     return (
         <Button
             borderWidth="1px"
@@ -19,7 +29,10 @@ export default function Card({ title }: CardProps) {
             gap="0"
             zIndex="0"
         >
-            <Image src="/shava.png" h="full" />
+            <Image
+                src={`${API_SHORT_URL}media/products/${imageUrl}`}
+                h="full"
+            />
             <Flex
                 flexDirection="column"
                 flex="2"
@@ -50,8 +63,7 @@ export default function Card({ title }: CardProps) {
                     fontSize="xs"
                     mb="4px"
                 >
-                    стандартный лаваш, курица, помидор, огурец, салат, чесночный
-                    соус, томатный соус
+                    {ingredients.map((i) => i.name).join(', ')}
                 </Text>
 
                 <Flex
@@ -69,7 +81,8 @@ export default function Card({ title }: CardProps) {
                         rounded="full"
                         fontSize="xs"
                     >
-                        от 6.5<Mark color="accent">р</Mark>
+                        от {price}
+                        <Mark color="accent">р</Mark>
                     </Flex>
 
                     <Flex

@@ -1,7 +1,8 @@
-import { Flex } from '@chakra-ui/react'
-import Card from './Card.tsx'
-import CategoryTitle from './CategoryTitle.tsx'
-import { useState, useEffect } from 'react'
+import { Flex, Alert, Skeleton } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import Card from './components/Card'
+import CategoryTitle from './components/CategoryTitle'
+import { useProducts } from '@/hooks/useProducts'
 
 type MainListProps = {
     categories: string[]
@@ -9,104 +10,23 @@ type MainListProps = {
     setActiveCategory: (category: string) => void
 }
 
-type Products = {
-    title: string
-    category: string
-}
-
 export default function MainList({
     categories,
     activeCategory,
     setActiveCategory,
 }: MainListProps) {
-    const [products, setProducts] = useState<Products[]>([
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Чикен',
-            category: 'Донеры',
-        },
-        {
-            title: 'Бургир',
-            category: 'Бургеры',
-        },
-        {
-            title: 'Бургир',
-            category: 'Бургеры',
-        },
-        {
-            title: 'Бургир',
-            category: 'Бургеры',
-        },
-        {
-            title: 'Клубника',
-            category: 'Десерты',
-        },
-        {
-            title: 'Клубника',
-            category: 'Десерты',
-        },
-        {
-            title: 'Клубника',
-            category: 'Десерты',
-        },
-        {
-            title: 'Кола',
-            category: 'Напитки',
-        },
-    ])
+    const { loading, error, getProductsByCategory } = useProducts()
 
     const [visibleCategories, setVisibleCategories] = useState<string[]>([])
+    const [isAutoChangeBlocked, setIsAutoChangeBlocked] = useState(false)
 
     const handleVisibilityChange = (category: string, isVisible: boolean) => {
-        setVisibleCategories((prev) => {
-            const newList = isVisible
+        setVisibleCategories((prev) =>
+            isVisible
                 ? [...prev.filter((c) => c !== category), category]
                 : prev.filter((c) => c !== category)
-
-            return newList
-        })
+        )
     }
-
-    const [isAutoChangeBlocked, setIsAutoChangeBlocked] = useState(false)
 
     useEffect(() => {
         setIsAutoChangeBlocked(true)
@@ -119,38 +39,56 @@ export default function MainList({
     useEffect(() => {
         if (isAutoChangeBlocked) return
 
-        if (visibleCategories.length > 0) {
-            setActiveCategory(visibleCategories[0])
-        } else {
-            setActiveCategory(categories[0])
-        }
+        setActiveCategory(
+            visibleCategories.length > 0 ? visibleCategories[0] : categories[0]
+        )
     }, [visibleCategories, isAutoChangeBlocked])
+
+    if (error) {
+        return (
+            <Alert.Root status="error">
+                <Alert.Indicator />
+                <Alert.Title>{error}</Alert.Title>
+            </Alert.Root>
+        )
+    }
 
     return (
         <Flex px="gap" flexDirection="column" gap="gap">
-            {categories.map((category) => (
-                <Flex
-                    id={category}
-                    key={category}
-                    direction="column"
-                    gap="gap"
-                    minH="500px"
-                >
-                    <CategoryTitle
-                        category={category}
-                        onVisibilityChange={handleVisibilityChange}
-                    />
+            {loading
+                ? Array(6)
+                      .fill(0)
+                      .map((_, i) => (
+                          <Skeleton
+                              key={i}
+                              height="140px"
+                              borderRadius="26px"
+                          />
+                      ))
+                : categories.map((category) => (
+                      <Flex
+                          id={category}
+                          key={category}
+                          direction="column"
+                          gap="gap"
+                          minH="500px"
+                      >
+                          <CategoryTitle
+                              category={category}
+                              onVisibilityChange={handleVisibilityChange}
+                          />
 
-                    {products
-                        .filter((product) => product.category === category)
-                        .map((product, index) => (
-                            <Card
-                                title={product.title}
-                                key={`${product.title}-${index}`}
-                            />
-                        ))}
-                </Flex>
-            ))}
+                          {getProductsByCategory(category).map((price) => (
+                              <Card
+                                  title={price.product.name}
+                                  key={`${price.product.product_id}-${price.size.size_id}`}
+                                  price={price.price}
+                                  ingredients={price.product.ingredients}
+                                  imageUrl={price.product.image_url}
+                              />
+                          ))}
+                      </Flex>
+                  ))}
         </Flex>
     )
 }
