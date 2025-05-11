@@ -3,6 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field, model_validator
 
+from src.services.category.schemas import CategoryResponse
 from src.services.ingredient.schemas import IngredientResponse
 
 
@@ -10,6 +11,7 @@ class ProductCreate(BaseModel):
     name: str = Field(..., max_length=30)
     description: str
     ingredient_ids: list[int]
+    category_id: int
 
     @model_validator(mode="before")
     @classmethod
@@ -23,6 +25,7 @@ class ProductResponse(BaseModel):
     description: str
     image_url: str | None
     ingredients: list[IngredientResponse]
+    category: CategoryResponse
 
     class Config:
         from_attributes = True
@@ -32,6 +35,7 @@ class ProductUpdate(BaseModel):
     name: str = Field(None)
     description: str = Field(None)
     ingredient_ids: list[int] = Field(None)
+    category_id: int = Field(None)
 
     @model_validator(mode="before")
     @classmethod

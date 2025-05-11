@@ -34,7 +34,7 @@ class PriceService(BaseService, PriceServiceI):
     async def get_all(self) -> list[PriceResponse]:
         async with self.session() as session:
             query = select(Price).options(
-                selectinload(Price.product).selectinload(Product.ingredients),
+                selectinload(Price.product).selectinload(Product.ingredients), selectinload(Price.product).selectinload(Product.category),
                 selectinload(Price.size),
             )
             result = await session.execute(query)
