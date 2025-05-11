@@ -9,7 +9,7 @@ class Product(Base):
     __table_args__ = {"extend_existing": True}
 
     product_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    category_id: Mapped[int] = mapped_column(ForeignKey("categories.category_id", ondelete="CASCADE"), primary_key=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.category_id", ondelete="CASCADE"))
     name: Mapped[str] = mapped_column(String(30), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(nullable=False)
     image_url: Mapped[str] = mapped_column(nullable=True)

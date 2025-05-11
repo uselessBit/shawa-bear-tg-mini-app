@@ -5,10 +5,11 @@ from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from src.clients.database.models.category import Category
 from src.clients.database.models.ingredient import Ingredient
 from src.clients.database.models.product import Product, ProductIngredient
 from src.services.base import BaseService
-from src.services.errors import IngredientNotFoundError, ProductNotFoundError
+from src.services.errors import CategoryNotFoundError, IngredientNotFoundError, ProductNotFoundError
 from src.services.product.interface import ProductIngredientServiceI, ProductServiceI
 from src.services.product.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.services.schemas import Image
@@ -34,12 +35,16 @@ class ProductService(BaseService, ProductServiceI):
                     ingredient.ingredient_id for ingredient in ingredients
                 }
                 raise IngredientNotFoundError(ingredients_not_found.format(missing_ids=missing_ids))
-
+            
+            category = await session.get(Category, product_data.category_id)
+            if not category:
+                raise CategoryNotFoundError
             image_url = await save_image(image, products_path) if image.filename else None
 
             new_product = Product(
                 name=product_data.name,
                 description=product_data.description,
+                category_id=product_data.category_id,
                 image_url=image_url,
             )
             session.add(new_product)
@@ -54,7 +59,7 @@ class ProductService(BaseService, ProductServiceI):
 
     async def get_all(self) -> list[ProductResponse]:
         async with self.session() as session:
-            query = select(Product).options(selectinload(Product.ingredients))
+            query = select(Product).options(selectinload(Product.ingredients), selectinload(Product.category))
             result = await session.execute(query)
             products = result.scalars().all()
             type_adapter = TypeAdapter(list[ProductResponse])
@@ -62,7 +67,10 @@ class ProductService(BaseService, ProductServiceI):
 
     async def get_by_name(self, product_name: str) -> ProductResponse:
         async with self.session() as session:
-            query = select(Product).options(selectinload(Product.ingredients)).where(Product.name == product_name)
+            query = select(Product).options(
+                selectinload(Product.ingredients), 
+                selectinload(Product.category)
+                ).where(Product.name == product_name)
             result = await session.execute(query)
             product = result.scalar()
             if not product:
@@ -79,6 +87,8 @@ class ProductService(BaseService, ProductServiceI):
                     product.name = product_data.name
                 if product_data.description:
                     product.description = product_data.description
+                if product_data.category_id:
+                    product.category_id = product_data.category_id
                 if product_data.ingredient_ids:
                     await self.product_ingredient_service.update(
                         product_id=product_id,
