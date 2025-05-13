@@ -21,7 +21,6 @@ export default function Header({
                 position="sticky"
                 top="0"
                 bg="back"
-                backdropFilter="blur(10px)"
                 p="gap"
                 zIndex="3"
                 w="100%"

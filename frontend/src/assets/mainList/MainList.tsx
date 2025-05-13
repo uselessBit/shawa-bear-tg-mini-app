@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Card from './components/Card'
 import CategoryTitle from './components/CategoryTitle'
 import { useProducts } from '@/hooks/useProducts'
+import MotionDrawer from '@/assets/drawers/MotionDrawer.tsx'
 
 type MainListProps = {
     categories: string[]
@@ -90,6 +91,7 @@ export default function MainList({
                     </Flex>
                 ))
             )}
+            <MotionDrawer></MotionDrawer>
         </Flex>
     )
 }

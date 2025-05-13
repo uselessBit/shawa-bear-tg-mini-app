@@ -1,0 +1,126 @@
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Drawer, Button, Portal, CloseButton } from '@chakra-ui/react'
+
+export default function MotionDrawer() {
+    const [isOpen, setIsOpen] = useState(false)
+    const [isDragging, setIsDragging] = useState(false)
+    const [offset, setOffset] = useState(0)
+    const [startY, setStartY] = useState(0)
+    const [drawerHeight, setDrawerHeight] = useState(0)
+    const [startTime, setStartTime] = useState(0)
+    const [velocity, setVelocity] = useState(0)
+
+    const contentRef = useRef<HTMLDivElement>(null)
+
+    const handleTouchStart = useCallback(
+        (e: React.TouchEvent<HTMLDivElement>) => {
+            setIsDragging(true)
+            const touch = e.touches[0]
+            setStartY(touch.clientY)
+            setStartTime(Date.now())
+
+            if (contentRef.current) {
+                const rect = contentRef.current.getBoundingClientRect()
+                setDrawerHeight(rect.height)
+            }
+
+            e.preventDefault()
+        },
+        []
+    )
+
+    const handleTouchMove = useCallback(
+        (e: TouchEvent) => {
+            if (!isDragging || !e.touches[0]) return
+
+            const touch = e.touches[0]
+            const deltaY = touch.clientY - startY
+            const newOffset = Math.max(0, deltaY)
+
+            setOffset(newOffset)
+            e.preventDefault()
+        },
+        [isDragging, startY]
+    )
+
+    const handleTouchEnd = useCallback(() => {
+        setIsDragging(false)
+        const endTime = Date.now()
+        const duration = endTime - startTime
+
+        const newVelocity = offset / (duration || 1)
+        setVelocity(newVelocity)
+
+        const shouldClose = offset > drawerHeight / 2 || newVelocity > 0.5
+
+        if (shouldClose) setIsOpen(false)
+
+        setOffset(0)
+    }, [offset, drawerHeight, startTime])
+
+    useEffect(() => {
+        document.addEventListener('touchmove', handleTouchMove, {
+            passive: false,
+        })
+        document.addEventListener('touchend', handleTouchEnd)
+        document.addEventListener('touchcancel', handleTouchEnd)
+
+        return () => {
+            document.removeEventListener('touchmove', handleTouchMove)
+            document.removeEventListener('touchend', handleTouchEnd)
+            document.removeEventListener('touchcancel', handleTouchEnd)
+        }
+    }, [handleTouchMove, handleTouchEnd])
+
+    return (
+        <Drawer.Root placement="bottom" open={isOpen}>
+            <Drawer.Trigger asChild onClick={() => setIsOpen(true)}>
+                <Button variant="outline">Open Drawer</Button>
+            </Drawer.Trigger>
+
+            <Portal>
+                <Drawer.Backdrop
+                    bg="back/90"
+                    backdropFilter="blur(8px)"
+                    style={{
+                        opacity: 1 - Math.min(offset / (drawerHeight * 0.7), 1),
+                        transition: 'opacity 0.2s ease',
+                    }}
+                />
+                <Drawer.Positioner
+                    padding="24px"
+                    style={{
+                        transform: `translateY(${offset}px)`,
+                        transition: isDragging
+                            ? 'none'
+                            : `transform ${velocity > 0.5 ? 0.2 : 0.3}s cubic-bezier(0.33, 1, 0.68, 1)`,
+                    }}
+                    onTouchStart={handleTouchStart}
+                >
+                    <Drawer.Content
+                        ref={contentRef}
+                        h="calc(100% - 32px)"
+                        rounded="32px"
+                        bg="card"
+                        shadow="none"
+                        touchAction="none"
+                    >
+                        <Drawer.CloseTrigger asChild>
+                            <CloseButton
+                                size="sm"
+                                onClick={() => setIsOpen(false)}
+                            />
+                        </Drawer.CloseTrigger>
+                        <Drawer.Header>
+                            <Drawer.Title />
+                        </Drawer.Header>
+                        <Drawer.Body>
+                            <Button variant="outline">Check</Button>
+                        </Drawer.Body>
+                        <Drawer.Footer />
+                    </Drawer.Content>
+                </Drawer.Positioner>
+            </Portal>
+        </Drawer.Root>
+    )
+}

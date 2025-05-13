@@ -32,6 +32,7 @@ export default function Card({
             <Image
                 src={`${API_SHORT_URL}media/products/${imageUrl}`}
                 h="full"
+                minW="152px"
             />
             <Flex
                 flexDirection="column"
