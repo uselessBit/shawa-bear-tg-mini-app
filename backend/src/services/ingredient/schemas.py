@@ -25,7 +25,7 @@ class IngredientResponse(BaseModel):
 
 
 class IngredientUpdate(BaseModel):
-    name: str = Field(None)
+    name: str | None
     price: float | None
 
     @model_validator(mode="before")

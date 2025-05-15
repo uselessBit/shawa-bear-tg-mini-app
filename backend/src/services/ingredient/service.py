@@ -29,14 +29,14 @@ class IngredientService(BaseService, IngredientServiceI):
 
     async def update(self, ingredient_id: int, ingredient_data: IngredientUpdate, image: Image) -> None:
         async with self.session() as session:
-            image_url = await save_image(image, ingredients_path) if image.filename else None
-
             ingredient = await session.get(Ingredient, ingredient_id)
             if ingredient:
                 if ingredient_data.name:
                     ingredient.name = ingredient_data.name
                 if ingredient_data.price:
                     ingredient.price = ingredient_data.price
+
+                image_url = await save_image(image, ingredients_path) if image.filename else None
                 if image_url:
                     if filename := ingredient.image_url:
                         await delete_image(str(filename), ingredients_path)
