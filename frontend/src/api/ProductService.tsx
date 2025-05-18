@@ -57,4 +57,12 @@ export const ProductService = {
             throw error
         }
     },
+
+    getAllPricesForProduct: (productId: number): Price[] => {
+        if (!cachedPrices) return []
+
+        return cachedPrices.filter(
+            (price) => price.product.product_id === productId
+        )
+    },
 }

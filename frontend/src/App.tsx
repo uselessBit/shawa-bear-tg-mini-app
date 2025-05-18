@@ -4,7 +4,6 @@ import { system } from './theme.ts'
 import Header from './assets/header/Header.tsx'
 import MainList from './assets/mainList/MainList.tsx'
 import { useCategories } from '@/hooks/useCategories'
-import MotionDrawer from '@/assets/drawers/MotionDrawer.tsx'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -16,14 +15,13 @@ export default function App() {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-    }, [activeCategory])
+    }, [])
 
     if (error) {
         return (
             <Alert.Root status="error">
                 <Alert.Indicator />
                 <Alert.Title>{error}</Alert.Title>
-                <MotionDrawer></MotionDrawer>
             </Alert.Root>
         )
     }

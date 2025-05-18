@@ -1,8 +1,8 @@
 import { Flex, Heading, Box, Center } from '@chakra-ui/react'
 import Bonuses from './components/Bonuses.tsx'
 import ProfileButton from './components/ProfileButton.tsx'
-import PromoGroup from './components/PromoGroup.tsx'
-import CategoriesGroup from './components/CategoriesGroup.tsx'
+import PromoGroup from './components/promoList/PromoGroup.tsx'
+import CategoriesGroup from './components/categoriesNavigation/CategoriesGroup.tsx'
 
 type HeaderProps = {
     categories: string[]

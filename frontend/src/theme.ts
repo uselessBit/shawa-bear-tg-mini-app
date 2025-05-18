@@ -60,8 +60,8 @@ const config = defineConfig({
                 },
                 card: {
                     value: {
-                        base: '{colors.token-second-white}',
-                        _dark: '{colors.token-second-black}',
+                        base: '{colors.token-white-card}',
+                        _dark: '{colors.token-black-card}',
                     },
                 },
             },

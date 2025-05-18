@@ -1,9 +1,10 @@
 import { Alert, Flex, Skeleton } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import Card from './components/Card'
 import CategoryTitle from './components/CategoryTitle'
 import { useProducts } from '@/hooks/useProducts'
-import MotionDrawer from '@/assets/drawers/MotionDrawer.tsx'
+import Card from './components/Card'
+import ProductPage from '@/assets/productPage/ProductPage'
+import MotionDrawer from '@/assets/MotionDrawer'
 
 type MainListProps = {
     categories: string[]
@@ -80,18 +81,16 @@ export default function MainList({
                         />
 
                         {getProductsByCategory(category).map((price) => (
-                            <Card
-                                title={price.product.name}
+                            <MotionDrawer
                                 key={`${price.product.product_id}-${price.size.size_id}`}
-                                price={price.price}
-                                ingredients={price.product.ingredients}
-                                imageUrl={price.product.image_url}
-                            />
+                                trigger={<Card price={price} />}
+                            >
+                                <ProductPage price={price} />
+                            </MotionDrawer>
                         ))}
                     </Flex>
                 ))
             )}
-            <MotionDrawer></MotionDrawer>
         </Flex>
     )
 }

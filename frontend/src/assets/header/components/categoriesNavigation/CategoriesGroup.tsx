@@ -1,7 +1,7 @@
 import { Flex, Skeleton } from '@chakra-ui/react'
 import { useRef, useEffect } from 'react'
 import CategoryButton from './CategoryButton.tsx'
-import { useCategories } from '@/hooks/useCategories'
+import { useCategories } from '@/hooks/useCategories.tsx'
 
 type CategoriesGroupProps = {
     categories: string[]

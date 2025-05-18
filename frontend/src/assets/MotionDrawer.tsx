@@ -1,7 +1,19 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Drawer, Button, Portal, CloseButton } from '@chakra-ui/react'
+import React, {
+    useState,
+    useEffect,
+    useCallback,
+    useRef,
+    ReactElement,
+    cloneElement,
+} from 'react'
+import { Drawer, Portal } from '@chakra-ui/react'
 
-export default function MotionDrawer() {
+type MotionDrawerProps = {
+    trigger: ReactElement<{ onClick?: React.MouseEventHandler }>
+    children?: React.ReactNode
+}
+
+export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
     const [isOpen, setIsOpen] = useState(false)
     const [isDragging, setIsDragging] = useState(false)
     const [offset, setOffset] = useState(0)
@@ -23,8 +35,6 @@ export default function MotionDrawer() {
                 const rect = contentRef.current.getBoundingClientRect()
                 setDrawerHeight(rect.height)
             }
-
-            e.preventDefault()
         },
         []
     )
@@ -74,8 +84,13 @@ export default function MotionDrawer() {
 
     return (
         <Drawer.Root placement="bottom" open={isOpen}>
-            <Drawer.Trigger asChild onClick={() => setIsOpen(true)}>
-                <Button variant="outline">Open Drawer</Button>
+            <Drawer.Trigger asChild>
+                {cloneElement(trigger, {
+                    onClick: (e: React.MouseEvent) => {
+                        trigger.props.onClick?.(e)
+                        setIsOpen(true)
+                    },
+                })}
             </Drawer.Trigger>
 
             <Portal>
@@ -83,7 +98,8 @@ export default function MotionDrawer() {
                     bg="back/90"
                     backdropFilter="blur(8px)"
                     style={{
-                        opacity: 1 - Math.min(offset / (drawerHeight * 0.7), 1),
+                        opacity:
+                            1 - Math.min(offset / (drawerHeight * 0.7), 1) || 1,
                         transition: 'opacity 0.2s ease',
                     }}
                 />
@@ -104,20 +120,9 @@ export default function MotionDrawer() {
                         bg="card"
                         shadow="none"
                         touchAction="none"
+                        overflow="auto"
                     >
-                        <Drawer.CloseTrigger asChild>
-                            <CloseButton
-                                size="sm"
-                                onClick={() => setIsOpen(false)}
-                            />
-                        </Drawer.CloseTrigger>
-                        <Drawer.Header>
-                            <Drawer.Title />
-                        </Drawer.Header>
-                        <Drawer.Body>
-                            <Button variant="outline">Check</Button>
-                        </Drawer.Body>
-                        <Drawer.Footer />
+                        {children}
                     </Drawer.Content>
                 </Drawer.Positioner>
             </Portal>

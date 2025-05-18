@@ -1,20 +1,14 @@
+import React from 'react'
 import { Text, Flex, Button, Image, Heading, Mark } from '@chakra-ui/react'
 import API_SHORT_URL from '@/config.ts'
-import { Ingredient } from '@/types/Products.ts'
+import { Price } from '@/types/Products.ts'
 
 type CardProps = {
-    title: string
-    price: number
-    imageUrl: string
-    ingredients: Ingredient[]
+    price: Price
+    onClick?: React.MouseEventHandler
 }
 
-export default function Card({
-    title,
-    price,
-    imageUrl,
-    ingredients,
-}: CardProps) {
+export default function Card({ price, onClick }: CardProps) {
     return (
         <Button
             borderWidth="1px"
@@ -28,9 +22,10 @@ export default function Card({
             p="0"
             gap="0"
             zIndex="0"
+            onClick={onClick}
         >
             <Image
-                src={`${API_SHORT_URL}media/products/${imageUrl}`}
+                src={`${API_SHORT_URL}media/products/${price.product.image_url}`}
                 h="full"
                 minW="152px"
             />
@@ -50,7 +45,7 @@ export default function Card({
                     size="2xl"
                     fontWeight="600"
                 >
-                    {title}
+                    {price.product.name}
                 </Heading>
 
                 <Text
@@ -64,7 +59,7 @@ export default function Card({
                     fontSize="xs"
                     mb="4px"
                 >
-                    {ingredients.map((i) => i.name).join(', ')}
+                    {price.product.ingredients.map((i) => i.name).join(', ')}
                 </Text>
 
                 <Flex
@@ -82,7 +77,7 @@ export default function Card({
                         rounded="full"
                         fontSize="xs"
                     >
-                        от {price}
+                        от {price.price}
                         <Mark color="accent">р</Mark>
                     </Flex>
 
