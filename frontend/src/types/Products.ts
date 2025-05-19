@@ -9,6 +9,7 @@ export interface Ingredient {
     name: string
     image_url: string | null
     price: number
+    color: string | null
 }
 
 export interface Category {

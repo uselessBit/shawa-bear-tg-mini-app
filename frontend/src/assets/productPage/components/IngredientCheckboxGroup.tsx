@@ -4,9 +4,11 @@ import {
     Heading,
     Flex,
     Image,
+    Text,
 } from '@chakra-ui/react'
 import { Ingredient } from '@/types/Products.ts'
 import API_BASE_URL from '@/config.ts'
+import { IoClose } from 'react-icons/io5'
 
 type IngredientCheckboxGroupProps = {
     ingredients: Ingredient[]
@@ -23,25 +25,48 @@ export default function IngredientCheckboxGroup({
             <Flex wrap="wrap" gap="8px">
                 {ingredients.slice(1).map((ingredient) => (
                     <CheckboxCard.Root
+                        key={ingredient.ingredient_id}
                         minW="fit-content"
                         maxW="fit-content"
                         border="none"
                         rounded="full"
-                        bgImage={`url(${API_BASE_URL}media/ingredients/${ingredient.image_url})`}
-                        bgFilter=""
-                        bgSize="200px"
+                        bg={`${ingredient.color}/10`}
+                        position="relative"
+                        _checked={{
+                            boxShadow: 'none',
+                            // Убрали общий opacity
+                            '& .checkbox-control': {
+                                // Добавляем класс к контролу
+                                opacity: 0.5,
+                            },
+                            '&::after': {
+                                opacity: '1',
+                                content: '""',
+                                position: 'absolute',
+                                left: '16px',
+                                bottom: '8px',
+                                width: 'calc(100% - 32px)',
+                                height: '2px',
+                                bg: 'text',
+                                transform: 'rotate(-8deg)',
+                                transformOrigin: 'left bottom',
+                            },
+                        }}
                     >
                         <CheckboxCard.HiddenInput />
-
-                        <CheckboxCard.Control px="16px" py="8px">
+                        <CheckboxCard.Control
+                            px="16px"
+                            py="8px"
+                            className="checkbox-control"
+                        >
                             <CheckboxCard.Label>
                                 <Image
                                     src={`${API_BASE_URL}media/ingredients/${ingredient.image_url}`}
                                     h="24px"
                                 />
-                                {ingredient.name}
+                                <Text>{ingredient.name}</Text>
+                                <IoClose />
                             </CheckboxCard.Label>
-                            <CheckboxCard.Indicator />
                         </CheckboxCard.Control>
                     </CheckboxCard.Root>
                 ))}
