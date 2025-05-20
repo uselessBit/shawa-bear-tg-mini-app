@@ -116,7 +116,7 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
                     <Drawer.Content
                         ref={contentRef}
                         h="calc(100% - 32px)"
-                        rounded="32px"
+                        rounded="42px"
                         bg="card"
                         shadow="none"
                         touchAction="none"

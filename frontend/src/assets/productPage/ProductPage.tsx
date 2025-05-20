@@ -1,8 +1,10 @@
-import { Drawer, Image, Heading } from '@chakra-ui/react'
+import { Drawer, Image, Heading, Flex } from '@chakra-ui/react'
 import { Price } from '@/types/Products.ts'
 import API_SHORT_URL from '@/config.ts'
 import CostPicker from './components/CostPicker.tsx'
 import IngredientCheckboxGroup from './components/IngredientCheckboxGroup.tsx'
+import CustomNumberInput from './components/NumberInput.tsx'
+import ToBasketButton from './components/ToBasketButton.tsx'
 
 type ProductPageProps = {
     price: Price
@@ -36,7 +38,12 @@ export default function ProductPage({ price }: ProductPageProps) {
                 ></IngredientCheckboxGroup>
             </Drawer.Body>
 
-            <Drawer.Footer>zxc</Drawer.Footer>
+            <Drawer.Footer p="12px">
+                <Flex w="full" gap="12px">
+                    <CustomNumberInput></CustomNumberInput>
+                    <ToBasketButton></ToBasketButton>
+                </Flex>
+            </Drawer.Footer>
         </>
     )
 }
