@@ -44,11 +44,11 @@ export default function IngredientCheckboxGroup({
                                 content: '""',
                                 position: 'absolute',
                                 left: '16px',
-                                bottom: '8px',
+                                bottom: '16px',
                                 width: 'calc(100% - 32px)',
                                 height: '2px',
                                 bg: 'text',
-                                transform: 'rotate(-8deg)',
+                                transform: 'rotate(-2deg)',
                                 transformOrigin: 'left bottom',
                             },
                         }}
