@@ -6,7 +6,7 @@ import React, {
     ReactElement,
     cloneElement,
 } from 'react'
-import { Drawer, Portal } from '@chakra-ui/react'
+import { Drawer, Portal, Box } from '@chakra-ui/react'
 
 type MotionDrawerProps = {
     trigger: ReactElement<{ onClick?: React.MouseEventHandler }>
@@ -99,7 +99,7 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
                     backdropFilter="blur(8px)"
                     style={{
                         opacity:
-                            1 - Math.min(offset / (drawerHeight * 0.7), 1) || 1,
+                            1 - Math.min(offset / (drawerHeight * 0.7), 1) || 0,
                         transition: 'opacity 0.2s ease',
                     }}
                 />
@@ -120,9 +120,20 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
                         bg="card"
                         shadow="none"
                         touchAction="none"
-                        overflow="auto"
                     >
-                        {children}
+                        <Box
+                            bg="text"
+                            w="100px"
+                            h="5px"
+                            rounded="full"
+                            position="absolute"
+                            top="-16px"
+                            left="50%"
+                            transform="translateX(-50%)"
+                        />
+                        <Box overflow="auto" rounded="42px">
+                            {children}
+                        </Box>
                     </Drawer.Content>
                 </Drawer.Positioner>
             </Portal>

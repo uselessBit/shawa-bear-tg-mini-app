@@ -25,6 +25,7 @@ export default function IngredientCheckboxGroup({
             <Flex wrap="wrap" gap="8px">
                 {ingredients.slice(1).map((ingredient) => (
                     <CheckboxCard.Root
+                        cursor="pointer"
                         key={ingredient.ingredient_id}
                         minW="fit-content"
                         maxW="fit-content"
@@ -34,9 +35,7 @@ export default function IngredientCheckboxGroup({
                         position="relative"
                         _checked={{
                             boxShadow: 'none',
-                            // Убрали общий opacity
                             '& .checkbox-control': {
-                                // Добавляем класс к контролу
                                 opacity: 0.5,
                             },
                             '&::after': {
