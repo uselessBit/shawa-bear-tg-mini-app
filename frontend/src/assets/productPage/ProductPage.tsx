@@ -17,6 +17,7 @@ export default function ProductPage({ price }: ProductPageProps) {
                 <Image
                     src={`${API_SHORT_URL}media/products/${price.product.image_url}`}
                     transform="scaleX(-1)"
+                    rounded="42px 42px 0 0"
                 />
                 <Heading
                     size="5xl"

@@ -131,9 +131,8 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
                             left="50%"
                             transform="translateX(-50%)"
                         />
-                        <Box overflow="auto" rounded="42px">
-                            {children}
-                        </Box>
+
+                        {children}
                     </Drawer.Content>
                 </Drawer.Positioner>
             </Portal>
