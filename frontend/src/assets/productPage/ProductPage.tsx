@@ -5,12 +5,16 @@ import CostPicker from './components/CostPicker.tsx'
 import IngredientCheckboxGroup from './components/IngredientCheckboxGroup.tsx'
 import CustomNumberInput from './components/NumberInput.tsx'
 import ToBasketButton from './components/ToBasketButton.tsx'
+import { useState } from 'react'
 
 type ProductPageProps = {
     price: Price
 }
 
 export default function ProductPage({ price }: ProductPageProps) {
+    const [currentPrice, setCurrentPrice] = useState(price.price)
+    const [quantity, setQuantity] = useState(1)
+
     return (
         <>
             <Drawer.Header p="0" display="flex" flexDirection="column">
@@ -32,7 +36,7 @@ export default function ProductPage({ price }: ProductPageProps) {
             </Drawer.Header>
 
             <Drawer.Body p="12px">
-                <CostPicker price={price} />
+                <CostPicker price={price} setCurrentPrice={setCurrentPrice} />
 
                 <IngredientCheckboxGroup
                     ingredients={price.product.ingredients}
@@ -41,8 +45,12 @@ export default function ProductPage({ price }: ProductPageProps) {
 
             <Drawer.Footer p="12px">
                 <Flex w="full" gap="12px">
-                    <CustomNumberInput></CustomNumberInput>
-                    <ToBasketButton></ToBasketButton>
+                    <CustomNumberInput
+                        setQuantity={setQuantity}
+                    ></CustomNumberInput>
+                    <ToBasketButton
+                        currentPrice={currentPrice * quantity}
+                    ></ToBasketButton>
                 </Flex>
             </Drawer.Footer>
         </>

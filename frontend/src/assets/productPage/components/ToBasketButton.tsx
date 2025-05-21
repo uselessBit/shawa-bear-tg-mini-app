@@ -1,6 +1,10 @@
 import { Button } from '@chakra-ui/react'
 
-export default function ToBasketButton() {
+type ToBasketProps = {
+    currentPrice: number
+}
+
+export default function ToBasketButton({ currentPrice }: ToBasketProps) {
     return (
         <Button
             flex="1"
@@ -12,7 +16,7 @@ export default function ToBasketButton() {
             rounded="full"
             color="text"
         >
-            В корзину - 6.5р
+            В корзину - {currentPrice}р
         </Button>
     )
 }

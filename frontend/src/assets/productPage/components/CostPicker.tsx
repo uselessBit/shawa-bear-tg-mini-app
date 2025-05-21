@@ -4,20 +4,23 @@ import { ProductService } from '@/api/ProductService'
 
 type CostPickerProps = {
     price: Price
+    setCurrentPrice: (currentPrice: number) => void
 }
 
-export default function CostPicker({ price }: CostPickerProps) {
+export default function CostPicker({
+    price,
+    setCurrentPrice,
+}: CostPickerProps) {
     const prices = ProductService.getAllPricesForProduct(
         price.product.product_id
     )
 
-    if (!prices) {
-        return <Skeleton rounded="32px" h="124px" w="full" />
-    }
+    if (!prices) return <Skeleton rounded="32px" h="124px" w="full" />
 
     return (
         <SegmentGroup.Root
-            defaultValue={price.price_id.toString()}
+            defaultValue={price.price.toString()}
+            onValueChange={(e) => setCurrentPrice(Number(e.value))}
             bg="back"
             p="12px"
             rounded="32px"
@@ -28,7 +31,7 @@ export default function CostPicker({ price }: CostPickerProps) {
             {prices.map((priceItem) => (
                 <SegmentGroup.Item
                     key={priceItem.price_id}
-                    value={priceItem.price_id.toString()}
+                    value={priceItem.price.toString()}
                     h="fit-content"
                     flex="1"
                     py="8px"

@@ -1,11 +1,16 @@
 import { HStack, IconButton, NumberInput } from '@chakra-ui/react'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
-export default function CustomNumberInput() {
+type NumberInputProps = {
+    setQuantity: (quantity: number) => void
+}
+
+export default function CustomNumberInput({ setQuantity }: NumberInputProps) {
     return (
         <NumberInput.Root
             unstyled
             spinOnPress={false}
+            onValueChange={(e) => setQuantity(Number(e.value))}
             bg="back"
             p="12px"
             rounded="full"
