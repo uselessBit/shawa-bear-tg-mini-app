@@ -22,6 +22,7 @@ export default function CostPicker({ price }: CostPickerProps) {
             p="12px"
             rounded="32px"
             gap="12px"
+            w="full"
         >
             <SegmentGroup.Indicator rounded="20px" boxShadow="none" bg="gray" />
             {prices.map((priceItem) => (
@@ -29,6 +30,7 @@ export default function CostPicker({ price }: CostPickerProps) {
                     key={priceItem.price_id}
                     value={priceItem.price_id.toString()}
                     h="fit-content"
+                    flex="1"
                     py="8px"
                     cursor="pointer"
                     display="flex"

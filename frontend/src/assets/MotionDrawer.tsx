@@ -98,16 +98,12 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
                     bg="back/90"
                     backdropFilter="blur(8px)"
                     style={{
-                        opacity:
-                            1 - Math.min(offset / (drawerHeight * 0.7), 1) <= 0
-                                ? '0'
-                                : 1 -
-                                  Math.min(offset / (drawerHeight * 0.7), 1),
+                        opacity: 1 - Math.min(offset / (drawerHeight * 0.7), 1),
                         transition: 'opacity 0.2s ease',
                     }}
                 />
                 <Drawer.Positioner
-                    padding="24px"
+                    padding="gap"
                     style={{
                         transform: `translateY(${offset}px)`,
                         transition: isDragging

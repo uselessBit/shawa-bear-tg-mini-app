@@ -1,9 +1,12 @@
 import { ChakraProvider, Alert } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { system } from './theme.ts'
-import Header from './assets/header/Header.tsx'
-import MainList from './assets/mainList/MainList.tsx'
+import Header from '@/assets/header/Header.tsx'
+import MainList from '@/assets/mainList/MainList.tsx'
 import { useCategories } from '@/hooks/useCategories'
+import BasketButton from '@/assets/basket/BasketButton.tsx'
+import MotionDrawer from '@/assets/MotionDrawer.tsx'
+import BasketPage from '@/assets/basket/basketPage/BasketPage.tsx'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -33,11 +36,16 @@ export default function App() {
                 activeCategory={activeCategory}
                 setActiveCategory={setActiveCategory}
             />
+
             <MainList
                 categories={categories.map((c) => c.name)}
                 activeCategory={activeCategory}
                 setActiveCategory={setActiveCategory}
             />
+
+            <MotionDrawer trigger={<BasketButton />}>
+                <BasketPage />
+            </MotionDrawer>
         </ChakraProvider>
     )
 }
