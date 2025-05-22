@@ -18,7 +18,6 @@ class PaymentOption(StrEnum):
 
 class OrderCreate(BaseModel):
     basket_id: int
-    total_price: float
     payment_option: PaymentOption = PaymentOption.CARD
     time_taken: str
     comment: str | None = None
@@ -32,9 +31,9 @@ class OrderResponse(BaseModel):
     order_id: int
     basket_id: int
     order_date: datetime
-    total_price: float
     payment_option: str
     time_taken: str
+    total_price: float
     comment: str | None
     status: str
 

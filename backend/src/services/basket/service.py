@@ -12,15 +12,21 @@ from src.services.errors import BasketItemNotFoundError, BasketNotFoundError, Pr
 class BasketService(BaseService, BasketServiceI):
     async def get_user_basket(self, user_id: int) -> BasketResponse:
         async with self.session() as session:
-            query = select(Basket).where(Basket.user_id == user_id).options(joinedload(Basket.items))
+            query = select(Basket).where(Basket.user_id == user_id).options(joinedload(Basket.items).joinedload(BasketItem.price))
             result = await session.execute(query)
             basket = result.unique().scalar_one_or_none()
             if not basket:
                 raise BasketNotFoundError
 
+            total_price = sum(
+                item.quantity * item.price.price
+                for item in basket.items
+            ) if basket else 0.0
+
         return BasketResponse(
             basket_id=basket.basket_id,
             user_id=basket.user_id,
+            total_price=total_price,
             items=[
                 BasketItemResponse(
                     basket_item_id=item.basket_item_id,

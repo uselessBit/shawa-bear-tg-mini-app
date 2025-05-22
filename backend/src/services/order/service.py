@@ -4,11 +4,13 @@ from datetime import UTC, datetime
 from pydantic import TypeAdapter
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
+from src.clients.database.models.basket import BasketItem
 from src.clients.database.models.order import Order
 from src.services.base import BaseService
 from src.services.basket.interface import BasketServiceI
-from src.services.errors import OrderNotFoundError
+from src.services.errors import OrderNotFoundError, PriceNotFoundError
 from src.services.order.interface import OrderServiceI
 from src.services.order.schemas import OrderCreate, OrderResponse, OrderStatus
 
@@ -20,9 +22,10 @@ class OrderService(BaseService, OrderServiceI):
 
     async def create_order(self, order_data: OrderCreate) -> None:
         async with self.session() as session, session.begin():
+            total_price = await self.calculate_total_price(session, order_data.basket_id)
             new_order = Order(
                 basket_id=order_data.basket_id,
-                total_price=order_data.total_price,
+                total_price=total_price,
                 order_date=datetime.now(tz=UTC),
                 payment_option=order_data.payment_option,
                 time_taken=order_data.time_taken,
@@ -59,3 +62,16 @@ class OrderService(BaseService, OrderServiceI):
                 await session.commit()
             else:
                 raise OrderNotFoundError
+
+    async def calculate_total_price(self, session, basket_id: int) -> float:
+        query = select(BasketItem).where(BasketItem.basket_id == basket_id).options(joinedload(BasketItem.price))
+        result = await session.execute(query)
+        items = result.scalars().all()
+
+        total = 0.0
+        for item in items:
+            if item.price:
+                total += item.quantity * item.price.price
+            else:
+                raise PriceNotFoundError()
+        return total

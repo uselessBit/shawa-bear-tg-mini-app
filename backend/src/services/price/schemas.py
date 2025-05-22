@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.services.product.schemas import ProductResponse
 from src.services.size.schemas import SizeResponse
@@ -40,7 +40,7 @@ class PriceUpdate(BaseModel):
     carbohydrates: int | None = None
     calories: int | None = None
     is_custom: bool = False
-    ingredient_comment: str | None
+    ingredient_comment: str | None = Field(None)
 
 
 class PriceFilter(BaseModel):
