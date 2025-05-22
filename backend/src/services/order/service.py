@@ -22,7 +22,7 @@ class OrderService(BaseService, OrderServiceI):
 
     async def create_order(self, order_data: OrderCreate) -> None:
         async with self.session() as session, session.begin():
-            total_price = await self.calculate_total_price(session, order_data.basket_id)
+            total_price = await self._calculate_total_price(session, order_data.basket_id)
             new_order = Order(
                 basket_id=order_data.basket_id,
                 total_price=total_price,
@@ -46,9 +46,12 @@ class OrderService(BaseService, OrderServiceI):
             type_adapter = TypeAdapter(OrderResponse)
             return type_adapter.validate_python(order)
 
-    async def get_all(self) -> list[OrderResponse]:
+    async def get_all(self, user_id: int | None) -> list[OrderResponse]:
         async with self.session() as session:
             query = select(Order)
+            if user_id:
+                query = query.where(user_id == Order.basket.user_id).options(joinedload(Order.basket))
+
             results = await session.execute(query)
             orders = results.scalars().all()
             type_adapter = TypeAdapter(list[OrderResponse])
@@ -63,7 +66,8 @@ class OrderService(BaseService, OrderServiceI):
             else:
                 raise OrderNotFoundError
 
-    async def calculate_total_price(self, session, basket_id: int) -> float:
+    @staticmethod
+    async def _calculate_total_price(session, basket_id: int) -> float:
         query = select(BasketItem).where(BasketItem.basket_id == basket_id).options(joinedload(BasketItem.price))
         result = await session.execute(query)
         items = result.scalars().all()
@@ -75,3 +79,12 @@ class OrderService(BaseService, OrderServiceI):
             else:
                 raise PriceNotFoundError()
         return total
+
+    # async def get_user_orders_history(self, user_id: int) -> list[OrderResponse]:
+    #     async with self.session() as session:
+    #         query = select(Order).where(user_id == Order.basket.user_id).options(joinedload(Order.basket))
+    #         result = await session.execute(query)
+    #         orders_history = result.scalars().all()
+    #         type_adapter = TypeAdapter(list[OrderResponse])
+    #         return type_adapter.validate_python(orders_history)
+
