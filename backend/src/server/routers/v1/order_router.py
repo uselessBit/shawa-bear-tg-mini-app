@@ -1,4 +1,5 @@
 from http import HTTPStatus
+from fastapi import Query
 
 from fastapi import APIRouter, Depends, Response
 from starlette.responses import JSONResponse
@@ -34,9 +35,9 @@ async def get_order(
 
 @router.get("/", response_model=list[OrderResponse])
 async def get_all(
-        order_service: OrderServiceI = Depends(get_order_service),
+        user_id: int | None = Query(None), order_service: OrderServiceI = Depends(get_order_service),
 ) -> list[OrderResponse]:
-    return await order_service.get_all()
+    return await order_service.get_all(user_id)
 
 @router.patch("/change_status/{order_id}")
 async def change_status(

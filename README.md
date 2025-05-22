@@ -5,7 +5,7 @@ View layout at [Figma](https://www.figma.com/design/XvUYgGWgPnsX1pYS7OPXPV/%D0%A
 #### Stack:
 - FastAPI
 - Postgres
-- ReactJS
+- ReactTS
 - ChakraUI
 - Aiogram3
 
@@ -31,4 +31,21 @@ View layout at [Figma](https://www.figma.com/design/XvUYgGWgPnsX1pYS7OPXPV/%D0%A
 Just use
 ```bash
 docker compose up --build
+```
+
+### Frontend
+
+Go to frontend folder
+```bash
+cd /frontend
+```
+
+Install packages
+```bash
+npm i
+```
+
+Run project build
+```bash
+npm run dev
 ```

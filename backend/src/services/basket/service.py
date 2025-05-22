@@ -12,15 +12,21 @@ from src.services.errors import BasketItemNotFoundError, BasketNotFoundError, Pr
 class BasketService(BaseService, BasketServiceI):
     async def get_user_basket(self, user_id: int) -> BasketResponse:
         async with self.session() as session:
-            query = select(Basket).where(Basket.user_id == user_id).options(joinedload(Basket.items))
+            query = select(Basket).where(Basket.user_id == user_id).options(joinedload(Basket.items).joinedload(BasketItem.price))
             result = await session.execute(query)
             basket = result.unique().scalar_one_or_none()
             if not basket:
                 raise BasketNotFoundError
 
+            total_price = sum(
+                item.quantity * item.price.price
+                for item in basket.items
+            ) if basket else 0.0
+
         return BasketResponse(
             basket_id=basket.basket_id,
             user_id=basket.user_id,
+            total_price=total_price,
             items=[
                 BasketItemResponse(
                     basket_item_id=item.basket_item_id,
@@ -41,15 +47,29 @@ class BasketService(BaseService, BasketServiceI):
                 basket = Basket(user_id=user_id)
                 session.add(basket)
                 await session.flush()
-            if await session.get(Price, item_data.price_id):
+
+            if not await session.get(Price, item_data.price_id):
+                raise PriceNotFoundError
+
+            existing_item = await self._get_existing_item(session, basket, item_data)
+
+            if existing_item:
+                existing_item.quantity += item_data.quantity
+            else:
                 new_item = BasketItem(
                     basket_id=basket.basket_id,
                     price_id=item_data.price_id,
                     quantity=item_data.quantity,
                 )
-            else:
-                raise PriceNotFoundError
-            session.add(new_item)
+                session.add(new_item)
+
+
+    @staticmethod
+    async def _get_existing_item(session, basket: Basket, item_data: BasketItemCreate):
+        query = select(BasketItem).where(BasketItem.basket_id == basket.basket_id, BasketItem.price_id == item_data.price_id)
+        result = await session.execute(query)
+        return result.scalar()
+
 
     async def remove_item(self, basket_item_id: int) -> None:
         async with self.session() as session, session.begin():
