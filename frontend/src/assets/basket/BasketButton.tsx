@@ -4,9 +4,10 @@ import React from 'react'
 
 type BasketButtonProps = {
     onClick?: React.MouseEventHandler
+    total: number
 }
 
-export default function BasketButton({ onClick }: BasketButtonProps) {
+export default function BasketButton({ onClick, total }: BasketButtonProps) {
     return (
         <Button
             position="fixed"
@@ -21,7 +22,7 @@ export default function BasketButton({ onClick }: BasketButtonProps) {
             onClick={onClick}
         >
             <Icon as={IoBasket} boxSize={8} />
-            6.5p
+            {total}p
         </Button>
     )
 }

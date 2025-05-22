@@ -43,7 +43,7 @@ export default function App() {
                 setActiveCategory={setActiveCategory}
             />
 
-            <MotionDrawer trigger={<BasketButton />}>
+            <MotionDrawer trigger={<BasketButton total={5} />}>
                 <BasketPage />
             </MotionDrawer>
         </ChakraProvider>

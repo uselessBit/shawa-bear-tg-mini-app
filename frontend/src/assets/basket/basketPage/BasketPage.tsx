@@ -1,5 +1,6 @@
 import { Drawer, Heading } from '@chakra-ui/react'
 import ToConfirmOrder from './components/ToConfirmOrder'
+// import BasketCard from './components/BasketCard.tsx'
 
 export default function ProductPage() {
     return (
@@ -10,7 +11,7 @@ export default function ProductPage() {
                 </Heading>
             </Drawer.Header>
 
-            <Drawer.Body p="12px"></Drawer.Body>
+            <Drawer.Body p="12px">{/*<BasketCard></BasketCard>*/}</Drawer.Body>
 
             <Drawer.Footer p="12px">
                 <ToConfirmOrder />

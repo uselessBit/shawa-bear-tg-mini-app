@@ -7,6 +7,7 @@ import React, {
     cloneElement,
 } from 'react'
 import { Drawer, Portal, Box } from '@chakra-ui/react'
+import { DrawerContext } from '@/contexts/DrawerContext'
 
 type MotionDrawerProps = {
     trigger: ReactElement<{ onClick?: React.MouseEventHandler }>
@@ -83,58 +84,59 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
     }, [handleTouchMove, handleTouchEnd])
 
     return (
-        <Drawer.Root placement="bottom" open={isOpen}>
-            <Drawer.Trigger asChild>
-                {cloneElement(trigger, {
-                    onClick: (e: React.MouseEvent) => {
-                        trigger.props.onClick?.(e)
-                        setIsOpen(true)
-                    },
-                })}
-            </Drawer.Trigger>
+        <DrawerContext.Provider value={{ onClose: () => setIsOpen(false) }}>
+            <Drawer.Root placement="bottom" open={isOpen}>
+                <Drawer.Trigger asChild>
+                    {cloneElement(trigger, {
+                        onClick: (e: React.MouseEvent) => {
+                            trigger.props.onClick?.(e)
+                            setIsOpen(true)
+                        },
+                    })}
+                </Drawer.Trigger>
 
-            <Portal>
-                <Drawer.Backdrop
-                    bg="back/90"
-                    backdropFilter="blur(8px)"
-                    style={{
-                        opacity: 1 - Math.min(offset / (drawerHeight * 0.7), 1),
-                        transition: 'opacity 0.2s ease',
-                    }}
-                />
-                <Drawer.Positioner
-                    padding="gap"
-                    style={{
-                        transform: `translateY(${offset}px)`,
-                        transition: isDragging
-                            ? 'none'
-                            : `transform ${velocity > 0.5 ? 0.2 : 0.3}s cubic-bezier(0.33, 1, 0.68, 1)`,
-                    }}
-                    onTouchStart={handleTouchStart}
-                >
-                    <Drawer.Content
-                        ref={contentRef}
-                        h="calc(100% - 32px)"
-                        rounded="42px"
-                        bg="card"
-                        shadow="none"
-                        touchAction="none"
+                <Portal>
+                    <Drawer.Backdrop
+                        bg="back/90"
+                        backdropFilter="blur(8px)"
+                        style={{
+                            opacity: 1 - Math.min(offset / drawerHeight, 1),
+                            transition: 'opacity 0.2s ease',
+                        }}
+                    />
+                    <Drawer.Positioner
+                        padding="gap"
+                        style={{
+                            transform: `translateY(${offset}px)`,
+                            transition: isDragging
+                                ? 'none'
+                                : `transform ${velocity > 0.5 ? 0.2 : 0.3}s cubic-bezier(0.33, 1, 0.68, 1)`,
+                        }}
+                        onTouchStart={handleTouchStart}
                     >
-                        <Box
-                            bg="text"
-                            w="100px"
-                            h="5px"
-                            rounded="full"
-                            position="absolute"
-                            top="-16px"
-                            left="50%"
-                            transform="translateX(-50%)"
-                        />
-
-                        {children}
-                    </Drawer.Content>
-                </Drawer.Positioner>
-            </Portal>
-        </Drawer.Root>
+                        <Drawer.Content
+                            ref={contentRef}
+                            h="calc(100% - 32px)"
+                            rounded="42px"
+                            bg="card"
+                            shadow="none"
+                            touchAction="none"
+                        >
+                            <Box
+                                bg="text"
+                                w="100px"
+                                h="5px"
+                                rounded="full"
+                                position="absolute"
+                                top="-16px"
+                                left="50%"
+                                transform="translateX(-50%)"
+                            />
+                            {children}
+                        </Drawer.Content>
+                    </Drawer.Positioner>
+                </Portal>
+            </Drawer.Root>
+        </DrawerContext.Provider>
     )
 }

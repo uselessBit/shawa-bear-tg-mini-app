@@ -6,14 +6,24 @@ import IngredientCheckboxGroup from './components/IngredientCheckboxGroup.tsx'
 import CustomNumberInput from './components/NumberInput.tsx'
 import ToBasketButton from './components/ToBasketButton.tsx'
 import { useState } from 'react'
+import { useBasket } from '@/hooks/useBasket.tsx'
 
 type ProductPageProps = {
     price: Price
 }
 
 export default function ProductPage({ price }: ProductPageProps) {
-    const [currentPrice, setCurrentPrice] = useState(price.price)
+    const [selectedPrice, setSelectedPrice] = useState<Price>(price)
     const [quantity, setQuantity] = useState(1)
+    const { addToBasket } = useBasket(0)
+
+    const handleAddToBasket = async () => {
+        try {
+            await addToBasket(selectedPrice.price_id, quantity)
+        } catch (err) {
+            console.error('Ошибка добавления:', err)
+        }
+    }
 
     return (
         <>
@@ -36,7 +46,7 @@ export default function ProductPage({ price }: ProductPageProps) {
             </Drawer.Header>
 
             <Drawer.Body p="12px">
-                <CostPicker price={price} setCurrentPrice={setCurrentPrice} />
+                <CostPicker price={price} setSelectedPrice={setSelectedPrice} />
 
                 <IngredientCheckboxGroup
                     ingredients={price.product.ingredients}
@@ -48,8 +58,10 @@ export default function ProductPage({ price }: ProductPageProps) {
                     <CustomNumberInput
                         setQuantity={setQuantity}
                     ></CustomNumberInput>
+
                     <ToBasketButton
-                        currentPrice={currentPrice * quantity}
+                        currentPrice={selectedPrice.price * quantity}
+                        onClick={handleAddToBasket}
                     ></ToBasketButton>
                 </Flex>
             </Drawer.Footer>

@@ -1,12 +1,24 @@
-import { Button } from '@chakra-ui/react'
+import { CloseButton } from '@chakra-ui/react'
+import { useDrawer } from '@/contexts/DrawerContext'
 
 type ToBasketProps = {
     currentPrice: number
+    onClick: () => void
 }
 
-export default function ToBasketButton({ currentPrice }: ToBasketProps) {
+export default function ToBasketButton({
+    currentPrice,
+    onClick,
+}: ToBasketProps) {
+    const { onClose } = useDrawer()
+
+    const handleClick = () => {
+        onClick()
+        onClose()
+    }
+
     return (
-        <Button
+        <CloseButton
             flex="1"
             bg="accent"
             h="56px"
@@ -15,8 +27,9 @@ export default function ToBasketButton({ currentPrice }: ToBasketProps) {
             fontWeight="700"
             rounded="full"
             color="text"
+            onClick={handleClick}
         >
             В корзину - {currentPrice}р
-        </Button>
+        </CloseButton>
     )
 }
