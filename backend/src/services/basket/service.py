@@ -41,15 +41,29 @@ class BasketService(BaseService, BasketServiceI):
                 basket = Basket(user_id=user_id)
                 session.add(basket)
                 await session.flush()
-            if await session.get(Price, item_data.price_id):
+
+            if not await session.get(Price, item_data.price_id):
+                raise PriceNotFoundError
+
+            existing_item = await self._get_existing_item(session, basket, item_data)
+
+            if existing_item:
+                existing_item.quantity += item_data.quantity
+            else:
                 new_item = BasketItem(
                     basket_id=basket.basket_id,
                     price_id=item_data.price_id,
                     quantity=item_data.quantity,
                 )
-            else:
-                raise PriceNotFoundError
-            session.add(new_item)
+                session.add(new_item)
+
+
+    @staticmethod
+    async def _get_existing_item(session, basket: Basket, item_data: BasketItemCreate):
+        query = select(BasketItem).where(BasketItem.basket_id == basket.basket_id, BasketItem.price_id == item_data.price_id)
+        result = await session.execute(query)
+        return result.scalar()
+
 
     async def remove_item(self, basket_item_id: int) -> None:
         async with self.session() as session, session.begin():
