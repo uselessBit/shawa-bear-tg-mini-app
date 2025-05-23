@@ -47,11 +47,21 @@ export default function App() {
                     setActiveCategory={setActiveCategory}
                 />
 
-                <MotionDrawer trigger={<BasketButton />}>
+                <MotionDrawer
+                    trigger={
+                        <BasketButton
+                            openBasketPage={() => setConfirmActive(false)}
+                        />
+                    }
+                >
                     {!confirmActive ? (
-                        <BasketPage openConfirmPage={setConfirmActive} />
+                        <BasketPage
+                            openConfirmPage={() => setConfirmActive(true)}
+                        />
                     ) : (
-                        <ConfirmOrderPage />
+                        <ConfirmOrderPage
+                            closeConfirmPage={() => setConfirmActive(false)}
+                        />
                     )}
                 </MotionDrawer>
             </ChakraProvider>

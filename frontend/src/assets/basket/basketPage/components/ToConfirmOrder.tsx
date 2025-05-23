@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/react'
 import { useBasketContext } from '@/contexts/BasketContext'
 
 type ToConfirmOrderProps = {
-    openConfirmPage: (confirmActive: boolean) => void
+    openConfirmPage: () => void
 }
 
 export default function ToConfirmOrder({
@@ -21,7 +21,7 @@ export default function ToConfirmOrder({
             rounded="full"
             color="text"
             onClick={() => {
-                openConfirmPage(true)
+                openConfirmPage()
             }}
         >
             Оформить - {basket?.total_price}р

@@ -1,11 +1,32 @@
-import { Drawer, Heading, Flex } from '@chakra-ui/react'
-import { useBasketContext } from '@/contexts/BasketContext.tsx'
+import { Drawer, Heading, CloseButton, Icon } from '@chakra-ui/react'
 import ConfirmOrderButton from './ConfirmOrderButton'
+import { IoArrowBackOutline } from 'react-icons/io5'
 
-export default function ProductPage() {
+type ConfirmOrderPageProps = {
+    closeConfirmPage: () => void
+}
+
+export default function ConfirmOrderPage({
+    closeConfirmPage,
+}: ConfirmOrderPageProps) {
     return (
         <>
-            <Drawer.Header py="gap" display="flex" flexDirection="column">
+            <Drawer.Header
+                position="relative"
+                py="24px"
+                display="flex"
+                flexDirection="column"
+            >
+                <CloseButton
+                    position="absolute"
+                    left="24px"
+                    top="20px"
+                    onClick={() => {
+                        closeConfirmPage()
+                    }}
+                >
+                    <Icon as={IoArrowBackOutline} boxSize={6} />
+                </CloseButton>
                 <Heading color="text" fontWeight="800" size="2xl">
                     Оформление
                 </Heading>

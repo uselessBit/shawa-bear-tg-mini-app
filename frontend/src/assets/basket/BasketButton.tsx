@@ -5,12 +5,23 @@ import { useBasketContext } from '@/contexts/BasketContext'
 
 type BasketButtonProps = {
     onClick?: React.MouseEventHandler
+    openBasketPage: () => void
 }
 
-export default function BasketButton({ onClick }: BasketButtonProps) {
+export default function BasketButton({
+    onClick,
+    openBasketPage,
+}: BasketButtonProps) {
     const { basket, loading } = useBasketContext()
 
     if (loading || !basket || basket.total_price === 0) return null
+
+    const handleOnClick: React.MouseEventHandler<HTMLButtonElement> = (
+        event
+    ) => {
+        openBasketPage()
+        onClick?.(event)
+    }
 
     return (
         <Button
@@ -23,7 +34,7 @@ export default function BasketButton({ onClick }: BasketButtonProps) {
             p="24px"
             fontSize="xl"
             fontWeight="700"
-            onClick={onClick}
+            onClick={handleOnClick}
         >
             <Icon as={IoBasket} boxSize={8} />
             {basket?.total_price}p

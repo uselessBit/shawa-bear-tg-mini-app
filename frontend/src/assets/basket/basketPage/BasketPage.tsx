@@ -4,7 +4,7 @@ import BasketCard from './components/BasketCard.tsx'
 import { useBasketContext } from '@/contexts/BasketContext.tsx'
 
 type BasketPageProps = {
-    openConfirmPage: (confirmActive: boolean) => void
+    openConfirmPage: () => void
 }
 
 const getItemCountText = (count: number) => {
@@ -37,7 +37,7 @@ export default function ProductPage({ openConfirmPage }: BasketPageProps) {
 
     return (
         <>
-            <Drawer.Header py="gap" display="flex" flexDirection="column">
+            <Drawer.Header py="24px" display="flex" flexDirection="column">
                 <Heading color="text" fontWeight="800" size="2xl">
                     {`Корзина - ${itemCount} ${itemText}`}
                 </Heading>
