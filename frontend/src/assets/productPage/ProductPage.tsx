@@ -3,7 +3,7 @@ import { Price } from '@/types/Products.ts'
 import API_SHORT_URL from '@/config.ts'
 import CostPicker from './components/CostPicker.tsx'
 import IngredientCheckboxGroup from './components/IngredientCheckboxGroup.tsx'
-import CustomNumberInput from './components/NumberInput.tsx'
+import CustomNumberInput from './components/CustomNumberInput.tsx'
 import ToBasketButton from './components/ToBasketButton.tsx'
 import { useState } from 'react'
 

@@ -36,4 +36,5 @@ export interface Price {
     carbohydrates: number
     calories: number
     is_custom: boolean
+    quantity?: number
 }

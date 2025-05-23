@@ -8,7 +8,9 @@ type BasketButtonProps = {
 }
 
 export default function BasketButton({ onClick }: BasketButtonProps) {
-    const { basket } = useBasketContext()
+    const { basket, loading } = useBasketContext()
+
+    if (loading || !basket || basket.total_price === 0) return null
 
     return (
         <Button

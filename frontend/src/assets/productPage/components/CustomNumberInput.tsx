@@ -1,20 +1,27 @@
-import { HStack, IconButton, NumberInput } from '@chakra-ui/react'
+import { HStack, IconButton, NumberInput, Icon } from '@chakra-ui/react'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
 type NumberInputProps = {
     setQuantity: (quantity: number) => void
+    small?: boolean
+    defaultValue?: string
 }
 
-export default function CustomNumberInput({ setQuantity }: NumberInputProps) {
+export default function CustomNumberInput({
+    setQuantity,
+    small,
+    defaultValue,
+}: NumberInputProps) {
     return (
         <NumberInput.Root
             unstyled
             spinOnPress={false}
             onValueChange={(e) => setQuantity(Number(e.value))}
             bg="back"
-            p="12px"
+            p={small ? '8px' : '12px'}
+            h={small ? '40px' : '56px'}
             rounded="full"
-            defaultValue="1"
+            defaultValue={defaultValue ? defaultValue : '1'}
             min={1}
             max={10}
         >
@@ -23,26 +30,29 @@ export default function CustomNumberInput({ setQuantity }: NumberInputProps) {
                     <IconButton
                         bg="accent"
                         rounded="full"
-                        size="xs"
+                        maxH={small ? '24px' : '32px'}
+                        minW={small ? '24px' : '32px'}
                         color="text"
                     >
-                        <FaMinus />
+                        <Icon as={FaMinus} boxSize={small ? 2 : 4} />
                     </IconButton>
                 </NumberInput.DecrementTrigger>
                 <NumberInput.ValueText
                     textAlign="center"
-                    fontSize="xl"
+                    fontSize={small ? 'md' : 'xl'}
                     fontWeight="700"
-                    minW="24px"
+                    minW={small ? '10px' : '24px'}
+                    color="text"
                 />
                 <NumberInput.IncrementTrigger asChild>
                     <IconButton
                         bg="accent"
                         rounded="full"
-                        size="xs"
+                        maxH={small ? '24px' : '32px'}
+                        minW={small ? '24px' : '32px'}
                         color="text"
                     >
-                        <FaPlus />
+                        <Icon as={FaPlus} boxSize={small ? 2 : 4} />
                     </IconButton>
                 </NumberInput.IncrementTrigger>
             </HStack>

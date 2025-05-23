@@ -1,11 +1,16 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Basket } from '@/types/Basket'
 import { BasketService } from '@/api/BasketService'
+import { ProductService } from '@/api/ProductService'
+import { Price } from '@/types/Products'
+
+type PriceWithQuantity = Price & { quantity: number }
 
 type BasketContextType = {
     basket: Basket | null
     loading: boolean
     error: string
+    basketPrices: PriceWithQuantity[]
     refreshBasket: () => Promise<void>
     addToBasket: (priceId: number, quantity: number) => Promise<void>
 }
@@ -14,6 +19,7 @@ const BasketContext = createContext<BasketContextType>({
     basket: null,
     loading: false,
     error: '',
+    basketPrices: [],
     refreshBasket: async () => {},
     addToBasket: async () => {},
 })
@@ -26,8 +32,33 @@ export const BasketProvider = ({
     userId: number
 }) => {
     const [basket, setBasket] = useState<Basket | null>(null)
+    const [allPrices, setAllPrices] = useState<Price[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+
+    useEffect(() => {
+        const loadPrices = async () => {
+            try {
+                const prices = await ProductService.fetchAllPrices()
+                setAllPrices(prices)
+            } catch (err) {
+                console.error('Ошибка загрузки цен:', err)
+            }
+        }
+        loadPrices()
+    }, [])
+
+    const getBasketPrices = (): PriceWithQuantity[] => {
+        if (!basket || !allPrices.length) return []
+        return basket.items
+            .map((item) => {
+                const price = allPrices.find(
+                    (p) => p.price_id === item.price_id
+                )
+                return price ? { ...price, quantity: item.quantity } : null
+            })
+            .filter((p): p is PriceWithQuantity => !!p)
+    }
 
     const refreshBasket = async () => {
         setLoading(true)
@@ -63,7 +94,14 @@ export const BasketProvider = ({
 
     return (
         <BasketContext.Provider
-            value={{ basket, loading, error, refreshBasket, addToBasket }}
+            value={{
+                basket,
+                loading,
+                error,
+                basketPrices: getBasketPrices(),
+                refreshBasket,
+                addToBasket,
+            }}
         >
             {children}
         </BasketContext.Provider>

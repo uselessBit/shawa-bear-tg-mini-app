@@ -1,8 +1,10 @@
-import { Drawer, Heading } from '@chakra-ui/react'
+import { Drawer, Heading, Flex } from '@chakra-ui/react'
 import ToConfirmOrder from './components/ToConfirmOrder'
-// import BasketCard from './components/BasketCard.tsx'
+import BasketCard from './components/BasketCard.tsx'
+import { useBasketContext } from '@/contexts/BasketContext.tsx'
 
 export default function ProductPage() {
+    const { basketPrices } = useBasketContext()
     return (
         <>
             <Drawer.Header py="gap" display="flex" flexDirection="column">
@@ -11,7 +13,13 @@ export default function ProductPage() {
                 </Heading>
             </Drawer.Header>
 
-            <Drawer.Body p="12px">{/*<BasketCard></BasketCard>*/}</Drawer.Body>
+            <Drawer.Body px="12px" py="0">
+                <Flex direction="column" gap="gap">
+                    {basketPrices.map((price) => (
+                        <BasketCard key={price.price_id} price={price} />
+                    ))}
+                </Flex>
+            </Drawer.Body>
 
             <Drawer.Footer p="12px">
                 <ToConfirmOrder />

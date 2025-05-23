@@ -43,7 +43,7 @@ export default function Card({ price, onClick }: CardProps) {
                     textAlign="left"
                     w="95%"
                     size="2xl"
-                    fontWeight="600"
+                    fontWeight="700"
                 >
                     {price.product.name}
                 </Heading>

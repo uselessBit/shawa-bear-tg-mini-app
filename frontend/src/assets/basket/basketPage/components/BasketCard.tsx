@@ -1,7 +1,7 @@
-import React from 'react'
 import { Text, Flex, Button, Image, Heading, Mark } from '@chakra-ui/react'
 import API_SHORT_URL from '@/config.ts'
 import { Price } from '@/types/Products.ts'
+import CustomNumberInput from '@/assets/productPage/components/CustomNumberInput'
 
 type CardProps = {
     price: Price
@@ -10,11 +10,9 @@ type CardProps = {
 export default function BasketCard({ price }: CardProps) {
     return (
         <Button
-            borderWidth="1px"
-            borderColor="gray"
             rounded="26px"
             overflow="hidden"
-            bg="back"
+            bg="card"
             w="full"
             h="140px"
             justifyContent="space-between"
@@ -40,7 +38,7 @@ export default function BasketCard({ price }: CardProps) {
                     textAlign="left"
                     w="95%"
                     size="2xl"
-                    fontWeight="600"
+                    fontWeight="700"
                 >
                     {price.product.name}
                 </Heading>
@@ -54,43 +52,35 @@ export default function BasketCard({ price }: CardProps) {
                     w="95%"
                     lineHeight="15px"
                     fontSize="xs"
-                    mb="4px"
+                    mb="24px"
                 >
-                    {price.product.ingredients.map((i) => i.name).join(', ')}
+                    {price.size.grams}г
                 </Text>
 
                 <Flex
                     justifyContent="space-between"
                     alignItems="center"
-                    w="calc(100% - 12px)"
+                    w="full"
+                    h="fit"
                 >
                     <Flex
-                        h="hb"
-                        bg="gray"
+                        h="40px"
+                        bg="back"
                         color="text"
                         alignItems="center"
                         justifyContent="center"
-                        px="20px"
+                        px="30px"
                         rounded="full"
-                        fontSize="xs"
+                        fontSize="md"
                     >
-                        от {price.price}
+                        {price.price}
                         <Mark color="accent">р</Mark>
                     </Flex>
 
-                    <Flex
-                        h="hb"
-                        bg="accent"
-                        color="text"
-                        alignItems="center"
-                        justifyContent="center"
-                        px="20px"
-                        rounded="full"
-                        fontWeight="600"
-                        fontSize="xl"
-                    >
-                        +
-                    </Flex>
+                    <CustomNumberInput
+                        small={true}
+                        defaultValue={price.quantity?.toString()}
+                    />
                 </Flex>
             </Flex>
         </Button>

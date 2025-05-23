@@ -4,7 +4,7 @@ export interface BasketItem {
     basket_item_id: number
     price_id: number
     quantity: number
-    price?: Price
+    price: Price
 }
 
 export interface Basket {
