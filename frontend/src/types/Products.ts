@@ -37,15 +37,3 @@ export interface Price {
     calories: number
     is_custom: boolean
 }
-
-export interface BasketItem {
-    basket_item_id: number
-    price_id: number
-    quantity: number
-}
-
-export interface Basket {
-    basket_id: number
-    user_id: number
-    items: BasketItem[]
-}

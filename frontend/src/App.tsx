@@ -7,6 +7,7 @@ import { useCategories } from '@/hooks/useCategories'
 import BasketButton from '@/assets/basket/BasketButton.tsx'
 import MotionDrawer from '@/assets/MotionDrawer.tsx'
 import BasketPage from '@/assets/basket/basketPage/BasketPage.tsx'
+import { BasketProvider } from '@/contexts/BasketContext.tsx'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -30,22 +31,24 @@ export default function App() {
     }
 
     return (
-        <ChakraProvider value={system}>
-            <Header
-                categories={categories.map((c) => c.name)}
-                activeCategory={activeCategory}
-                setActiveCategory={setActiveCategory}
-            />
+        <BasketProvider userId={0}>
+            <ChakraProvider value={system}>
+                <Header
+                    categories={categories.map((c) => c.name)}
+                    activeCategory={activeCategory}
+                    setActiveCategory={setActiveCategory}
+                />
 
-            <MainList
-                categories={categories.map((c) => c.name)}
-                activeCategory={activeCategory}
-                setActiveCategory={setActiveCategory}
-            />
+                <MainList
+                    categories={categories.map((c) => c.name)}
+                    activeCategory={activeCategory}
+                    setActiveCategory={setActiveCategory}
+                />
 
-            <MotionDrawer trigger={<BasketButton total={5} />}>
-                <BasketPage />
-            </MotionDrawer>
-        </ChakraProvider>
+                <MotionDrawer trigger={<BasketButton />}>
+                    <BasketPage />
+                </MotionDrawer>
+            </ChakraProvider>
+        </BasketProvider>
     )
 }

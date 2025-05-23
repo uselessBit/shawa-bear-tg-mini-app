@@ -1,6 +1,9 @@
 import { Button } from '@chakra-ui/react'
+import { useBasketContext } from '@/contexts/BasketContext.tsx'
 
 export default function ToConfirmOrder() {
+    const { basket } = useBasketContext()
+
     return (
         <Button
             w="full"
@@ -12,7 +15,7 @@ export default function ToConfirmOrder() {
             rounded="full"
             color="text"
         >
-            Оформить - 6.5р
+            Оформить - {basket?.total_price}р
         </Button>
     )
 }

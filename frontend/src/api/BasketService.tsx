@@ -1,19 +1,6 @@
 import axios from 'axios'
 import API_BASE_URL from '@/config'
-import { Price } from '@/types/Products'
-
-export interface BasketItem {
-    basket_item_id: number
-    price_id: number
-    quantity: number
-    price?: Price
-}
-
-export interface Basket {
-    basket_id: number
-    user_id: number
-    items: BasketItem[]
-}
+import { Basket } from '@/types/Basket'
 
 export const BasketService = {
     async addItem(
@@ -21,26 +8,16 @@ export const BasketService = {
         priceId: number,
         quantity: number = 1
     ): Promise<void> {
-        try {
-            await axios.post(
-                `${API_BASE_URL}api/v1/basket/add_item?user_id=${userId}`,
-                { price_id: priceId, quantity }
-            )
-        } catch (error) {
-            console.error('Error adding item to basket:', error)
-            throw error
-        }
+        await axios.post(
+            `${API_BASE_URL}api/v1/basket/add_item?user_id=${userId}`,
+            { price_id: priceId, quantity }
+        )
     },
 
     async getBasket(userId: number): Promise<Basket> {
-        try {
-            const response = await axios.get<Basket>(
-                `${API_BASE_URL}api/v1/basket/${userId}`
-            )
-            return response.data
-        } catch (error) {
-            console.error('Error fetching basket:', error)
-            throw error
-        }
+        const response = await axios.get<Basket>(
+            `${API_BASE_URL}api/v1/basket/${userId}`
+        )
+        return response.data
     },
 }

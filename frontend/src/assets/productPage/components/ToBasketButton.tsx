@@ -1,19 +1,23 @@
 import { CloseButton } from '@chakra-ui/react'
 import { useDrawer } from '@/contexts/DrawerContext'
+import { useBasketContext } from '@/contexts/BasketContext'
 
 type ToBasketProps = {
     currentPrice: number
-    onClick: () => void
+    priceId: number
+    quantity: number
 }
 
 export default function ToBasketButton({
     currentPrice,
-    onClick,
+    priceId,
+    quantity,
 }: ToBasketProps) {
     const { onClose } = useDrawer()
+    const { addToBasket } = useBasketContext()
 
     const handleClick = () => {
-        onClick()
+        addToBasket(priceId, quantity)
         onClose()
     }
 

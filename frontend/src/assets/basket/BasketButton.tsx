@@ -1,13 +1,15 @@
 import { Button, Icon } from '@chakra-ui/react'
 import { IoBasket } from 'react-icons/io5'
 import React from 'react'
+import { useBasketContext } from '@/contexts/BasketContext'
 
 type BasketButtonProps = {
     onClick?: React.MouseEventHandler
-    total: number
 }
 
-export default function BasketButton({ onClick, total }: BasketButtonProps) {
+export default function BasketButton({ onClick }: BasketButtonProps) {
+    const { basket } = useBasketContext()
+
     return (
         <Button
             position="fixed"
@@ -22,7 +24,7 @@ export default function BasketButton({ onClick, total }: BasketButtonProps) {
             onClick={onClick}
         >
             <Icon as={IoBasket} boxSize={8} />
-            {total}p
+            {basket?.total_price}p
         </Button>
     )
 }
