@@ -1,42 +1,55 @@
 import { Drawer, Heading, CloseButton, Icon } from '@chakra-ui/react'
-import ConfirmOrderButton from './ConfirmOrderButton'
+import { motion } from 'framer-motion'
 import { IoArrowBackOutline } from 'react-icons/io5'
+import ConfirmOrderButton from './ConfirmOrderButton'
 
-type ConfirmOrderPageProps = {
-    closeConfirmPage: () => void
-}
+const MotionHeader = motion(Drawer.Header)
+const MotionBody = motion(Drawer.Body)
+const MotionFooter = motion(Drawer.Footer)
 
-export default function ConfirmOrderPage({
-    closeConfirmPage,
-}: ConfirmOrderPageProps) {
-    return (
-        <>
-            <Drawer.Header
-                position="relative"
-                py="24px"
-                display="flex"
-                flexDirection="column"
+export const ConfirmOrderPage = {
+    Header: ({ onBack }: { onBack: () => void }) => (
+        <MotionHeader
+            position="relative"
+            py="24px"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+        >
+            <CloseButton
+                position="absolute"
+                left="24px"
+                top="20px"
+                onClick={onBack}
             >
-                <CloseButton
-                    position="absolute"
-                    left="24px"
-                    top="20px"
-                    onClick={() => {
-                        closeConfirmPage()
-                    }}
-                >
-                    <Icon as={IoArrowBackOutline} boxSize={6} />
-                </CloseButton>
-                <Heading color="text" fontWeight="800" size="2xl">
-                    Оформление
-                </Heading>
-            </Drawer.Header>
+                <Icon as={IoArrowBackOutline} boxSize={6} />
+            </CloseButton>
+            <Heading size="2xl" fontWeight="800" textAlign="center" w="full">
+                Оформление
+            </Heading>
+        </MotionHeader>
+    ),
 
-            <Drawer.Body px="12px" py="0"></Drawer.Body>
+    Body: () => (
+        <MotionBody
+            px="12px"
+            py="0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+        >
+            {/* Контент оформления заказа */}
+        </MotionBody>
+    ),
 
-            <Drawer.Footer p="12px">
-                <ConfirmOrderButton />
-            </Drawer.Footer>
-        </>
-    )
+    Footer: () => (
+        <MotionFooter
+            p="12px"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+        >
+            <ConfirmOrderButton />
+        </MotionFooter>
+    ),
 }

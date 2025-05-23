@@ -1,20 +1,18 @@
 import { Drawer, Heading, Flex } from '@chakra-ui/react'
+import { motion } from 'framer-motion'
 import ToConfirmOrder from './components/ToConfirmOrder'
-import BasketCard from './components/BasketCard.tsx'
-import { useBasketContext } from '@/contexts/BasketContext.tsx'
+import BasketCard from './components/BasketCard'
+import { useBasketContext } from '@/contexts/BasketContext'
 
-type BasketPageProps = {
-    openConfirmPage: () => void
-}
+const MotionHeader = motion(Drawer.Header)
+const MotionBody = motion(Drawer.Body)
+const MotionFooter = motion(Drawer.Footer)
 
 const getItemCountText = (count: number) => {
     const lastDigit = count % 10
     const lastTwoDigits = count % 100
 
-    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
-        return 'товаров'
-    }
-
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) return 'товаров'
     switch (lastDigit) {
         case 1:
             return 'товар'
@@ -27,33 +25,61 @@ const getItemCountText = (count: number) => {
     }
 }
 
-export default function ProductPage({ openConfirmPage }: BasketPageProps) {
-    const { basketPrices } = useBasketContext()
-    const itemCount = basketPrices.reduce(
-        (sum, price) => sum + (price.quantity || 0),
-        0
-    )
-    const itemText = getItemCountText(itemCount)
+export const BasketPage = {
+    Header: () => {
+        const { basketPrices } = useBasketContext()
+        const itemCount = basketPrices.reduce(
+            (sum, price) => sum + (price.quantity || 0),
+            0
+        )
 
-    return (
-        <>
-            <Drawer.Header py="24px" display="flex" flexDirection="column">
-                <Heading color="text" fontWeight="800" size="2xl">
-                    {`Корзина - ${itemCount} ${itemText}`}
+        return (
+            <MotionHeader
+                py="24px"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+            >
+                <Heading
+                    size="2xl"
+                    fontWeight="800"
+                    textAlign="center"
+                    w="full"
+                >
+                    {`Корзина - ${itemCount} ${getItemCountText(itemCount)}`}
                 </Heading>
-            </Drawer.Header>
+            </MotionHeader>
+        )
+    },
 
-            <Drawer.Body px="12px" py="0">
+    Body: () => {
+        const { basketPrices } = useBasketContext()
+
+        return (
+            <MotionBody
+                px="12px"
+                py="0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+            >
                 <Flex direction="column" gap="gap">
                     {basketPrices.map((price) => (
                         <BasketCard key={price.price_id} price={price} />
                     ))}
                 </Flex>
-            </Drawer.Body>
+            </MotionBody>
+        )
+    },
 
-            <Drawer.Footer p="12px">
-                <ToConfirmOrder openConfirmPage={openConfirmPage} />
-            </Drawer.Footer>
-        </>
-    )
+    Footer: ({ openConfirm }: { openConfirm: () => void }) => (
+        <MotionFooter
+            p="12px"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+        >
+            <ToConfirmOrder openConfirmPage={openConfirm} />
+        </MotionFooter>
+    ),
 }

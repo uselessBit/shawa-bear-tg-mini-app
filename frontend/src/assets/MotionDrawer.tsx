@@ -121,6 +121,8 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
                             bg="card"
                             shadow="none"
                             touchAction="none"
+                            display="flex"
+                            flexDirection="column"
                         >
                             <Box
                                 bg="text"
@@ -132,7 +134,18 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
                                 left="50%"
                                 transform="translateX(-50%)"
                             />
-                            {children}
+
+                            <div
+                                style={{
+                                    flex: 1,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    borderRadius: '42px',
+                                    overflow: 'hidden',
+                                }}
+                            >
+                                {children}
+                            </div>
                         </Drawer.Content>
                     </Drawer.Positioner>
                 </Portal>

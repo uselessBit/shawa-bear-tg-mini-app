@@ -6,9 +6,8 @@ import MainList from '@/assets/mainList/MainList.tsx'
 import { useCategories } from '@/hooks/useCategories'
 import BasketButton from '@/assets/basket/BasketButton.tsx'
 import MotionDrawer from '@/assets/MotionDrawer.tsx'
-import BasketPage from '@/assets/basket/basketPage/BasketPage.tsx'
+import { BasketDrawerContent } from '@/assets/basket/BasketDrawer.tsx'
 import { BasketProvider } from '@/contexts/BasketContext.tsx'
-import ConfirmOrderPage from '@/assets/basket/confirmOrderPage/ConfirmOrderPage.tsx'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -54,15 +53,11 @@ export default function App() {
                         />
                     }
                 >
-                    {!confirmActive ? (
-                        <BasketPage
-                            openConfirmPage={() => setConfirmActive(true)}
-                        />
-                    ) : (
-                        <ConfirmOrderPage
-                            closeConfirmPage={() => setConfirmActive(false)}
-                        />
-                    )}
+                    <BasketDrawerContent
+                        confirmActive={confirmActive}
+                        handleBack={() => setConfirmActive(false)}
+                        handleConfirm={() => setConfirmActive(true)}
+                    />
                 </MotionDrawer>
             </ChakraProvider>
         </BasketProvider>
