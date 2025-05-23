@@ -3,6 +3,10 @@ import ToConfirmOrder from './components/ToConfirmOrder'
 import BasketCard from './components/BasketCard.tsx'
 import { useBasketContext } from '@/contexts/BasketContext.tsx'
 
+type BasketPageProps = {
+    openConfirmPage: (confirmActive: boolean) => void
+}
+
 const getItemCountText = (count: number) => {
     const lastDigit = count % 10
     const lastTwoDigits = count % 100
@@ -23,7 +27,7 @@ const getItemCountText = (count: number) => {
     }
 }
 
-export default function ProductPage() {
+export default function ProductPage({ openConfirmPage }: BasketPageProps) {
     const { basketPrices } = useBasketContext()
     const itemCount = basketPrices.reduce(
         (sum, price) => sum + (price.quantity || 0),
@@ -48,7 +52,7 @@ export default function ProductPage() {
             </Drawer.Body>
 
             <Drawer.Footer p="12px">
-                <ToConfirmOrder />
+                <ToConfirmOrder openConfirmPage={openConfirmPage} />
             </Drawer.Footer>
         </>
     )

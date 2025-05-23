@@ -1,14 +1,10 @@
 import { Button } from '@chakra-ui/react'
+import { useDrawer } from '@/contexts/DrawerContext'
 import { useBasketContext } from '@/contexts/BasketContext'
 
-type ToConfirmOrderProps = {
-    openConfirmPage: (confirmActive: boolean) => void
-}
-
-export default function ToConfirmOrder({
-    openConfirmPage,
-}: ToConfirmOrderProps) {
+export default function ConfirmOrderButton() {
     const { basket } = useBasketContext()
+    const { onClose } = useDrawer()
 
     return (
         <Button
@@ -21,10 +17,10 @@ export default function ToConfirmOrder({
             rounded="full"
             color="text"
             onClick={() => {
-                openConfirmPage(true)
+                onClose()
             }}
         >
-            Оформить - {basket?.total_price}р
+            Заказать - {basket?.total_price}р
         </Button>
     )
 }

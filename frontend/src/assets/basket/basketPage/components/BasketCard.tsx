@@ -1,4 +1,4 @@
-import { Text, Flex, Button, Image, Heading, Mark } from '@chakra-ui/react'
+import { Text, Flex, Image, Heading, Mark } from '@chakra-ui/react'
 import API_SHORT_URL from '@/config.ts'
 import { Price } from '@/types/Products.ts'
 import CustomNumberInput from '@/assets/productPage/components/CustomNumberInput'
@@ -9,7 +9,7 @@ type CardProps = {
 
 export default function BasketCard({ price }: CardProps) {
     return (
-        <Button
+        <Flex
             rounded="26px"
             overflow="hidden"
             bg="card"
@@ -83,6 +83,6 @@ export default function BasketCard({ price }: CardProps) {
                     />
                 </Flex>
             </Flex>
-        </Button>
+        </Flex>
     )
 }

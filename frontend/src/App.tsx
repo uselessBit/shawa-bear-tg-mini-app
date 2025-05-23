@@ -8,10 +8,12 @@ import BasketButton from '@/assets/basket/BasketButton.tsx'
 import MotionDrawer from '@/assets/MotionDrawer.tsx'
 import BasketPage from '@/assets/basket/basketPage/BasketPage.tsx'
 import { BasketProvider } from '@/contexts/BasketContext.tsx'
+import ConfirmOrderPage from '@/assets/basket/confirmOrderPage/ConfirmOrderPage.tsx'
 
 export default function App() {
     const { categories, error } = useCategories()
     const [activeCategory, setActiveCategory] = useState('')
+    const [confirmActive, setConfirmActive] = useState<boolean>(false)
 
     useEffect(() => {
         if (categories.length > 0) setActiveCategory(categories[0].name)
@@ -46,7 +48,11 @@ export default function App() {
                 />
 
                 <MotionDrawer trigger={<BasketButton />}>
-                    <BasketPage />
+                    {!confirmActive ? (
+                        <BasketPage openConfirmPage={setConfirmActive} />
+                    ) : (
+                        <ConfirmOrderPage />
+                    )}
                 </MotionDrawer>
             </ChakraProvider>
         </BasketProvider>
