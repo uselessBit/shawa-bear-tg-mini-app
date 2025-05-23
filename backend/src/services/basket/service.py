@@ -5,7 +5,7 @@ from src.clients.database.models.basket import Basket, BasketItem
 from src.clients.database.models.price import Price
 from src.services.base import BaseService
 from src.services.basket.interface import BasketServiceI
-from src.services.basket.schemas import BasketItemCreate, BasketItemResponse, BasketResponse
+from src.services.basket.schemas import BasketItemCreate, BasketItemResponse, BasketResponse, QuantityUpdate
 from src.services.errors import BasketItemNotFoundError, BasketNotFoundError, PriceNotFoundError
 
 
@@ -93,3 +93,15 @@ class BasketService(BaseService, BasketServiceI):
 
             for item in items_to_delete:
                 await session.delete(item)
+
+
+    async def change_quantity(self, quantity_update: QuantityUpdate) -> None:
+        async with self.session() as session, session.begin():
+            query = select(BasketItem).where(BasketItem.basket_item_id == quantity_update.basket_item_id)
+            result = await session.execute(query)
+            item = result.scalar()
+
+            if not item:
+                raise BasketItemNotFoundError
+
+            item.quantity = quantity_update.quantity

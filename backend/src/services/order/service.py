@@ -79,12 +79,3 @@ class OrderService(BaseService, OrderServiceI):
             else:
                 raise PriceNotFoundError()
         return total
-
-    # async def get_user_orders_history(self, user_id: int) -> list[OrderResponse]:
-    #     async with self.session() as session:
-    #         query = select(Order).where(user_id == Order.basket.user_id).options(joinedload(Order.basket))
-    #         result = await session.execute(query)
-    #         orders_history = result.scalars().all()
-    #         type_adapter = TypeAdapter(list[OrderResponse])
-    #         return type_adapter.validate_python(orders_history)
-

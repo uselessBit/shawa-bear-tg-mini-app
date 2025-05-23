@@ -1,11 +1,11 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends
-from starlette.responses import JSONResponse
+from fastapi import APIRouter, Depends, Response
+from starlette.responses import JSONResponse, Response
 
 from src.container import container
 from src.services.basket.interface import BasketServiceI
-from src.services.basket.schemas import BasketItemCreate, BasketResponse
+from src.services.basket.schemas import BasketItemCreate, BasketResponse, QuantityUpdate
 from src.services.static import create_message, delete_message
 
 basket_tag = "Basket"
@@ -52,3 +52,12 @@ async def clear_basket(
 ) -> JSONResponse:
     await basket_service.clear_basket(basket_id)
     return JSONResponse(content={"message": delete_message.format(entity=basket_tag)}, status_code=200)
+
+
+@router.post("/change_quantity")
+async def change_quantity(
+    quantity_update: QuantityUpdate,
+    basket_service: BasketServiceI = Depends(get_basket_service),
+) -> Response:
+    await basket_service.change_quantity(quantity_update)
+    return Response(status_code=204)
