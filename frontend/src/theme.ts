@@ -4,6 +4,7 @@ const config = defineConfig({
     globalCss: {
         body: {
             backgroundColor: 'back',
+            color: 'text',
         },
         html: {
             scrollBehavior: 'smooth',

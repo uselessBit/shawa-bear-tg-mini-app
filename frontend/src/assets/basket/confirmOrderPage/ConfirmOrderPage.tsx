@@ -1,7 +1,17 @@
-import { Drawer, Heading, CloseButton, Icon } from '@chakra-ui/react'
+import {
+    Drawer,
+    Heading,
+    CloseButton,
+    Icon,
+    Flex,
+    Textarea,
+} from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { IoArrowBackOutline } from 'react-icons/io5'
-import ConfirmOrderButton from './ConfirmOrderButton'
+import ConfirmOrderButton from './components/ConfirmOrderButton.tsx'
+import CustomSelect from './components/CustomSelect.tsx'
+import { Input } from '@chakra-ui/react'
+import { withMask } from 'use-mask-input'
 
 const MotionHeader = motion(Drawer.Header)
 const MotionBody = motion(Drawer.Body)
@@ -38,7 +48,49 @@ export const ConfirmOrderPage = {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
-            {/* Контент оформления заказа */}
+            <Flex direction="column" gap="gap" h="full" pb="4px">
+                <CustomSelect />
+                <Input
+                    bg="back"
+                    borderWidth="0"
+                    outline="none"
+                    boxShadow="none"
+                    h="56px"
+                    px="24px"
+                    rounded="full"
+                    size="lg"
+                    fontWeight="500"
+                    placeholder="Имя"
+                />
+                <Input
+                    bg="back"
+                    borderWidth="0"
+                    outline="none"
+                    boxShadow="none"
+                    h="56px"
+                    rounded="full"
+                    size="lg"
+                    fontWeight="500"
+                    px="24px"
+                    placeholder="+375 (99) 999-99-99"
+                    ref={withMask('+375 (99) 999-99-99')}
+                />
+                <CustomSelect />
+                <CustomSelect />
+                <Textarea
+                    bg="back"
+                    borderWidth="0"
+                    outline="none"
+                    boxShadow="none"
+                    flex="1"
+                    rounded="28px"
+                    size="lg"
+                    fontWeight="500"
+                    px="24px"
+                    resize="none"
+                    placeholder="Комментарий к заказу..."
+                />
+            </Flex>
         </MotionBody>
     ),
 

@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/react'
-import { useDrawer } from '@/contexts/DrawerContext'
-import { useBasketContext } from '@/contexts/BasketContext'
+import { useDrawer } from '@/contexts/DrawerContext.tsx'
+import { useBasketContext } from '@/contexts/BasketContext.tsx'
 
 export default function ConfirmOrderButton() {
     const { basket } = useBasketContext()
