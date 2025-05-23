@@ -17,3 +17,8 @@ class BasketResponse(BaseModel):
     user_id: int
     items: list[BasketItemResponse]
     total_price: float
+
+
+class QuantityUpdate(BaseModel):
+    basket_item_id: int
+    quantity: int

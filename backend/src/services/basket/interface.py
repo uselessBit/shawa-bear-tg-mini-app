@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from typing import Protocol
 
-from src.services.basket.schemas import BasketItemCreate, BasketResponse
+from src.services.basket.schemas import BasketItemCreate, BasketResponse, QuantityUpdate
 
 
 class BasketServiceI(Protocol):
@@ -16,3 +16,6 @@ class BasketServiceI(Protocol):
 
     @abstractmethod
     async def clear_basket(self, basket_id: int) -> None: ...
+
+    @abstractmethod
+    async def change_quantity(self, quantity_update: QuantityUpdate) -> None: ...
