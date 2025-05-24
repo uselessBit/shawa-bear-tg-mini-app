@@ -60,7 +60,8 @@ export default function BasketCard({ price }: CardProps) {
                 message={
                     <>
                         Вы уверены, что хотите удалить
-                        <br />"{price.product.name}" из корзины?
+                        <br />"{price.product.name} - {price.size.grams}г" из
+                        корзины?
                     </>
                 }
             />
