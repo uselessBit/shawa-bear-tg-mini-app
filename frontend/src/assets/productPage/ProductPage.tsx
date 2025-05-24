@@ -1,4 +1,4 @@
-import { Drawer, Image, Heading, Flex } from '@chakra-ui/react'
+import { Drawer, Image, Heading, Flex, CloseButton } from '@chakra-ui/react'
 import { Price } from '@/types/Products.ts'
 import API_SHORT_URL from '@/config.ts'
 import CostPicker from './components/CostPicker.tsx'
@@ -6,6 +6,8 @@ import IngredientCheckboxGroup from './components/IngredientCheckboxGroup.tsx'
 import CustomNumberInput from './components/CustomNumberInput.tsx'
 import ToBasketButton from './components/ToBasketButton.tsx'
 import { useState } from 'react'
+import { IoClose } from 'react-icons/io5'
+import { useDrawer } from '@/contexts/DrawerContext.tsx'
 
 type ProductPageProps = {
     price: Price
@@ -14,10 +16,28 @@ type ProductPageProps = {
 export default function ProductPage({ price }: ProductPageProps) {
     const [selectedPrice, setSelectedPrice] = useState<Price>(price)
     const [quantity, setQuantity] = useState(1)
+    const { onClose } = useDrawer()
 
     return (
         <>
-            <Drawer.Header p="0" display="flex" flexDirection="column">
+            <Drawer.Header
+                p="0"
+                display="flex"
+                flexDirection="column"
+                position="relative"
+            >
+                <Drawer.CloseTrigger
+                    position="absolute"
+                    left="20px"
+                    top="20px"
+                    w="fit"
+                    zIndex="max"
+                    onClick={onClose}
+                >
+                    <CloseButton>
+                        <IoClose />
+                    </CloseButton>
+                </Drawer.CloseTrigger>
                 <Image
                     src={`${API_SHORT_URL}media/products/${price.product.image_url}`}
                     transform="scaleX(-1)"

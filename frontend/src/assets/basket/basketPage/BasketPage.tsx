@@ -1,8 +1,10 @@
-import { Drawer, Heading, Flex } from '@chakra-ui/react'
+import { Drawer, Heading, Flex, CloseButton } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import ToConfirmOrder from './components/ToConfirmOrder'
 import BasketCard from './components/BasketCard'
 import { useBasketContext } from '@/contexts/BasketContext'
+import { IoClose } from 'react-icons/io5'
+import { useDrawer } from '@/contexts/DrawerContext.tsx'
 
 const MotionHeader = motion(Drawer.Header)
 const MotionBody = motion(Drawer.Body)
@@ -32,6 +34,7 @@ export const BasketPage = {
             (sum, price) => sum + (price.quantity || 0),
             0
         )
+        const { onClose } = useDrawer()
 
         return (
             <MotionHeader
@@ -40,6 +43,18 @@ export const BasketPage = {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
             >
+                <Drawer.CloseTrigger
+                    position="absolute"
+                    left="20px"
+                    top="20px"
+                    w="fit"
+                    zIndex="max"
+                    onClick={onClose}
+                >
+                    <CloseButton>
+                        <IoClose />
+                    </CloseButton>
+                </Drawer.CloseTrigger>
                 <Heading
                     size="2xl"
                     fontWeight="800"
