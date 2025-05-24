@@ -48,7 +48,7 @@ export const ConfirmOrderPage = {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
-            <Flex direction="column" gap="gap" h="full" pb="4px">
+            <Flex direction="column" gap="12px" h="full">
                 <CustomSelect />
                 <Input
                     bg="back"
