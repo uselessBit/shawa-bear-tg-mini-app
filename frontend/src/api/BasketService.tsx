@@ -30,4 +30,10 @@ export const BasketService = {
             quantity,
         })
     },
+
+    async removeItem(basketItemId: number): Promise<void> {
+        await axios.delete(
+            `${API_BASE_URL}api/v1/basket/remove_item/${basketItemId}`
+        )
+    },
 }

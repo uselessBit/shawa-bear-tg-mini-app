@@ -18,6 +18,7 @@ type BasketContextType = {
     addToBasket: (priceId: number, quantity: number) => Promise<boolean>
     updateQuantity: (basketItemId: number, quantity: number) => Promise<void>
     clearError: () => void
+    removeFromBasket: (basketItemId: number) => Promise<Basket | null>
 }
 
 const BasketContext = createContext<BasketContextType>({
@@ -29,6 +30,7 @@ const BasketContext = createContext<BasketContextType>({
     addToBasket: async () => false,
     updateQuantity: async () => {},
     clearError: () => {},
+    removeFromBasket: async () => null,
 })
 
 export const BasketProvider = ({
@@ -148,6 +150,23 @@ export const BasketProvider = ({
 
     const clearError = () => setError('')
 
+    const removeFromBasket = async (basketItemId: number) => {
+        setLoading(true)
+        setError('')
+        try {
+            await BasketService.removeItem(basketItemId)
+            const updatedBasket = await BasketService.getBasket(userId)
+            setBasket(updatedBasket)
+            return updatedBasket
+        } catch (err) {
+            setError('Ошибка удаления товара')
+            console.error('Ошибка удаления товара:', err)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <BasketContext.Provider
             value={{
@@ -159,6 +178,7 @@ export const BasketProvider = ({
                 addToBasket,
                 updateQuantity,
                 clearError,
+                removeFromBasket,
             }}
         >
             {children}

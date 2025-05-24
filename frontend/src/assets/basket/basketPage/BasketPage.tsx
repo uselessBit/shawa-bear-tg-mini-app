@@ -48,7 +48,6 @@ export const BasketPage = {
                     left="20px"
                     top="20px"
                     w="fit"
-                    zIndex="max"
                     onClick={onClose}
                 >
                     <IoClose />
