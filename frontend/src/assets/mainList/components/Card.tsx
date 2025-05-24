@@ -76,6 +76,7 @@ export default function Card({ price, onClick }: CardProps) {
                         px="20px"
                         rounded="full"
                         fontSize="xs"
+                        fontWeight="500"
                     >
                         от {price.price}
                         <Mark color="accent">р</Mark>

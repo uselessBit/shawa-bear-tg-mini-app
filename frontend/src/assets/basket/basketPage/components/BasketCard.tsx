@@ -1,13 +1,40 @@
 import { Text, Flex, Image, Heading, Mark } from '@chakra-ui/react'
 import API_SHORT_URL from '@/config.ts'
-import { Price } from '@/types/Products.ts'
+import { useState, useEffect } from 'react'
+import { useBasketContext, PriceWithQuantity } from '@/contexts/BasketContext'
 import CustomNumberInput from '@/assets/productPage/components/CustomNumberInput'
 
 type CardProps = {
-    price: Price
+    price: PriceWithQuantity
 }
 
 export default function BasketCard({ price }: CardProps) {
+    const { updateQuantity } = useBasketContext()
+    const [localQuantity, setLocalQuantity] = useState(price.quantity)
+    const [updateTimeout, setUpdateTimeout] = useState<NodeJS.Timeout | null>(
+        null
+    )
+
+    useEffect(() => {
+        setLocalQuantity(price.quantity)
+    }, [price.quantity])
+
+    const handleQuantityChange = (newQuantity: number) => {
+        setLocalQuantity(newQuantity)
+
+        if (updateTimeout) clearTimeout(updateTimeout)
+
+        const newTimeout = setTimeout(async () => {
+            try {
+                await updateQuantity(price.basket_item_id, newQuantity)
+            } catch (error) {
+                setLocalQuantity(price.quantity)
+            }
+        }, 500)
+
+        setUpdateTimeout(newTimeout)
+    }
+
     return (
         <Flex
             rounded="26px"
@@ -72,6 +99,7 @@ export default function BasketCard({ price }: CardProps) {
                         px="30px"
                         rounded="full"
                         fontSize="md"
+                        fontWeight="500"
                     >
                         {price.price}
                         <Mark color="accent">р</Mark>
@@ -79,7 +107,8 @@ export default function BasketCard({ price }: CardProps) {
 
                     <CustomNumberInput
                         small={true}
-                        defaultValue={price.quantity?.toString()}
+                        defaultValue={localQuantity.toString()}
+                        setQuantity={handleQuantityChange}
                     />
                 </Flex>
             </Flex>

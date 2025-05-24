@@ -41,7 +41,8 @@ export default function CustomNumberInput({
                     textAlign="center"
                     fontSize={small ? 'md' : 'xl'}
                     fontWeight="700"
-                    minW={small ? '10px' : '24px'}
+                    minW={small ? '18px' : '24px'}
+                    maxW={small ? '18px' : '24px'}
                     color="text"
                 />
                 <NumberInput.IncrementTrigger asChild>

@@ -4,7 +4,10 @@ import { BasketService } from '@/api/BasketService'
 import { ProductService } from '@/api/ProductService'
 import { Price } from '@/types/Products'
 
-type PriceWithQuantity = Price & { quantity: number }
+export type PriceWithQuantity = Price & {
+    quantity: number
+    basket_item_id: number
+}
 
 type BasketContextType = {
     basket: Basket | null
@@ -13,6 +16,7 @@ type BasketContextType = {
     basketPrices: PriceWithQuantity[]
     refreshBasket: () => Promise<void>
     addToBasket: (priceId: number, quantity: number) => Promise<void>
+    updateQuantity: (basketItemId: number, quantity: number) => Promise<void>
 }
 
 const BasketContext = createContext<BasketContextType>({
@@ -22,6 +26,7 @@ const BasketContext = createContext<BasketContextType>({
     basketPrices: [],
     refreshBasket: async () => {},
     addToBasket: async () => {},
+    updateQuantity: async () => {},
 })
 
 export const BasketProvider = ({
@@ -55,9 +60,21 @@ export const BasketProvider = ({
                 const price = allPrices.find(
                     (p) => p.price_id === item.price_id
                 )
-                return price ? { ...price, quantity: item.quantity } : null
+                return price
+                    ? {
+                          ...price,
+                          quantity: item.quantity,
+                          basket_item_id: item.basket_item_id,
+                      }
+                    : null
             })
             .filter((p): p is PriceWithQuantity => !!p)
+            .sort((a, b) => {
+                const priceCompare = a.price - b.price
+                if (priceCompare !== 0) return priceCompare
+
+                return a.product.name.localeCompare(b.product.name)
+            })
     }
 
     const refreshBasket = async () => {
@@ -88,6 +105,20 @@ export const BasketProvider = ({
         }
     }
 
+    const updateQuantity = async (basketItemId: number, quantity: number) => {
+        setLoading(true)
+        setError('')
+        try {
+            await BasketService.changeQuantity(basketItemId, quantity)
+            await refreshBasket()
+        } catch (err) {
+            setError('Ошибка изменения количества')
+            console.error('Ошибка изменения количества:', err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     useEffect(() => {
         refreshBasket()
     }, [userId])
@@ -101,6 +132,7 @@ export const BasketProvider = ({
                 basketPrices: getBasketPrices(),
                 refreshBasket,
                 addToBasket,
+                updateQuantity,
             }}
         >
             {children}

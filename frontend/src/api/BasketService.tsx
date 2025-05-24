@@ -20,4 +20,14 @@ export const BasketService = {
         )
         return response.data
     },
+
+    async changeQuantity(
+        basketItemId: number,
+        quantity: number
+    ): Promise<void> {
+        await axios.post(`${API_BASE_URL}api/v1/basket/change_quantity`, {
+            basket_item_id: basketItemId,
+            quantity,
+        })
+    },
 }
