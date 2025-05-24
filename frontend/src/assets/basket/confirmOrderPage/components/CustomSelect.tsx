@@ -25,8 +25,7 @@ export default function CustomSelect() {
                 <Select.Positioner>
                     <Select.Content
                         zIndex="max"
-                        bg="gray"
-                        boxShadow="none"
+                        bg="card"
                         rounded="28px"
                         p="8px"
                     >
