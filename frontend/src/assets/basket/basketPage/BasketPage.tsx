@@ -1,4 +1,4 @@
-import { Drawer, Heading, Flex, CloseButton } from '@chakra-ui/react'
+import { Drawer, Heading, Flex, CloseButton, Float } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import ToConfirmOrder from './components/ToConfirmOrder'
 import BasketCard from './components/BasketCard'
@@ -49,6 +49,7 @@ export const BasketPage = {
                     top="20px"
                     w="fit"
                     onClick={onClose}
+                    zIndex="10"
                 >
                     <IoClose />
                 </CloseButton>
@@ -58,8 +59,18 @@ export const BasketPage = {
                     fontWeight="800"
                     textAlign="center"
                     w="full"
+                    position="relative"
                 >
-                    {`Корзина - ${itemCount} ${getItemCountText(itemCount)}`}
+                    Корзина
+                    <Float
+                        placement="middle-end"
+                        opacity="0.5"
+                        fontWeight="500"
+                        fontSize="md"
+                        offsetX="10"
+                    >
+                        {itemCount} {getItemCountText(itemCount)}
+                    </Float>
                 </Heading>
             </MotionHeader>
         )
