@@ -16,9 +16,11 @@ export default function ToBasketButton({
     const { onClose } = useDrawer()
     const { addToBasket } = useBasketContext()
 
-    const handleClick = () => {
-        addToBasket(priceId, quantity)
-        onClose()
+    const handleClick = async () => {
+        const success: boolean = await addToBasket(priceId, quantity)
+        if (success) {
+            onClose()
+        }
     }
 
     return (

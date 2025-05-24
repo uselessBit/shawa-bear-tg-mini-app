@@ -23,9 +23,9 @@ export default function CustomNumberInput({
             rounded="full"
             defaultValue={defaultValue ? defaultValue : '1'}
             min={1}
-            max={10}
+            max={99}
         >
-            <HStack gap="2">
+            <HStack gap={small ? '1' : '2'}>
                 <NumberInput.DecrementTrigger asChild>
                     <IconButton
                         bg="accent"
@@ -41,8 +41,8 @@ export default function CustomNumberInput({
                     textAlign="center"
                     fontSize={small ? 'md' : 'xl'}
                     fontWeight="700"
-                    minW={small ? '18px' : '24px'}
-                    maxW={small ? '18px' : '24px'}
+                    minW={small ? '24px' : '32px'}
+                    maxW={small ? '24px' : '32px'}
                     color="text"
                 />
                 <NumberInput.IncrementTrigger asChild>

@@ -15,8 +15,9 @@ type BasketContextType = {
     error: string
     basketPrices: PriceWithQuantity[]
     refreshBasket: () => Promise<void>
-    addToBasket: (priceId: number, quantity: number) => Promise<void>
+    addToBasket: (priceId: number, quantity: number) => Promise<boolean>
     updateQuantity: (basketItemId: number, quantity: number) => Promise<void>
+    clearError: () => void
 }
 
 const BasketContext = createContext<BasketContextType>({
@@ -25,8 +26,9 @@ const BasketContext = createContext<BasketContextType>({
     error: '',
     basketPrices: [],
     refreshBasket: async () => {},
-    addToBasket: async () => {},
+    addToBasket: async () => false,
     updateQuantity: async () => {},
+    clearError: () => {},
 })
 
 export const BasketProvider = ({
@@ -91,15 +93,31 @@ export const BasketProvider = ({
         }
     }
 
-    const addToBasket = async (priceId: number, quantity: number = 1) => {
+    const addToBasket = async (
+        priceId: number,
+        quantity: number = 1
+    ): Promise<boolean> => {
         setLoading(true)
         setError('')
         try {
+            const existingItem = basket?.items.find(
+                (item) => item.price_id === priceId
+            )
+            const currentQuantity = existingItem?.quantity || 0
+            const newTotal = currentQuantity + quantity
+
+            if (newTotal > 99) {
+                setError('Максимальное количество товара в корзине - 99')
+                return false
+            }
+
             await BasketService.addItem(userId, priceId, quantity)
             await refreshBasket()
+            return true
         } catch (err) {
             setError('Ошибка добавления в корзину')
             console.error('Ошибка добавления в корзину:', err)
+            return false
         } finally {
             setLoading(false)
         }
@@ -109,6 +127,11 @@ export const BasketProvider = ({
         setLoading(true)
         setError('')
         try {
+            if (quantity > 99) {
+                setError('Максимальное количество товара - 99')
+                return
+            }
+
             await BasketService.changeQuantity(basketItemId, quantity)
             await refreshBasket()
         } catch (err) {
@@ -123,6 +146,8 @@ export const BasketProvider = ({
         refreshBasket()
     }, [userId])
 
+    const clearError = () => setError('')
+
     return (
         <BasketContext.Provider
             value={{
@@ -133,6 +158,7 @@ export const BasketProvider = ({
                 refreshBasket,
                 addToBasket,
                 updateQuantity,
+                clearError,
             }}
         >
             {children}

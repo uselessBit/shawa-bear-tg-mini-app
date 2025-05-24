@@ -5,9 +5,11 @@ import CostPicker from './components/CostPicker.tsx'
 import IngredientCheckboxGroup from './components/IngredientCheckboxGroup.tsx'
 import CustomNumberInput from './components/CustomNumberInput.tsx'
 import ToBasketButton from './components/ToBasketButton.tsx'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IoClose } from 'react-icons/io5'
 import { useDrawer } from '@/contexts/DrawerContext.tsx'
+import { useBasketContext } from '@/contexts/BasketContext.tsx'
+import LimitDialog from './components/LimitDialog.tsx'
 
 type ProductPageProps = {
     price: Price
@@ -16,7 +18,22 @@ type ProductPageProps = {
 export default function ProductPage({ price }: ProductPageProps) {
     const [selectedPrice, setSelectedPrice] = useState<Price>(price)
     const [quantity, setQuantity] = useState(1)
+
     const { onClose } = useDrawer()
+
+    const { error, clearError } = useBasketContext()
+    const [showLimitDialog, setShowLimitDialog] = useState(false)
+
+    useEffect(() => {
+        if (error?.includes('Максимальное')) {
+            setShowLimitDialog(true)
+        }
+    }, [error])
+
+    const handleCloseDialog = () => {
+        setShowLimitDialog(false)
+        clearError()
+    }
 
     return (
         <>
@@ -26,22 +43,22 @@ export default function ProductPage({ price }: ProductPageProps) {
                 flexDirection="column"
                 position="relative"
             >
-                <Drawer.CloseTrigger
+                <CloseButton
                     position="absolute"
                     left="20px"
                     top="20px"
                     w="fit"
-                    zIndex="max"
+                    zIndex="docked"
                     onClick={onClose}
                 >
-                    <CloseButton>
-                        <IoClose />
-                    </CloseButton>
-                </Drawer.CloseTrigger>
+                    <IoClose />
+                </CloseButton>
+
                 <Image
                     src={`${API_SHORT_URL}media/products/${price.product.image_url}`}
                     transform="scaleX(-1)"
                     rounded="42px 42px 0 0"
+                    zIndex="base"
                 />
                 <Heading
                     size="5xl"
@@ -76,6 +93,13 @@ export default function ProductPage({ price }: ProductPageProps) {
                     ></ToBasketButton>
                 </Flex>
             </Drawer.Footer>
+
+            <LimitDialog
+                isOpen={showLimitDialog}
+                onClose={handleCloseDialog}
+                title="Превышен лимит"
+                message="В корзине может быть не более 99 единиц одного товара"
+            />
         </>
     )
 }

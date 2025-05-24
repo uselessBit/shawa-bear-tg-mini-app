@@ -43,7 +43,7 @@ export const BasketPage = {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
             >
-                <Drawer.CloseTrigger
+                <CloseButton
                     position="absolute"
                     left="20px"
                     top="20px"
@@ -51,10 +51,9 @@ export const BasketPage = {
                     zIndex="max"
                     onClick={onClose}
                 >
-                    <CloseButton>
-                        <IoClose />
-                    </CloseButton>
-                </Drawer.CloseTrigger>
+                    <IoClose />
+                </CloseButton>
+
                 <Heading
                     size="2xl"
                     fontWeight="800"
