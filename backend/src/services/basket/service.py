@@ -86,7 +86,7 @@ class BasketService(BaseService, BasketServiceI):
         async with self.session() as session, session.begin():
             query = select(BasketItem).where(BasketItem.basket_id == basket_id)
             result = await session.execute(query)
-            items_to_delete = result.scalars().all()
+            items_to_delete = result.scalars().unique().all()
 
             if not items_to_delete:
                 raise BasketNotFoundError

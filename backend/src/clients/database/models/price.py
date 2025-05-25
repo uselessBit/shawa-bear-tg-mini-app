@@ -16,7 +16,6 @@ class Price(Base):
     carbohydrates: Mapped[int] = mapped_column(nullable=True)
     calories: Mapped[int] = mapped_column(nullable=True)
     is_custom: Mapped[bool] = mapped_column(nullable=False)
-    ingredient_comment: Mapped[str] = mapped_column(nullable=True)
 
     product: Mapped["Product"] = relationship(back_populates="prices")  # noqa: F821
     size: Mapped["Size"] = relationship(back_populates="prices")  # noqa: F821

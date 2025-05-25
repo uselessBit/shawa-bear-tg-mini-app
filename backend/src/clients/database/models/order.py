@@ -17,5 +17,8 @@ class Order(Base):
     time_taken: Mapped[str] = mapped_column(String(50), nullable=False)
     comment: Mapped[str] = mapped_column(nullable=True)
     status: Mapped[str] = mapped_column(String(50), nullable=False, default="created")
+    first_name: Mapped[str] = mapped_column(String(50), nullable=True)
+    address: Mapped[str] = mapped_column(String(50), nullable=True)
+    phone: Mapped[str] = mapped_column(String(50), nullable=True)
 
     basket: Mapped["Basket"] = relationship("Basket", back_populates="orders")  # noqa: F821

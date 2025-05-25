@@ -26,3 +26,21 @@ class BasketItem(Base):
 
     basket: Mapped["Basket"] = relationship("Basket", back_populates="items")
     price: Mapped["Price"] = relationship("Price", back_populates="basket_items")  # noqa: F821
+    excluded_ingredients: Mapped[list["Ingredient"]] = relationship(
+        "Ingredient",
+        secondary="basket_item_excluded_ingredients",
+        lazy="joined"
+    )
+
+
+class BasketItemExcludedIngredient(Base):
+    __tablename__ = "basket_item_excluded_ingredients"
+
+    basket_item_id: Mapped[int] = mapped_column(
+        ForeignKey("basket_items.basket_item_id", ondelete="CASCADE"),
+        primary_key=True
+    )
+    ingredient_id: Mapped[int] = mapped_column(
+        ForeignKey("ingredients.ingredient_id", ondelete="CASCADE"),
+        primary_key=True
+    )
