@@ -40,6 +40,7 @@ export default function BasketCard({ price }: CardProps) {
                 await updateQuantity(price.basket_item_id, newQuantity)
             } catch (error) {
                 setLocalQuantity(price.quantity)
+                console.error(error)
             }
         }, 500)
         setUpdateTimeout(newTimeout)
