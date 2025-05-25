@@ -1,15 +1,15 @@
 import { Drawer, Image, Heading, Flex, CloseButton } from '@chakra-ui/react'
-import { Price } from '@/types/Products.ts'
-import API_SHORT_URL from '@/config.ts'
-import CostPicker from './components/CostPicker.tsx'
-import IngredientCheckboxGroup from './components/IngredientCheckboxGroup.tsx'
-import CustomNumberInput from './components/CustomNumberInput.tsx'
-import ToBasketButton from './components/ToBasketButton.tsx'
-import { useState, useEffect } from 'react'
+import { Price } from '@/types/Products'
+import API_SHORT_URL from '@/config'
+import CostPicker from './components/CostPicker'
+import IngredientCheckboxGroup from './components/IngredientCheckboxGroup'
+import CustomNumberInput from './components/CustomNumberInput'
+import ToBasketButton from './components/ToBasketButton'
+import { useState, useEffect, useCallback } from 'react'
 import { IoClose } from 'react-icons/io5'
-import { useDrawer } from '@/contexts/DrawerContext.tsx'
-import { useBasketContext } from '@/contexts/BasketContext.tsx'
-import LimitDialog from './components/LimitDialog.tsx'
+import { useDrawer } from '@/contexts/DrawerContext'
+import { useBasketContext } from '@/contexts/BasketContext'
+import LimitDialog from './components/LimitDialog'
 
 type ProductPageProps = {
     price: Price
@@ -18,11 +18,27 @@ type ProductPageProps = {
 export default function ProductPage({ price }: ProductPageProps) {
     const [selectedPrice, setSelectedPrice] = useState<Price>(price)
     const [quantity, setQuantity] = useState(1)
+    const [tempQuantity, setTempQuantity] = useState(1)
+    const [quantityTimeout, setQuantityTimeout] = useState<NodeJS.Timeout>()
 
     const { onClose } = useDrawer()
-
     const { error, clearError } = useBasketContext()
     const [showLimitDialog, setShowLimitDialog] = useState(false)
+
+    const debouncedSetQuantity = useCallback(
+        (value: number) => {
+            if (quantityTimeout) clearTimeout(quantityTimeout)
+            const timeout = setTimeout(() => setQuantity(value), 500)
+            setQuantityTimeout(timeout)
+        },
+        [quantityTimeout]
+    )
+
+    useEffect(() => {
+        return () => {
+            if (quantityTimeout) clearTimeout(quantityTimeout)
+        }
+    }, [quantityTimeout])
 
     useEffect(() => {
         if (error?.includes('Максимальное')) {
@@ -59,6 +75,7 @@ export default function ProductPage({ price }: ProductPageProps) {
                     transform="scaleX(-1)"
                     rounded="42px 42px 0 0"
                     zIndex="base"
+                    alt={price.product.name}
                 />
                 <Heading
                     size="5xl"
@@ -77,20 +94,24 @@ export default function ProductPage({ price }: ProductPageProps) {
 
                 <IngredientCheckboxGroup
                     ingredients={price.product.ingredients}
-                ></IngredientCheckboxGroup>
+                />
             </Drawer.Body>
 
             <Drawer.Footer p="12px">
                 <Flex w="full" gap="12px">
                     <CustomNumberInput
-                        setQuantity={setQuantity}
-                    ></CustomNumberInput>
+                        defaultValue={tempQuantity.toString()}
+                        setQuantity={(value) => {
+                            setTempQuantity(value)
+                            debouncedSetQuantity(value)
+                        }}
+                    />
 
                     <ToBasketButton
                         currentPrice={selectedPrice.price * quantity}
                         priceId={selectedPrice.price_id}
                         quantity={quantity}
-                    ></ToBasketButton>
+                    />
                 </Flex>
             </Drawer.Footer>
 
