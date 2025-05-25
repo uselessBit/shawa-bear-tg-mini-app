@@ -24,12 +24,9 @@ class OrderService(BaseService, OrderServiceI):
         async with self.session() as session, session.begin():
             total_price = await self._calculate_total_price(session, order_data.basket_id)
             new_order = Order(
-                basket_id=order_data.basket_id,
                 total_price=total_price,
                 order_date=datetime.now(tz=UTC),
-                payment_option=order_data.payment_option,
-                time_taken=order_data.time_taken,
-                comment=order_data.comment,
+                **order_data.model_dump(),
             )
             session.add(new_order)
 
@@ -70,7 +67,7 @@ class OrderService(BaseService, OrderServiceI):
     async def _calculate_total_price(session, basket_id: int) -> float:
         query = select(BasketItem).where(BasketItem.basket_id == basket_id).options(joinedload(BasketItem.price))
         result = await session.execute(query)
-        items = result.scalars().all()
+        items = result.scalars().unique().all()
 
         total = 0.0
         for item in items:

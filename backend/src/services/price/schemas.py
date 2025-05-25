@@ -13,7 +13,6 @@ class PriceCreate(BaseModel):
     carbohydrates: int | None
     calories: int | None
     is_custom: bool = False
-    ingredient_comment: str | None
 
 
 class PriceResponse(BaseModel):
@@ -26,7 +25,6 @@ class PriceResponse(BaseModel):
     carbohydrates: int | None
     calories: int | None
     is_custom: bool
-    ingredient_comment: str | None
 
     class Config:
         from_attributes = True
@@ -40,7 +38,6 @@ class PriceUpdate(BaseModel):
     carbohydrates: int | None = None
     calories: int | None = None
     is_custom: bool = False
-    ingredient_comment: str | None = Field(None)
 
 
 class PriceFilter(BaseModel):

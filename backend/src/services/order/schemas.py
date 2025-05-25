@@ -22,6 +22,9 @@ class OrderCreate(BaseModel):
     time_taken: str
     comment: str | None = None
     status: OrderStatus = OrderStatus.CREATED
+    first_name: str | None
+    address: str | None
+    phone: str | None
 
     class Config:
         use_enum_values = True
@@ -36,6 +39,9 @@ class OrderResponse(BaseModel):
     total_price: float
     comment: str | None
     status: str
+    first_name: str | None
+    address: str | None
+    phone: str | None
 
     class Config:
         from_attributes = True
