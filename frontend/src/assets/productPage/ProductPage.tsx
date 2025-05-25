@@ -1,4 +1,11 @@
-import { Drawer, Image, Heading, Flex, CloseButton } from '@chakra-ui/react'
+import {
+    Drawer,
+    Image,
+    Heading,
+    Flex,
+    CloseButton,
+    Float,
+} from '@chakra-ui/react'
 import { Price } from '@/types/Products'
 import API_SHORT_URL from '@/config'
 import CostPicker from './components/CostPicker'
@@ -10,6 +17,7 @@ import { IoClose } from 'react-icons/io5'
 import { useDrawer } from '@/contexts/DrawerContext'
 import { useBasketContext } from '@/contexts/BasketContext'
 import LimitDialog from './components/LimitDialog'
+import ProductInfo from './components/ProductInfo.tsx'
 
 type ProductPageProps = {
     price: Price
@@ -84,8 +92,12 @@ export default function ProductPage({ price }: ProductPageProps) {
                     textAlign="center"
                     mt="-32px"
                     pos="relative"
+                    w="full"
                 >
                     {price.product.name}
+                    <Float placement="middle-end" offsetX="8">
+                        <ProductInfo price={selectedPrice} />
+                    </Float>
                 </Heading>
             </Drawer.Header>
 
