@@ -1,5 +1,5 @@
 .venv
-.env
+../.env
 localhost-key.pem
 localhost.pem
 .env-production
