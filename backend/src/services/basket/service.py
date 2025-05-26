@@ -1,18 +1,23 @@
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
-from src.clients.database.models.basket import Basket, BasketItem
+from src.clients.database.models.basket import Basket, BasketItem, BasketItemExcludedIngredient
+from src.clients.database.models.ingredient import Ingredient
 from src.clients.database.models.price import Price
 from src.services.base import BaseService
 from src.services.basket.interface import BasketServiceI
 from src.services.basket.schemas import BasketItemCreate, BasketItemResponse, BasketResponse, QuantityUpdate
-from src.services.errors import BasketItemNotFoundError, BasketNotFoundError, PriceNotFoundError
+from src.services.errors import BasketItemNotFoundError, BasketNotFoundError, PriceNotFoundError, \
+    IngredientNotFoundError
 
 
 class BasketService(BaseService, BasketServiceI):
     async def get_user_basket(self, user_id: int) -> BasketResponse:
         async with self.session() as session:
-            query = select(Basket).where(Basket.user_id == user_id).options(joinedload(Basket.items).joinedload(BasketItem.price))
+            query = select(Basket).where(Basket.user_id == user_id).options(
+                joinedload(Basket.items).joinedload(BasketItem.price),
+                joinedload(Basket.items).joinedload(BasketItem.excluded_ingredients)
+            )
             result = await session.execute(query)
             basket = result.unique().scalar_one_or_none()
             if not basket:
@@ -32,6 +37,7 @@ class BasketService(BaseService, BasketServiceI):
                     basket_item_id=item.basket_item_id,
                     price_id=item.price_id,
                     quantity=item.quantity,
+                    excluded_ingredient_ids=[ing.ingredient_id for ing in item.excluded_ingredients]
                 )
                 for item in basket.items
             ],
@@ -51,6 +57,15 @@ class BasketService(BaseService, BasketServiceI):
             if not await session.get(Price, item_data.price_id):
                 raise PriceNotFoundError
 
+            if item_data.excluded_ingredient_ids:
+                stmt = select(Ingredient).where(Ingredient.ingredient_id.in_(item_data.excluded_ingredient_ids))
+                result = await session.execute(stmt)
+                existing_ingredients = list(result.scalars().all())
+                if len(existing_ingredients) != len(item_data.excluded_ingredient_ids):
+                    raise IngredientNotFoundError
+            else:
+                existing_ingredients = []
+
             existing_item = await self._get_existing_item(session, basket, item_data)
 
             if existing_item:
@@ -62,14 +77,33 @@ class BasketService(BaseService, BasketServiceI):
                     quantity=item_data.quantity,
                 )
                 session.add(new_item)
+                await session.flush()
 
+                if existing_ingredients:
+                    excluded = [
+                        BasketItemExcludedIngredient(
+                            basket_item_id=new_item.basket_item_id,
+                            ingredient_id=ing.ingredient_id
+                        )
+                        for ing in existing_ingredients
+                    ]
+                    session.add_all(excluded)
+                    await session.flush()
 
     @staticmethod
     async def _get_existing_item(session, basket: Basket, item_data: BasketItemCreate):
-        query = select(BasketItem).where(BasketItem.basket_id == basket.basket_id, BasketItem.price_id == item_data.price_id)
+        query = select(BasketItem).where(BasketItem.basket_id == basket.basket_id, BasketItem.price_id == item_data.price_id).options(joinedload(BasketItem.excluded_ingredients))
         result = await session.execute(query)
-        return result.scalar()
+        candidates = result.scalars().all()
 
+        target_excluded = set(item_data.excluded_ingredient_ids)
+
+        for candidate in candidates:
+            candidate_excluded = {ing.ingredient_id for ing in candidate.excluded_ingredients}
+            if candidate_excluded == target_excluded:
+                return candidate
+
+        return None
 
     async def remove_item(self, basket_item_id: int) -> None:
         async with self.session() as session, session.begin():
@@ -93,7 +127,6 @@ class BasketService(BaseService, BasketServiceI):
 
             for item in items_to_delete:
                 await session.delete(item)
-
 
     async def change_quantity(self, quantity_update: QuantityUpdate) -> None:
         async with self.session() as session, session.begin():
