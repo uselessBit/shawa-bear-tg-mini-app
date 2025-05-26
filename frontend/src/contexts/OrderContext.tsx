@@ -161,7 +161,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
             phone: '',
             comment: '',
             address: '',
-            timeTaken: '30',
+            timeTaken: '',
             paymentOption: 'cash',
         })
         setErrors({})
