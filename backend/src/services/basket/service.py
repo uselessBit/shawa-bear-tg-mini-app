@@ -94,7 +94,7 @@ class BasketService(BaseService, BasketServiceI):
     async def _get_existing_item(session, basket: Basket, item_data: BasketItemCreate):
         query = select(BasketItem).where(BasketItem.basket_id == basket.basket_id, BasketItem.price_id == item_data.price_id).options(joinedload(BasketItem.excluded_ingredients))
         result = await session.execute(query)
-        candidates = result.scalars().all()
+        candidates = result.scalars().unique().all()
 
         target_excluded = set(item_data.excluded_ingredient_ids)
 

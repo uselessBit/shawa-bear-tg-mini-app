@@ -6,18 +6,24 @@ type ToBasketProps = {
     currentPrice: number
     priceId: number
     quantity: number
+    excludedIngredientIds: number[]
 }
 
 export default function ToBasketButton({
     currentPrice,
     priceId,
     quantity,
+    excludedIngredientIds,
 }: ToBasketProps) {
     const { onClose } = useDrawer()
     const { addToBasket } = useBasketContext()
 
     const handleClick = async () => {
-        const success: boolean = await addToBasket(priceId, quantity)
+        const success: boolean = await addToBasket(
+            priceId,
+            quantity,
+            excludedIngredientIds
+        )
         if (success) {
             onClose()
         }

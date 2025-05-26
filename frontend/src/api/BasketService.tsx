@@ -6,11 +6,16 @@ export const BasketService = {
     async addItem(
         userId: number,
         priceId: number,
-        quantity: number = 1
+        quantity: number = 1,
+        excludedIngredientIds: number[] = []
     ): Promise<void> {
         await axios.post(
             `${API_BASE_URL}api/v1/basket/add_item?user_id=${userId}`,
-            { price_id: priceId, quantity }
+            {
+                price_id: priceId,
+                quantity,
+                excluded_ingredient_ids: excludedIngredientIds,
+            }
         )
     },
 

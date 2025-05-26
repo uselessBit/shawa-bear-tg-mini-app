@@ -89,7 +89,10 @@ export const BasketPage = {
             >
                 <Flex direction="column" gap="gap">
                     {basketPrices.map((price) => (
-                        <BasketCard key={price.price_id} price={price} />
+                        <BasketCard
+                            key={`${price.price_id} + ${price.excluded_ingredient_names}`}
+                            price={price}
+                        />
                     ))}
                 </Flex>
             </MotionBody>

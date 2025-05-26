@@ -7,6 +7,7 @@ import { Price } from '@/types/Products'
 export type PriceWithQuantity = Price & {
     quantity: number
     basket_item_id: number
+    excluded_ingredient_names: string[]
 }
 
 type BasketContextType = {
@@ -15,7 +16,11 @@ type BasketContextType = {
     error: string
     basketPrices: PriceWithQuantity[]
     refreshBasket: () => Promise<void>
-    addToBasket: (priceId: number, quantity: number) => Promise<boolean>
+    addToBasket: (
+        priceId: number,
+        quantity: number,
+        excludedIngredientIds: number[]
+    ) => Promise<boolean>
     updateQuantity: (basketItemId: number, quantity: number) => Promise<void>
     clearError: () => void
     removeFromBasket: (basketItemId: number) => Promise<Basket | null>
@@ -46,38 +51,58 @@ export const BasketProvider = ({
     const [error, setError] = useState('')
 
     useEffect(() => {
-        const loadPrices = async () => {
+        const loadData = async () => {
             try {
-                const prices = await ProductService.fetchAllPrices()
+                const [prices] = await Promise.all([
+                    ProductService.fetchAllPrices(),
+                    ProductService.fetchAllIngredients(),
+                ])
                 setAllPrices(prices)
             } catch (err) {
-                console.error('Ошибка загрузки цен:', err)
+                console.error('Ошибка загрузки данных:', err)
             }
         }
-        loadPrices()
+        loadData()
     }, [])
 
     const getBasketPrices = (): PriceWithQuantity[] => {
         if (!basket || !allPrices.length) return []
+
+        const ingredients = ProductService.getCachedIngredients() || []
+        const ingredientMap = new Map<number, string>(
+            ingredients.map((i) => [i.ingredient_id, i.name])
+        )
+
         return basket.items
             .map((item) => {
                 const price = allPrices.find(
                     (p) => p.price_id === item.price_id
                 )
-                return price
-                    ? {
-                          ...price,
-                          quantity: item.quantity,
-                          basket_item_id: item.basket_item_id,
-                      }
-                    : null
+                if (!price) return null
+
+                const excludedNames = item.excluded_ingredient_ids.map(
+                    (id) => ingredientMap.get(id) || `Ингредиент #${id}`
+                )
+
+                return {
+                    ...price,
+                    quantity: item.quantity,
+                    basket_item_id: item.basket_item_id,
+                    excluded_ingredient_names: excludedNames,
+                }
             })
             .filter((p): p is PriceWithQuantity => !!p)
             .sort((a, b) => {
                 const priceCompare = a.price - b.price
                 if (priceCompare !== 0) return priceCompare
 
-                return a.product.name.localeCompare(b.product.name)
+                const nameCompare = a.product.name.localeCompare(b.product.name)
+                if (nameCompare !== 0) return nameCompare
+
+                return (
+                    b.excluded_ingredient_names.length -
+                    a.excluded_ingredient_names.length
+                )
             })
     }
 
@@ -97,7 +122,8 @@ export const BasketProvider = ({
 
     const addToBasket = async (
         priceId: number,
-        quantity: number = 1
+        quantity: number = 1,
+        excludedIngredientIds: number[] = []
     ): Promise<boolean> => {
         setLoading(true)
         setError('')
@@ -113,7 +139,12 @@ export const BasketProvider = ({
                 return false
             }
 
-            await BasketService.addItem(userId, priceId, quantity)
+            await BasketService.addItem(
+                userId,
+                priceId,
+                quantity,
+                excludedIngredientIds
+            )
             await refreshBasket()
             return true
         } catch (err) {

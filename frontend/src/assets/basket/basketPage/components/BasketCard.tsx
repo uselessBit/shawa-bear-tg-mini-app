@@ -1,4 +1,4 @@
-import { Text, Flex, Image, Heading, Mark } from '@chakra-ui/react'
+import { Text, Flex, Image, Heading, Mark, Center } from '@chakra-ui/react'
 import API_BASE_URL from '@/config.ts'
 import { useState, useEffect } from 'react'
 import { useBasketContext, PriceWithQuantity } from '@/contexts/BasketContext'
@@ -86,22 +86,25 @@ export default function BasketCard({ price }: CardProps) {
                     flexDirection="column"
                     flex="2"
                     height="full"
-                    pb="12px"
-                    pt="6px"
+                    py="6px"
                     justifyContent="space-between"
                     position="relative"
                 >
                     <DeleteProductButton onDelete={handleDeleteClick} />
-                    <Heading
-                        color="text"
-                        lineClamp="1"
-                        textAlign="left"
-                        w="95%"
-                        size="2xl"
-                        fontWeight="700"
-                    >
-                        {price.product.name}
-                    </Heading>
+                    <Flex alignItems="flex-end" gap="8px">
+                        <Heading color="text" size="2xl" fontWeight="700">
+                            {price.product.name}
+                        </Heading>
+                        <Text
+                            color="text"
+                            fontWeight="400"
+                            opacity="50%"
+                            fontSize="xs"
+                            h="22px"
+                        >
+                            {`${price.size.grams}г`}
+                        </Text>
+                    </Flex>
 
                     <Text
                         color="text"
@@ -109,12 +112,14 @@ export default function BasketCard({ price }: CardProps) {
                         opacity="50%"
                         lineClamp="3"
                         textAlign="left"
-                        w="95%"
+                        w="80%"
                         lineHeight="15px"
                         fontSize="xs"
-                        mb="24px"
+                        minH="40px"
+                        mb="4px"
                     >
-                        {price.size.grams}г
+                        {price.excluded_ingredient_names[0] &&
+                            `Без: ${price.excluded_ingredient_names.join(', ')}`}
                     </Text>
 
                     <Flex
@@ -123,12 +128,10 @@ export default function BasketCard({ price }: CardProps) {
                         w="full"
                         h="fit"
                     >
-                        <Flex
+                        <Center
                             h="40px"
                             bg="back"
                             color="text"
-                            alignItems="center"
-                            justifyContent="center"
                             px="30px"
                             rounded="full"
                             fontSize="md"
@@ -136,7 +139,7 @@ export default function BasketCard({ price }: CardProps) {
                         >
                             {price.price}
                             <Mark color="accent">р</Mark>
-                        </Flex>
+                        </Center>
 
                         <CustomNumberInput
                             small={true}

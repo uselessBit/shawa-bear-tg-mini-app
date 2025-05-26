@@ -9,14 +9,28 @@ import {
 import { Ingredient } from '@/types/Products.ts'
 import API_BASE_URL from '@/config.ts'
 import { IoClose } from 'react-icons/io5'
+import { useState } from 'react'
 
 type IngredientCheckboxGroupProps = {
     ingredients: Ingredient[]
+    onChange: (ids: number[]) => void
 }
 
 export default function IngredientCheckboxGroup({
     ingredients,
+    onChange,
 }: IngredientCheckboxGroupProps) {
+    const [selectedIds, setSelectedIds] = useState<number[]>([])
+
+    const handleCheckboxChange = (ingredientId: number, isChecked: boolean) => {
+        const newIds = isChecked
+            ? [...selectedIds, ingredientId]
+            : selectedIds.filter((id) => id !== ingredientId)
+
+        setSelectedIds(newIds)
+        onChange(newIds)
+    }
+
     return (
         <CheckboxGroup pt="16px">
             <Heading textAlign="center" w="full" size="2xl">
@@ -25,8 +39,8 @@ export default function IngredientCheckboxGroup({
             <Flex wrap="wrap" gap="8px">
                 {ingredients.slice(1).map((ingredient) => (
                     <CheckboxCard.Root
-                        cursor="pointer"
                         key={ingredient.ingredient_id}
+                        cursor="pointer"
                         minW="fit-content"
                         maxW="fit-content"
                         border="none"
@@ -52,7 +66,14 @@ export default function IngredientCheckboxGroup({
                             },
                         }}
                     >
-                        <CheckboxCard.HiddenInput />
+                        <CheckboxCard.HiddenInput
+                            onChange={(e) =>
+                                handleCheckboxChange(
+                                    ingredient.ingredient_id,
+                                    e.target.checked
+                                )
+                            }
+                        />
                         <CheckboxCard.Control
                             px="16px"
                             py="8px"

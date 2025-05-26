@@ -1,9 +1,10 @@
 import axios from 'axios'
-import { Price, Category } from '@/types/Products'
+import { Price, Category, Ingredient } from '@/types/Products'
 import API_BASE_URL from '@/config'
 
 let cachedPrices: Price[] | null = null
 let cachedCategories: Category[] | null = null
+let cachedIngredients: Ingredient[] | null = null
 
 export const ProductService = {
     fetchAllPrices: async (): Promise<Price[]> => {
@@ -64,5 +65,24 @@ export const ProductService = {
         return cachedPrices.filter(
             (price) => price.product.product_id === productId
         )
+    },
+
+    fetchAllIngredients: async (): Promise<Ingredient[]> => {
+        if (cachedIngredients) return cachedIngredients
+
+        try {
+            const response = await axios.get<Ingredient[]>(
+                `${API_BASE_URL}api/v1/ingredient/`
+            )
+            cachedIngredients = response.data
+            return cachedIngredients
+        } catch (error) {
+            console.error('Error fetching ingredients:', error)
+            throw error
+        }
+    },
+
+    getCachedIngredients: (): Ingredient[] | null => {
+        return cachedIngredients
     },
 }

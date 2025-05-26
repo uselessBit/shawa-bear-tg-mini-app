@@ -28,6 +28,9 @@ export default function ProductPage({ price }: ProductPageProps) {
     const [quantity, setQuantity] = useState(1)
     const [tempQuantity, setTempQuantity] = useState(1)
     const [quantityTimeout, setQuantityTimeout] = useState<NodeJS.Timeout>()
+    const [excludedIngredientIds, setExcludedIngredientIds] = useState<
+        number[]
+    >([])
 
     const { onClose } = useDrawer()
     const { error, clearError } = useBasketContext()
@@ -106,6 +109,7 @@ export default function ProductPage({ price }: ProductPageProps) {
 
                 <IngredientCheckboxGroup
                     ingredients={price.product.ingredients}
+                    onChange={(ids) => setExcludedIngredientIds(ids)}
                 />
             </Drawer.Body>
 
@@ -123,6 +127,7 @@ export default function ProductPage({ price }: ProductPageProps) {
                         currentPrice={selectedPrice.price * quantity}
                         priceId={selectedPrice.price_id}
                         quantity={quantity}
+                        excludedIngredientIds={excludedIngredientIds}
                     />
                 </Flex>
             </Drawer.Footer>

@@ -5,6 +5,7 @@ export interface BasketItem {
     price_id: number
     quantity: number
     price: Price
+    excluded_ingredient_ids: number[]
 }
 
 export interface Basket {
