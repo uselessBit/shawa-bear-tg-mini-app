@@ -8,10 +8,10 @@ class PriceCreate(BaseModel):
     size_id: int
     product_id: int
     price: float
-    proteins: int | None
-    fats: int | None
-    carbohydrates: int | None
-    calories: int | None
+    proteins: float | None
+    fats: float | None
+    carbohydrates: float | None
+    calories: float | None
     is_custom: bool = False
 
 
@@ -20,10 +20,10 @@ class PriceResponse(BaseModel):
     size: SizeResponse
     price: float
     product: ProductResponse
-    proteins: int | None
-    fats: int | None
-    carbohydrates: int | None
-    calories: int | None
+    proteins: float | None
+    fats: float | None
+    carbohydrates: float | None
+    calories: float | None
     is_custom: bool
 
     class Config:
@@ -33,10 +33,10 @@ class PriceResponse(BaseModel):
 class PriceUpdate(BaseModel):
     price: float | None = None
     size_id: int | None = None
-    proteins: int | None = None
-    fats: int | None = None
-    carbohydrates: int | None = None
-    calories: int | None = None
+    proteins: float | None = None
+    fats: float | None = None
+    carbohydrates: float | None = None
+    calories: float | None = None
     is_custom: bool = False
 
 
