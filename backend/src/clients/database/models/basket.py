@@ -29,7 +29,6 @@ class BasketItem(Base):
     excluded_ingredients: Mapped[list["Ingredient"]] = relationship(
         "Ingredient",
         secondary="basket_item_excluded_ingredients",
-        lazy="joined"
     )
 
 
