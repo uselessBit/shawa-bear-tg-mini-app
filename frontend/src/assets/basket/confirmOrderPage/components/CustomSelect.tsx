@@ -1,20 +1,38 @@
-import { Portal, Select, createListCollection } from '@chakra-ui/react'
+import { Portal, Select, createListCollection, Flex } from '@chakra-ui/react'
+import React from 'react'
 
-export default function CustomSelect() {
+type CustomSelectProps = {
+    options: Array<{ label: string; value: string; icon?: React.ReactNode }>
+    placeholder: string
+    value: string[]
+    setValue: (value: string[]) => void
+}
+
+export default function CustomSelect({
+    options,
+    placeholder,
+    value,
+    setValue,
+}: CustomSelectProps) {
+    const collection = createListCollection({ items: options })
+
     return (
         <Select.Root
-            collection={frameworks}
+            collection={collection}
             size="lg"
             width="full"
             bg="back"
             rounded="full"
+            value={value}
+            onValueChange={(e) => setValue(e.value)}
         >
             <Select.HiddenSelect />
             <Select.Control>
                 <Select.Trigger borderWidth="0" py="16px" px="24px">
                     <Select.ValueText
                         fontWeight="500"
-                        placeholder="Select framework"
+                        placeholder={placeholder}
+                        opacity={value[0] === '' ? '0.5' : '1'}
                     />
                 </Select.Trigger>
                 <Select.IndicatorGroup>
@@ -29,16 +47,19 @@ export default function CustomSelect() {
                         rounded="28px"
                         p="8px"
                     >
-                        {frameworks.items.map((framework) => (
+                        {options.map((option) => (
                             <Select.Item
                                 rounded="full"
                                 _checked={{
                                     background: 'card',
                                 }}
-                                item={framework}
-                                key={framework.value}
+                                item={option}
+                                key={option.value}
                             >
-                                {framework.label}
+                                <Flex alignItems="center" gap="8px">
+                                    {option.icon && option.icon}
+                                    {option.label}
+                                </Flex>
                                 <Select.ItemIndicator />
                             </Select.Item>
                         ))}
@@ -48,12 +69,3 @@ export default function CustomSelect() {
         </Select.Root>
     )
 }
-
-const frameworks = createListCollection({
-    items: [
-        { label: 'React.js', value: 'react' },
-        { label: 'Vue.js', value: 'vue' },
-        { label: 'Angular', value: 'angular' },
-        { label: 'Svelte', value: 'svelte' },
-    ],
-})

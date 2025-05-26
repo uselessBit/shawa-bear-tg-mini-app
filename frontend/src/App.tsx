@@ -8,6 +8,7 @@ import BasketButton from '@/assets/basket/BasketButton.tsx'
 import MotionDrawer from '@/assets/MotionDrawer.tsx'
 import { BasketDrawerContent } from '@/assets/basket/BasketDrawer.tsx'
 import { BasketProvider } from '@/contexts/BasketContext.tsx'
+import { OrderProvider } from '@/contexts/OrderContext'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -32,34 +33,36 @@ export default function App() {
     }
 
     return (
-        <BasketProvider userId={0}>
-            <ChakraProvider value={system}>
-                <Header
-                    categories={categories.map((c) => c.name)}
-                    activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
-                />
-
-                <MainList
-                    categories={categories.map((c) => c.name)}
-                    activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
-                />
-
-                <MotionDrawer
-                    trigger={
-                        <BasketButton
-                            openBasketPage={() => setConfirmActive(false)}
-                        />
-                    }
-                >
-                    <BasketDrawerContent
-                        confirmActive={confirmActive}
-                        handleBack={() => setConfirmActive(false)}
-                        handleConfirm={() => setConfirmActive(true)}
+        <OrderProvider>
+            <BasketProvider userId={0}>
+                <ChakraProvider value={system}>
+                    <Header
+                        categories={categories.map((c) => c.name)}
+                        activeCategory={activeCategory}
+                        setActiveCategory={setActiveCategory}
                     />
-                </MotionDrawer>
-            </ChakraProvider>
-        </BasketProvider>
+
+                    <MainList
+                        categories={categories.map((c) => c.name)}
+                        activeCategory={activeCategory}
+                        setActiveCategory={setActiveCategory}
+                    />
+
+                    <MotionDrawer
+                        trigger={
+                            <BasketButton
+                                openBasketPage={() => setConfirmActive(false)}
+                            />
+                        }
+                    >
+                        <BasketDrawerContent
+                            confirmActive={confirmActive}
+                            handleBack={() => setConfirmActive(false)}
+                            handleConfirm={() => setConfirmActive(true)}
+                        />
+                    </MotionDrawer>
+                </ChakraProvider>
+            </BasketProvider>
+        </OrderProvider>
     )
 }

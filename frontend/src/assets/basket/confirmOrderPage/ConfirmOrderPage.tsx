@@ -12,6 +12,8 @@ import ConfirmOrderButton from './components/ConfirmOrderButton.tsx'
 import CustomSelect from './components/CustomSelect.tsx'
 import { Input } from '@chakra-ui/react'
 import { withMask } from 'use-mask-input'
+import { IoWallet, IoCard } from 'react-icons/io5'
+import { useOrder } from '@/contexts/OrderContext'
 
 const MotionHeader = motion(Drawer.Header)
 const MotionBody = motion(Drawer.Body)
@@ -40,59 +42,101 @@ export const ConfirmOrderPage = {
         </MotionHeader>
     ),
 
-    Body: () => (
-        <MotionBody
-            px="12px"
-            py="0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-        >
-            <Flex direction="column" gap="12px" h="full">
-                <CustomSelect />
-                <Input
-                    bg="back"
-                    borderWidth="0"
-                    outline="none"
-                    boxShadow="none"
-                    h="56px"
-                    px="24px"
-                    rounded="full"
-                    size="lg"
-                    fontWeight="500"
-                    placeholder="Имя"
-                />
-                <Input
-                    bg="back"
-                    borderWidth="0"
-                    outline="none"
-                    boxShadow="none"
-                    h="56px"
-                    rounded="full"
-                    size="lg"
-                    fontWeight="500"
-                    px="24px"
-                    placeholder="+375 (99) 999-99-99"
-                    ref={withMask('+375 (99) 999-99-99')}
-                />
-                <CustomSelect />
-                <CustomSelect />
-                <Textarea
-                    bg="back"
-                    borderWidth="0"
-                    outline="none"
-                    boxShadow="none"
-                    flex="1"
-                    rounded="28px"
-                    size="lg"
-                    fontWeight="500"
-                    px="24px"
-                    resize="none"
-                    placeholder="Комментарий к заказу..."
-                />
-            </Flex>
-        </MotionBody>
-    ),
+    Body: () => {
+        const addressOptions = [
+            { label: 'ул. Ленина 10', value: 'ул. Ленина 10' },
+            { label: 'пр. Независимости 25', value: 'пр. Независимости 25' },
+        ]
+        const timeOptions = [10, 15, 20, 25, 30].map((m) => ({
+            label: `${m} минут`,
+            value: `${m}`,
+        }))
+        const paymentOptions = [
+            { label: 'Картой', value: 'card', icon: <IoCard /> },
+            { label: 'Наличными', value: 'cash', icon: <IoWallet /> },
+        ]
+
+        const { formState, updateField, updateSelectField } = useOrder()
+
+        return (
+            <MotionBody
+                px="12px"
+                py="0"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+            >
+                <Flex direction="column" gap="12px" h="full">
+                    <CustomSelect
+                        options={addressOptions}
+                        placeholder="Откуда заберёте заказ?"
+                        value={[formState.address]}
+                        setValue={(val) => updateSelectField('address', val)}
+                    />
+                    <Input
+                        bg="back"
+                        borderWidth="0"
+                        outline="none"
+                        boxShadow="none"
+                        h="56px"
+                        px="24px"
+                        rounded="full"
+                        size="lg"
+                        fontWeight="500"
+                        placeholder="Имя"
+                        value={formState.firstName}
+                        onChange={(e) =>
+                            updateField('firstName', e.target.value)
+                        }
+                    />
+                    <Input
+                        bg="back"
+                        borderWidth="0"
+                        outline="none"
+                        boxShadow="none"
+                        h="56px"
+                        rounded="full"
+                        size="lg"
+                        fontWeight="500"
+                        px="24px"
+                        placeholder="+375 (99) 999-99-99"
+                        ref={withMask('+375 (99) 999-99-99')}
+                        value={formState.phone}
+                        onChange={(e) => updateField('phone', e.target.value)}
+                    />
+                    <CustomSelect
+                        options={timeOptions}
+                        placeholder="Через сколько заберёте?"
+                        value={[formState.timeTaken]}
+                        setValue={(val) => updateSelectField('timeTaken', val)}
+                    />
+                    <CustomSelect
+                        options={paymentOptions}
+                        placeholder="Какой способ оплаты?"
+                        value={[formState.paymentOption]}
+                        setValue={(val) =>
+                            updateSelectField('paymentOption', val)
+                        }
+                    />
+                    <Textarea
+                        bg="back"
+                        borderWidth="0"
+                        outline="none"
+                        boxShadow="none"
+                        flex="1"
+                        rounded="28px"
+                        size="lg"
+                        fontWeight="500"
+                        px="24px"
+                        resize="none"
+                        placeholder="Комментарий к заказу..."
+                        value={formState.comment}
+                        onChange={(e) => updateField('comment', e.target.value)}
+                    />
+                </Flex>
+            </MotionBody>
+        )
+    },
 
     Footer: () => (
         <MotionFooter
