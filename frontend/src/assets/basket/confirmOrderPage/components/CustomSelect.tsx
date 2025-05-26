@@ -6,6 +6,7 @@ type CustomSelectProps = {
     placeholder: string
     value: string[]
     setValue: (value: string[]) => void
+    isInvalid: boolean
 }
 
 export default function CustomSelect({
@@ -13,6 +14,7 @@ export default function CustomSelect({
     placeholder,
     value,
     setValue,
+    isInvalid,
 }: CustomSelectProps) {
     const collection = createListCollection({ items: options })
 
@@ -23,6 +25,8 @@ export default function CustomSelect({
             width="full"
             bg="back"
             rounded="full"
+            borderColor={isInvalid ? 'red.500' : 'back'}
+            borderWidth="1px"
             value={value}
             onValueChange={(e) => setValue(e.value)}
         >

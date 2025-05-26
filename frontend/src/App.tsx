@@ -9,6 +9,7 @@ import MotionDrawer from '@/assets/MotionDrawer.tsx'
 import { BasketDrawerContent } from '@/assets/basket/BasketDrawer.tsx'
 import { BasketProvider } from '@/contexts/BasketContext.tsx'
 import { OrderProvider } from '@/contexts/OrderContext'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -61,6 +62,8 @@ export default function App() {
                             handleConfirm={() => setConfirmActive(true)}
                         />
                     </MotionDrawer>
+
+                    <Toaster />
                 </ChakraProvider>
             </BasketProvider>
         </OrderProvider>

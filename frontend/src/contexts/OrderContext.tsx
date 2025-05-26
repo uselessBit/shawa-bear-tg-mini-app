@@ -4,12 +4,11 @@ import {
     useState,
     useCallback,
     ReactNode,
-    useEffect,
 } from 'react'
 import { OrderService } from '@/api/OrderService'
 import { PaymentOption } from '@/types/Basket'
-import { useBasketContext } from '@/contexts/BasketContext'
 import { Basket } from '@/types/Basket'
+import { toaster } from '@/components/ui/toaster.tsx'
 
 type OrderFormState = {
     firstName: string
@@ -35,13 +34,12 @@ type OrderContextType = {
 const OrderContext = createContext<OrderContextType | undefined>(undefined)
 
 export const OrderProvider = ({ children }: { children: ReactNode }) => {
-    const { basket } = useBasketContext()
     const [formState, setFormState] = useState<OrderFormState>({
         firstName: '',
         phone: '',
         comment: '',
         address: '',
-        timeTaken: '30',
+        timeTaken: '',
         paymentOption: 'cash',
     })
 
@@ -52,21 +50,50 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
 
     const validateForm = useCallback(() => {
         const newErrors: Record<string, string> = {}
+        let hasEmptyFields = false
 
-        if (!formState.firstName.trim()) {
-            newErrors.firstName = 'Введите имя'
+        const requiredFields: Array<keyof OrderFormState> = [
+            'firstName',
+            'phone',
+            'address',
+            'timeTaken',
+            'paymentOption',
+        ]
+
+        requiredFields.forEach((field) => {
+            if (!formState[field]) {
+                newErrors[field] = 'Обязательное поле'
+                hasEmptyFields = true
+            }
+        })
+
+        if (hasEmptyFields) {
+            setErrors(newErrors)
+            toaster.create({
+                description: 'Заполните все обязательные поля',
+                type: 'error',
+            })
+            return false
         }
+
+        let hasFormatErrors = false
 
         if (!formState.phone.match(/^\+375 \(\d{2}\) \d{3}-\d{2}-\d{2}$/)) {
             newErrors.phone = 'Некорректный номер телефона'
+            hasFormatErrors = true
         }
 
-        if (!formState.address) {
-            newErrors.address = 'Выберите адрес'
+        if (hasFormatErrors) {
+            setErrors(newErrors)
+            toaster.create({
+                description: 'Исправьте ошибки в полях',
+                type: 'error',
+            })
+            return false
         }
 
-        setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
+        setErrors({})
+        return true
     }, [formState])
 
     const updateField = useCallback(
@@ -141,11 +168,6 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
         setSubmitError(null)
         setIsSuccess(false)
     }, [])
-
-    useEffect(() => {
-        console.log('Form data updated:', formState)
-        console.log(basket)
-    }, [formState])
 
     return (
         <OrderContext.Provider

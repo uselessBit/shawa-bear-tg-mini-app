@@ -56,7 +56,7 @@ export const ConfirmOrderPage = {
             { label: 'Наличными', value: 'cash', icon: <IoWallet /> },
         ]
 
-        const { formState, updateField, updateSelectField } = useOrder()
+        const { formState, errors, updateField, updateSelectField } = useOrder()
 
         return (
             <MotionBody
@@ -72,12 +72,12 @@ export const ConfirmOrderPage = {
                         placeholder="Откуда заберёте заказ?"
                         value={[formState.address]}
                         setValue={(val) => updateSelectField('address', val)}
+                        isInvalid={!!errors.address}
                     />
                     <Input
                         bg="back"
-                        borderWidth="0"
+                        borderColor={errors.firstName ? 'red.500' : 'back'}
                         outline="none"
-                        boxShadow="none"
                         h="56px"
                         px="24px"
                         rounded="full"
@@ -91,9 +91,8 @@ export const ConfirmOrderPage = {
                     />
                     <Input
                         bg="back"
-                        borderWidth="0"
+                        borderColor={errors.phone ? 'red.500' : 'back'}
                         outline="none"
-                        boxShadow="none"
                         h="56px"
                         rounded="full"
                         size="lg"
@@ -109,6 +108,7 @@ export const ConfirmOrderPage = {
                         placeholder="Через сколько заберёте?"
                         value={[formState.timeTaken]}
                         setValue={(val) => updateSelectField('timeTaken', val)}
+                        isInvalid={!!errors.timeTaken}
                     />
                     <CustomSelect
                         options={paymentOptions}
@@ -117,6 +117,7 @@ export const ConfirmOrderPage = {
                         setValue={(val) =>
                             updateSelectField('paymentOption', val)
                         }
+                        isInvalid={!!errors.payment}
                     />
                     <Textarea
                         bg="back"
