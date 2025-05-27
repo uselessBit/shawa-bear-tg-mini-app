@@ -1,4 +1,4 @@
-import { ChakraProvider, Alert } from '@chakra-ui/react'
+import { ChakraProvider, Alert, Button } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { system } from './theme.ts'
 import Header from '@/assets/header/Header.tsx'
@@ -10,6 +10,8 @@ import { BasketDrawerContent } from '@/assets/basket/BasketDrawer.tsx'
 import { BasketProvider } from '@/contexts/BasketContext.tsx'
 import { OrderProvider } from '@/contexts/OrderContext'
 import { Toaster } from '@/components/ui/toaster'
+import { ShawarmaConstructorContent } from '@/assets/shawarmaConstructor/ShawarmaConstructorDrawer.tsx'
+import { ConstructorProvider } from '@/contexts/ConstructorContext'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -36,35 +38,43 @@ export default function App() {
     return (
         <OrderProvider>
             <BasketProvider userId={0}>
-                <ChakraProvider value={system}>
-                    <Header
-                        categories={categories.map((c) => c.name)}
-                        activeCategory={activeCategory}
-                        setActiveCategory={setActiveCategory}
-                    />
-
-                    <MainList
-                        categories={categories.map((c) => c.name)}
-                        activeCategory={activeCategory}
-                        setActiveCategory={setActiveCategory}
-                    />
-
-                    <MotionDrawer
-                        trigger={
-                            <BasketButton
-                                openBasketPage={() => setConfirmActive(false)}
-                            />
-                        }
-                    >
-                        <BasketDrawerContent
-                            confirmActive={confirmActive}
-                            handleBack={() => setConfirmActive(false)}
-                            handleConfirm={() => setConfirmActive(true)}
+                <ConstructorProvider>
+                    <ChakraProvider value={system}>
+                        <Header
+                            categories={categories.map((c) => c.name)}
+                            activeCategory={activeCategory}
+                            setActiveCategory={setActiveCategory}
                         />
-                    </MotionDrawer>
 
-                    <Toaster />
-                </ChakraProvider>
+                        <MainList
+                            categories={categories.map((c) => c.name)}
+                            activeCategory={activeCategory}
+                            setActiveCategory={setActiveCategory}
+                        />
+
+                        <MotionDrawer
+                            trigger={
+                                <BasketButton
+                                    openBasketPage={() =>
+                                        setConfirmActive(false)
+                                    }
+                                />
+                            }
+                        >
+                            <BasketDrawerContent
+                                confirmActive={confirmActive}
+                                handleBack={() => setConfirmActive(false)}
+                                handleConfirm={() => setConfirmActive(true)}
+                            />
+                        </MotionDrawer>
+
+                        <MotionDrawer trigger={<Button>Конструктор</Button>}>
+                            <ShawarmaConstructorContent />
+                        </MotionDrawer>
+
+                        <Toaster />
+                    </ChakraProvider>
+                </ConstructorProvider>
             </BasketProvider>
         </OrderProvider>
     )

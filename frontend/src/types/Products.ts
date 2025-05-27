@@ -4,12 +4,18 @@ export interface Size {
     grams: number
 }
 
+export type IngredientType = 'base' | 'sauce' | 'meat' | 'extras'
+export type Step = IngredientType | 'summary'
+
 export interface Ingredient {
     ingredient_id: number
     name: string
-    image_url: string | null
+    type: IngredientType
+    image_url?: string
     price: number
-    color: string | null
+    color?: string
+    required?: boolean
+    description?: string
 }
 
 export interface Category {
