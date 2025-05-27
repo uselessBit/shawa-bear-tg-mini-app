@@ -37,6 +37,8 @@ class IngredientService(BaseService, IngredientServiceI):
                     ingredient.price = ingredient_data.price
                 if ingredient_data.color:
                     ingredient.color = ingredient_data.color
+                if ingredient_data.type:
+                    ingredient.type = ingredient_data.type
 
 
                 image_url = await save_image(image, ingredients_path) if image.filename else None

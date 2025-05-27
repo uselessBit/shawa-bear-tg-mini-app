@@ -1,13 +1,22 @@
 import json
+from enum import StrEnum
 from typing import Any
 import re
 from pydantic import BaseModel, Field, model_validator, field_validator
+
+
+class IngredientType(StrEnum):
+    BASE = "base"
+    SAUCE = "sauce"
+    MEAT = "meat"
+    EXTRAS = "extras"
 
 
 class IngredientCreate(BaseModel):
     name: str
     price: float | None
     color: str | None
+    type: IngredientType | None
 
     @model_validator(mode="before")
     @classmethod
@@ -30,15 +39,17 @@ class IngredientResponse(BaseModel):
     image_url: str | None
     price: float | None
     color: str | None
+    type: IngredientType | None
 
     class Config:
         from_attributes = True
 
 
 class IngredientUpdate(BaseModel):
-    name: str | None
-    price: float | None
-    color: str | None
+    name: str | None = Field(None)
+    price: float | None= Field(None)
+    color: str | None= Field(None)
+    type: IngredientType | None= Field(None)
 
     @model_validator(mode="before")
     @classmethod

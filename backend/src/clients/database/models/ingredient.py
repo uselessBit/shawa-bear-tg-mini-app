@@ -12,5 +12,6 @@ class Ingredient(Base):
     image_url: Mapped[str] = mapped_column(nullable=True)
     price: Mapped[float] = mapped_column(nullable=True)
     color: Mapped[str] = mapped_column(nullable=True)
+    type: Mapped[str] = mapped_column(nullable=True)
 
     products: Mapped[list["Product"]] = relationship(back_populates="ingredients", secondary="product_ingredient")  # noqa: F821
