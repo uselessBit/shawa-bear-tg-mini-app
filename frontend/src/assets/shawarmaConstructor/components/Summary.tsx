@@ -74,7 +74,12 @@ export const Summary = () => {
                                 h="full"
                                 justifyContent="space-between"
                             >
-                                <Text fontSize="xl" fontWeight="600" mt={2}>
+                                <Text
+                                    fontSize="xl"
+                                    fontWeight="600"
+                                    mb={5}
+                                    mt={2}
+                                >
                                     {item.name}
                                 </Text>
 
