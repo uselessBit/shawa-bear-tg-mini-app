@@ -6,11 +6,13 @@ import {
     Flex,
     Image,
     CloseButton,
+    Mark,
 } from '@chakra-ui/react'
 import { useConstructor } from '@/contexts/ConstructorContext'
 import { NavigationButtons } from './NavigationButtons.tsx'
 import { IoClose } from 'react-icons/io5'
 import { useDrawer } from '@/contexts/DrawerContext.tsx'
+import API_BASE_URL from '@/config.ts'
 
 export const Summary = () => {
     const { selectedItems, totalPrice } = useConstructor()
@@ -37,15 +39,15 @@ export const Summary = () => {
                 {Object.entries(selectedItems).map(([type, item]) => (
                     <Flex
                         key={type}
-                        bg="gray.50"
+                        bg={`${item.color}/10`}
                         p={4}
-                        borderRadius="xl"
+                        rounded="24px"
                         align="center"
                         gap={4}
                     >
                         {item.image_url ? (
                             <Image
-                                src={item.image_url}
+                                src={`${API_BASE_URL}media/ingredients/${item.image_url}`}
                                 alt={item.name}
                                 boxSize="80px"
                                 borderRadius="md"
@@ -54,7 +56,6 @@ export const Summary = () => {
                         ) : (
                             <Box
                                 boxSize="80px"
-                                bg={item.color || 'gray.200'}
                                 borderRadius="md"
                                 display="flex"
                                 alignItems="center"
@@ -63,12 +64,28 @@ export const Summary = () => {
                                 <Text fontSize="sm">Нет фото</Text>
                             </Box>
                         )}
-                        <Box>
-                            <Text fontSize="lg" fontWeight="600">
+                        <Flex
+                            direction="column"
+                            h="full"
+                            justifyContent="space-between"
+                        >
+                            <Text fontSize="xl" fontWeight="600" mt={2}>
                                 {item.name}
                             </Text>
-                            <Text color="gray.600">{item.price} ₽</Text>
-                        </Box>
+
+                            <Text
+                                fontSize="md"
+                                color="text"
+                                bg="card"
+                                w="fit"
+                                px="24px"
+                                py="8px"
+                                rounded="50px"
+                            >
+                                {item.price}
+                                <Mark color="accent">р</Mark>
+                            </Text>
+                        </Flex>
                     </Flex>
                 ))}
             </VStack>
