@@ -49,4 +49,3 @@ Run project build
 ```bash
 npm run dev
 ```
-i
