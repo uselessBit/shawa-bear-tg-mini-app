@@ -22,17 +22,26 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
     const [drawerHeight, setDrawerHeight] = useState(0)
     const [startTime, setStartTime] = useState(0)
     const [velocity, setVelocity] = useState(0)
+    const [potentialDrag, setPotentialDrag] = useState(false) // Новое состояние
 
     const contentRef = useRef<HTMLDivElement>(null)
 
+    const isDraggingRef = useRef(isDragging)
+    const potentialDragRef = useRef(potentialDrag)
+
+    useEffect(() => {
+        isDraggingRef.current = isDragging
+        potentialDragRef.current = potentialDrag
+    }, [isDragging, potentialDrag])
+
     const handleTouchStart = useCallback(
         (e: React.TouchEvent<HTMLDivElement>) => {
-            setIsDragging(true)
-            const touch = e.touches[0]
-            setStartY(touch.clientY)
-            setStartTime(Date.now())
+            if (contentRef.current && contentRef.current.scrollTop === 0) {
+                setPotentialDrag(true)
+                const touch = e.touches[0]
+                setStartY(touch.clientY)
+                setStartTime(Date.now())
 
-            if (contentRef.current) {
                 const rect = contentRef.current.getBoundingClientRect()
                 setDrawerHeight(rect.height)
             }
@@ -42,30 +51,45 @@ export default function MotionDrawer({ trigger, children }: MotionDrawerProps) {
 
     const handleTouchMove = useCallback(
         (e: TouchEvent) => {
-            if (!isDragging || !e.touches[0]) return
-
+            if (!e.touches[0]) return
             const touch = e.touches[0]
-            const deltaY = touch.clientY - startY
-            const newOffset = Math.max(0, deltaY)
 
-            setOffset(newOffset)
-            e.preventDefault()
+            if (potentialDragRef.current && !isDraggingRef.current) {
+                const deltaY = touch.clientY - startY
+
+                if (deltaY > 5) {
+                    setIsDragging(true)
+                    setPotentialDrag(false)
+                    setOffset(deltaY)
+                    e.preventDefault()
+                } else if (deltaY < 0) {
+                    setPotentialDrag(false)
+                }
+            }
+
+            if (isDraggingRef.current) {
+                const deltaY = touch.clientY - startY
+                const newOffset = Math.max(0, deltaY)
+                setOffset(newOffset)
+                e.preventDefault()
+            }
         },
-        [isDragging, startY]
+        [startY]
     )
 
     const handleTouchEnd = useCallback(() => {
+        if (isDraggingRef.current) {
+            const endTime = Date.now()
+            const duration = endTime - startTime
+            const newVelocity = offset / (duration || 1)
+            setVelocity(newVelocity)
+
+            const shouldClose = offset > drawerHeight / 2 || newVelocity > 0.5
+            if (shouldClose) setIsOpen(false)
+        }
+
         setIsDragging(false)
-        const endTime = Date.now()
-        const duration = endTime - startTime
-
-        const newVelocity = offset / (duration || 1)
-        setVelocity(newVelocity)
-
-        const shouldClose = offset > drawerHeight / 2 || newVelocity > 0.5
-
-        if (shouldClose) setIsOpen(false)
-
+        setPotentialDrag(false)
         setOffset(0)
     }, [offset, drawerHeight, startTime])
 

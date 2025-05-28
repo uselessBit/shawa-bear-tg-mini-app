@@ -42,7 +42,7 @@ export default function IngredientCheckboxGroup({
                         ingredient.type !== 'base' && (
                             <>
                                 <CheckboxCard.Root
-                                    key={ingredient.ingredient_id}
+                                    key={`${ingredient.ingredient_id} ${ingredient.name}`}
                                     cursor="pointer"
                                     minW="fit-content"
                                     maxW="fit-content"
