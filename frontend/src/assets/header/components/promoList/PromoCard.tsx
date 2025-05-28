@@ -22,7 +22,7 @@ export default function PromoCard({
             opacity={isViewed ? '50%' : '100%'}
             borderWidth={isViewed ? '0px' : '1px'}
             borderColor="accent"
-            onClick={isViewed ? undefined : onClick}
+            onClick={onClick}
         >
             <Image
                 src={image}
