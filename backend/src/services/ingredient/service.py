@@ -12,12 +12,14 @@ from src.services.utils import delete_image, save_image, try_commit
 
 
 class IngredientService(BaseService, IngredientServiceI):
-    async def create(self, ingredient: IngredientCreate, image: Image) -> None:
+    async def create(self, ingredient: IngredientCreate, image: Image) -> IngredientResponse:
         async with self.session() as session:
             image_url = await save_image(image, ingredients_path) if image.filename else None
             new_ingredient = Ingredient(image_url=image_url, **ingredient.model_dump())
             session.add(new_ingredient)
             await try_commit(session, ingredient.name, delete_image, ingredients_path)
+            type_adapter = TypeAdapter(IngredientResponse)
+            return type_adapter.validate_python(new_ingredient)
 
     async def get(self) -> list[IngredientResponse]:
         async with self.session() as session:

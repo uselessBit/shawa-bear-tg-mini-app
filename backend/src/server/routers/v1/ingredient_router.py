@@ -17,7 +17,7 @@ async def get_ingredient_service() -> IngredientServiceI:
     return container.ingredient_service()
 
 
-@router.post("/")
+@router.post("/", response_model=IngredientResponse)
 async def create(
     ingredient: IngredientCreate,
     file: UploadFile | None = File(None),
@@ -27,9 +27,9 @@ async def create(
     if file:
         image.file_bytes = await file.read()
         image.filename = file.filename
-    await ingredient_service.create(ingredient, image)
+    ingredient = await ingredient_service.create(ingredient, image)
     return JSONResponse(
-        content={"message": create_message.format(entity=ingredient_tag)}, status_code=HTTPStatus.CREATED
+        content=ingredient.model_dump(), status_code=HTTPStatus.CREATED
     )
 
 

@@ -18,7 +18,7 @@ async def get_product_service() -> ProductServiceI:
     return container.product_service()
 
 
-@router.post("/")
+@router.post("/", response_model=ProductResponse)
 async def create(
     product: ProductCreate,
     file: UploadFile | None = File(None),
@@ -28,8 +28,8 @@ async def create(
     if file:
         image.file_bytes = await file.read()
         image.filename = file.filename
-    await product_service.create(product, image)
-    return JSONResponse(content={"message": create_message.format(entity=product_tag)}, status_code=HTTPStatus.CREATED)
+    product = await product_service.create(product, image)
+    return JSONResponse(content=product.model_dump(), status_code=HTTPStatus.CREATED)
 
 
 @router.get("/", response_model=list[ProductResponse])

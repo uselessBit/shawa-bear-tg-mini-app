@@ -9,7 +9,9 @@ from src.clients.database.models.category import Category
 from src.clients.database.models.ingredient import Ingredient
 from src.clients.database.models.product import Product, ProductIngredient
 from src.services.base import BaseService
+from src.services.category.schemas import CategoryResponse
 from src.services.errors import CategoryNotFoundError, IngredientNotFoundError, ProductNotFoundError
+from src.services.ingredient.schemas import IngredientResponse
 from src.services.product.interface import ProductIngredientServiceI, ProductServiceI
 from src.services.product.schemas import ProductCreate, ProductResponse, ProductUpdate
 from src.services.schemas import Image
@@ -24,7 +26,7 @@ class ProductService(BaseService, ProductServiceI):
         super().__init__(session)
         self.product_ingredient_service = product_ingredient_service
 
-    async def create(self, product_data: ProductCreate, image: Image) -> None:
+    async def create(self, product_data: ProductCreate, image: Image) -> ProductResponse:
         async with self.session() as session:
             query = select(Ingredient).where(Ingredient.ingredient_id.in_(product_data.ingredient_ids))
             result = await session.execute(query)
@@ -50,12 +52,16 @@ class ProductService(BaseService, ProductServiceI):
             session.add(new_product)
             await try_commit(session, new_product.name, delete_image, products_path)
             await session.flush()
-
             for ingredient_id in product_data.ingredient_ids:
                 await self.product_ingredient_service.create(
                     product_id=new_product.product_id,
                     ingredient_id=ingredient_id,
                 )
+            query = select(Product).where(Product.product_id == new_product.product_id).options(selectinload(Product.ingredients), selectinload(Product.category))
+            result = await session.execute(query)
+            product_response = result.scalars().first()
+            type_adapter = TypeAdapter(ProductResponse)
+            return type_adapter.validate_python(product_response)
 
     async def get_all(self) -> list[ProductResponse]:
         async with self.session() as session:

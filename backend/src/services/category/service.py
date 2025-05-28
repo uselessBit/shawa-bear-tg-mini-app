@@ -10,11 +10,13 @@ from src.services.utils import try_commit
 
 
 class CategoryService(BaseService, CategoryServiceI):
-    async def create(self, category: CategoryCreate) -> None:
+    async def create(self, category: CategoryCreate) -> CategoryResponse:
         async with self.session() as session:
             new_category = Category(name=category.name)
             session.add(new_category)
             await try_commit(session, category.name)
+            type_adapter = TypeAdapter(CategoryResponse)
+            return type_adapter.validate_python(new_category)
 
     async def get_all(self) -> list[CategoryResponse]:
         async with self.session() as session:

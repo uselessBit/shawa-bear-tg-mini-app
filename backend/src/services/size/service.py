@@ -10,11 +10,14 @@ from src.services.utils import try_commit
 
 
 class SizeService(BaseService, SizeServiceI):
-    async def create(self, size: SizeCreate) -> None:
+    async def create(self, size: SizeCreate) -> SizeResponse:
         async with self.session() as session:
             new_size = Size(name=size.name, grams=size.grams)
             session.add(new_size)
             await try_commit(session, size.name)
+            type_adapter = TypeAdapter(SizeResponse)
+            return type_adapter.validate_python(new_size)
+
 
     async def get_all(self) -> list[SizeResponse]:
         async with self.session() as session:
