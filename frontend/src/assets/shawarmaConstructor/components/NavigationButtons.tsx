@@ -1,7 +1,6 @@
 import { Button, Flex } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useConstructor } from '@/contexts/ConstructorContext'
-import { Step } from '@/types/Products'
 
 const MotionFlex = motion(Flex)
 
@@ -13,7 +12,12 @@ export const NavigationButtons = () => {
 
     const isStepValid = () => {
         if (currentStep === 'summary') return true
-        return Boolean(selectedItems[currentStep as Exclude<Step, 'summary'>])
+
+        if (currentStep === 'base') {
+            return Boolean(selectedItems.base?.length)
+        }
+
+        return true
     }
 
     const getMainButtonText = () => {
@@ -32,6 +36,8 @@ export const NavigationButtons = () => {
             bottom="0"
             left="0"
             w="full"
+            bg="card"
+            pt="12px"
         >
             {!isFirstStep && (
                 <Button
