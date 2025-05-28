@@ -1,5 +1,13 @@
-import { createContext, useContext, useState, useMemo, ReactNode } from 'react'
+import {
+    createContext,
+    useContext,
+    useState,
+    useMemo,
+    ReactNode,
+    useEffect,
+} from 'react'
 import { Ingredient, IngredientType, Step } from '@/types/Products'
+import { ProductService } from '@/api/ProductService'
 
 interface ConstructorContextType {
     currentStep: Step
@@ -10,6 +18,8 @@ interface ConstructorContextType {
     goBack: () => void
     selectItem: (item: Ingredient) => void
     direction: number
+    ingredientsLoading: boolean
+    ingredientsError: string | null
 }
 
 const ConstructorContext = createContext<ConstructorContextType>(
@@ -25,94 +35,35 @@ export const ConstructorProvider = ({ children }: { children: ReactNode }) => {
     >({})
     const [direction, setDirection] = useState(1)
 
-    const [ingredients] = useState<Ingredient[]>([
-        // Основа (base)
-        {
-            ingredient_id: 1,
-            name: 'Тонкий лаваш',
-            type: 'base',
-            price: 50,
-            color: '#f0e6d2',
-            required: true,
-        },
-        {
-            ingredient_id: 2,
-            name: 'Арабская пита',
-            type: 'base',
-            price: 70,
-            color: '#e2d3c3',
-        },
+    const [ingredients, setIngredients] = useState<Ingredient[]>([])
+    const [ingredientsLoading, setIngredientsLoading] = useState(true)
+    const [ingredientsError, setIngredientsError] = useState<string | null>(
+        null
+    )
 
-        // Соусы (sauce)
-        {
-            ingredient_id: 3,
-            name: 'Классический соус',
-            type: 'sauce',
-            price: 30,
-            color: '#fff5e6',
-        },
-        {
-            ingredient_id: 4,
-            name: 'Острый соус',
-            type: 'sauce',
-            price: 35,
-            color: '#ffd1d1',
-        },
+    useEffect(() => {
+        const loadIngredients = async () => {
+            try {
+                const data = await ProductService.fetchAllIngredients()
 
-        // Мясо (meat)
-        {
-            ingredient_id: 5,
-            name: 'Курица гриль',
-            type: 'meat',
-            price: 80,
-            color: '#ffeb3b',
-            image_url: '/images/chicken.jpg',
-        },
-        {
-            ingredient_id: 6,
-            name: 'Говядина',
-            type: 'meat',
-            price: 100,
-            color: '#ff5722',
-            image_url: '/images/beef.jpg',
-        },
+                const enrichedData = data.map((ingredient) => ({
+                    ...ingredient,
+                    color: ingredient.color || getDefaultColor(ingredient.type),
+                    required: ingredient.required || ingredient.type === 'base',
+                }))
 
-        // Дополнительно (extras)
-        {
-            ingredient_id: 7,
-            name: 'Овощи гриль',
-            type: 'extras',
-            price: 40,
-            color: '#8bc34a',
-            image_url: '/images/grilled-veggies.jpg',
-        },
-        {
-            ingredient_id: 8,
-            name: 'Сырный соус',
-            type: 'extras',
-            price: 45,
-            color: '#fff9c4',
-            image_url: '/images/cheese-sauce.jpg',
-        },
+                setIngredients(enrichedData)
+            } catch (err) {
+                setIngredientsError(
+                    `Ошибка загрузки: ${err instanceof Error ? err.message : 'Unknown error'}`
+                )
+            } finally {
+                setIngredientsLoading(false)
+            }
+        }
 
-        // Дополнительные примеры для демонстрации
-        {
-            ingredient_id: 9,
-            name: 'Бекон',
-            type: 'meat',
-            price: 90,
-            color: '#d84315',
-            image_url: '/images/bacon.jpg',
-        },
-        {
-            ingredient_id: 10,
-            name: 'Грибы',
-            type: 'extras',
-            price: 35,
-            color: '#bcaaa4',
-            image_url: '/images/mushrooms.jpg',
-        },
-    ])
+        loadIngredients()
+    }, [])
 
     const totalPrice = useMemo(
         () =>
@@ -157,6 +108,8 @@ export const ConstructorProvider = ({ children }: { children: ReactNode }) => {
                 goBack,
                 selectItem,
                 direction,
+                ingredientsLoading,
+                ingredientsError,
             }}
         >
             {children}
@@ -165,3 +118,13 @@ export const ConstructorProvider = ({ children }: { children: ReactNode }) => {
 }
 
 export const useConstructor = () => useContext(ConstructorContext)
+
+const getDefaultColor = (type: IngredientType): string => {
+    const colors: Record<IngredientType, string> = {
+        base: '#f0e6d2',
+        sauce: '#fff5e6',
+        meat: '#ffeb3b',
+        extras: '#8bc34a',
+    }
+    return colors[type]
+}

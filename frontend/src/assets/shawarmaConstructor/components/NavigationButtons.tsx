@@ -43,10 +43,6 @@ export const NavigationButtons = () => {
                     borderRadius="full"
                     fontSize="lg"
                     fontWeight="700"
-                    _hover={{
-                        transform: 'scale(1.05)',
-                        borderColor: 'gray',
-                    }}
                     transition="all 0.2s"
                 >
                     Назад
@@ -57,20 +53,15 @@ export const NavigationButtons = () => {
                 flex="1"
                 h="56px"
                 onClick={goNext}
-                bg="bg"
+                bg="accent"
                 color="text"
                 borderRadius="full"
                 fontSize="lg"
                 fontWeight="700"
                 disabled={!isStepValid()}
-                _hover={{
-                    transform: 'scale(1.05)',
-                    filter: 'brightness(1.1)',
-                }}
                 _disabled={{
-                    opacity: 0.7,
+                    opacity: 0.5,
                     cursor: 'not-allowed',
-                    _hover: { transform: 'none' },
                 }}
                 transition="all 0.2s"
             >
