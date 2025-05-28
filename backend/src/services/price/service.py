@@ -33,9 +33,14 @@ class PriceService(BaseService, PriceServiceI):
 
     async def get_all(self) -> list[PriceResponse]:
         async with self.session() as session:
-            query = select(Price).options(
-                selectinload(Price.product).selectinload(Product.ingredients), selectinload(Price.product).selectinload(Product.category),
-                selectinload(Price.size),
+            query = (
+                select(Price)
+                .options(
+                    selectinload(Price.product).selectinload(Product.ingredients),
+                    selectinload(Price.product).selectinload(Product.category),
+                    selectinload(Price.size),
+                )
+                .filter(Price.is_custom == False)
             )
             result = await session.execute(query)
             prices = result.scalars().all()
@@ -64,9 +69,13 @@ class PriceService(BaseService, PriceServiceI):
 
     async def filter_price(self, price_filter: PriceFilter) -> list[PriceResponse]:
         async with self.session() as session:
-            query = select(Price).options(
-                selectinload(Price.product).selectinload(Product.ingredients),
-                selectinload(Price.size),
+            query = (
+                select(Price)
+                .options(
+                    selectinload(Price.product).selectinload(Product.ingredients),
+                    selectinload(Price.size),
+                )
+                .filter(Price.is_custom == False)
             )
 
             if price_filter.min_price:
@@ -77,6 +86,7 @@ class PriceService(BaseService, PriceServiceI):
                 query = query.filter(Price.size.has(Size.grams >= price_filter.min_grams))
             if price_filter.max_grams:
                 query = query.filter(Price.size.has(Size.grams <= price_filter.max_grams))
+
             result = await session.execute(query)
             prices = result.scalars().all()
             type_adapter = TypeAdapter(list[PriceResponse])
