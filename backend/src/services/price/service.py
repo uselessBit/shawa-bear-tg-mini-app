@@ -12,7 +12,7 @@ from src.services.price.schemas import PriceCreate, PriceFilter, PriceResponse, 
 
 
 class PriceService(BaseService, PriceServiceI):
-    async def create(self, price_data: PriceCreate) -> None:
+    async def create(self, price_data: PriceCreate) -> PriceResponse:
         async with self.session() as session, session.begin():
             query = select(Product).where(Product.product_id == price_data.product_id)
             result = await session.execute(query)
@@ -30,6 +30,20 @@ class PriceService(BaseService, PriceServiceI):
                 **price_data.model_dump(),
             )
             session.add(price)
+            await session.flush()
+
+            query = (
+                select(Price).where(Price.price_id == price.price_id)
+                .options(
+                    selectinload(Price.product).selectinload(Product.ingredients),
+                    selectinload(Price.product).selectinload(Product.category),
+                    selectinload(Price.size),
+                )
+            )
+            result = await session.execute(query)
+            price = result.scalar_one_or_none()
+            type_adapter = TypeAdapter(PriceResponse)
+            return type_adapter.validate_python(price)
 
     async def get_all(self) -> list[PriceResponse]:
         async with self.session() as session:

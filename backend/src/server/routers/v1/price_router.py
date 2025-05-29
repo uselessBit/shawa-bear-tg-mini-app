@@ -16,10 +16,10 @@ async def get_price_service() -> PriceServiceI:
     return container.price_service()
 
 
-@router.post("/")
+@router.post("/", response_model=PriceResponse)
 async def create(price: PriceCreate, price_service: PriceServiceI = Depends(get_price_service)) -> JSONResponse:
-    await price_service.create(price)
-    return JSONResponse(content={"message": create_message.format(entity=price_tag)}, status_code=HTTPStatus.CREATED)
+    price = await price_service.create(price)
+    return JSONResponse(content=price.model_dump(), status_code=HTTPStatus.CREATED)
 
 
 @router.get("/")

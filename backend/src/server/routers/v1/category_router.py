@@ -16,12 +16,14 @@ async def get_category_service() -> CategoryServiceI:
     return container.category_service()
 
 
-@router.post("/")
+@router.post("/", response_model=CategoryResponse)
 async def create(
     category: CategoryCreate, category_service: CategoryServiceI = Depends(get_category_service)
 ) -> JSONResponse:
-    await category_service.create(category)
-    return JSONResponse(content={"message": create_message.format(entity=category_tag)}, status_code=HTTPStatus.CREATED)
+    category = await category_service.create(category)
+    return JSONResponse(
+        content=category.model_dump(), status_code=HTTPStatus.CREATED
+    )
 
 
 @router.get("/", response_model=list[CategoryResponse])

@@ -6,7 +6,7 @@ from src.services.category.schemas import CategoryCreate, CategoryResponse, Cate
 
 class CategoryServiceI(Protocol):
     @abstractmethod
-    async def create(self, size: CategoryCreate) -> None:
+    async def create(self, size: CategoryCreate) -> CategoryResponse:
         ...
 
     @abstractmethod

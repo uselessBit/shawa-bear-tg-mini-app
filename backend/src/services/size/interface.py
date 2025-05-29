@@ -6,7 +6,7 @@ from src.services.size.schemas import SizeCreate, SizeResponse, SizeUpdate
 
 class SizeServiceI(Protocol):
     @abstractmethod
-    async def create(self, size: SizeCreate) -> None:
+    async def create(self, size: SizeCreate) -> SizeResponse:
         ...
 
     @abstractmethod

@@ -7,7 +7,7 @@ from src.services.schemas import Image
 
 class IngredientServiceI(Protocol):
     @abstractmethod
-    async def create(self, ingredient: IngredientCreate, image: Image) -> None:
+    async def create(self, ingredient: IngredientCreate, image: Image) -> IngredientResponse:
         ...
 
     @abstractmethod

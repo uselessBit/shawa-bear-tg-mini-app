@@ -16,10 +16,12 @@ async def get_size_service() -> SizeServiceI:
     return container.size_service()
 
 
-@router.post("/")
+@router.post("/", response_model=SizeResponse)
 async def create(size: SizeCreate, size_service: SizeServiceI = Depends(get_size_service)) -> JSONResponse:
-    await size_service.create(size)
-    return JSONResponse(content={"message": create_message.format(entity=size_tag)}, status_code=HTTPStatus.CREATED)
+    size = await size_service.create(size)
+    return JSONResponse(
+        content=size.model_dump(), status_code=HTTPStatus.CREATED
+    )
 
 
 @router.get("/", response_model=list[SizeResponse])
