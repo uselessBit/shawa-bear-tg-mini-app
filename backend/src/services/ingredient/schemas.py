@@ -17,6 +17,7 @@ class IngredientCreate(BaseModel):
     price: float | None
     color: str | None
     type: IngredientType | None
+    grams: int | None
 
     @model_validator(mode="before")
     @classmethod
@@ -40,6 +41,7 @@ class IngredientResponse(BaseModel):
     price: float | None
     color: str | None
     type: IngredientType | None
+    grams: int | None
 
     class Config:
         from_attributes = True
@@ -47,9 +49,10 @@ class IngredientResponse(BaseModel):
 
 class IngredientUpdate(BaseModel):
     name: str | None = Field(None)
-    price: float | None= Field(None)
-    color: str | None= Field(None)
-    type: IngredientType | None= Field(None)
+    price: float | None = Field(None)
+    color: str | None = Field(None)
+    type: IngredientType | None = Field(None)
+    grams: int | None = Field(None)
 
     @model_validator(mode="before")
     @classmethod

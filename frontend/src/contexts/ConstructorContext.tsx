@@ -12,7 +12,7 @@ import { ProductService } from '@/api/ProductService'
 interface ConstructorContextType {
     currentStep: Step
     ingredients: Ingredient[]
-    selectedItems: Partial<Record<IngredientType, Ingredient>>
+    selectedItems: Partial<Record<IngredientType, Ingredient[]>>
     totalPrice: number
     goNext: () => void
     goBack: () => void
@@ -31,7 +31,7 @@ const stepsOrder: Step[] = ['base', 'sauce', 'meat', 'extras', 'summary']
 export const ConstructorProvider = ({ children }: { children: ReactNode }) => {
     const [currentStep, setCurrentStep] = useState<Step>('base')
     const [selectedItems, setSelectedItems] = useState<
-        Partial<Record<IngredientType, Ingredient>>
+        Partial<Record<IngredientType, Ingredient[]>>
     >({})
     const [direction, setDirection] = useState(1)
 
@@ -67,10 +67,9 @@ export const ConstructorProvider = ({ children }: { children: ReactNode }) => {
 
     const totalPrice = useMemo(
         () =>
-            Object.values(selectedItems).reduce(
-                (sum, item) => sum + (item?.price || 0),
-                0
-            ),
+            Object.values(selectedItems)
+                .flat()
+                .reduce((sum, item) => sum + (item?.price || 0), 0),
         [selectedItems]
     )
 
@@ -91,10 +90,25 @@ export const ConstructorProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const selectItem = (item: Ingredient) => {
-        setSelectedItems((prev) => ({
-            ...prev,
-            [item.type]: item,
-        }))
+        setSelectedItems((prev) => {
+            const current = prev[item.type] || []
+
+            if (item.type === 'base') {
+                return { ...prev, [item.type]: [item] }
+            }
+
+            const existingIndex = current.findIndex(
+                (i) => i.ingredient_id === item.ingredient_id
+            )
+
+            if (existingIndex !== -1) {
+                const newArray = [...current]
+                newArray.splice(existingIndex, 1)
+                return { ...prev, [item.type]: newArray }
+            } else {
+                return { ...prev, [item.type]: [...current, item] }
+            }
+        })
     }
 
     return (

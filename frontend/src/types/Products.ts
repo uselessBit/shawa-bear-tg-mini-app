@@ -5,6 +5,7 @@ export interface Size {
 }
 
 export type IngredientType = 'base' | 'sauce' | 'meat' | 'extras'
+
 export type Step = IngredientType | 'summary'
 
 export interface Ingredient {

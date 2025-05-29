@@ -1,4 +1,4 @@
-import { ChakraProvider, Alert, Button } from '@chakra-ui/react'
+import { ChakraProvider, Alert } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { system } from './theme.ts'
 import Header from '@/assets/header/Header.tsx'
@@ -12,6 +12,7 @@ import { OrderProvider } from '@/contexts/OrderContext'
 import { Toaster } from '@/components/ui/toaster'
 import { ShawarmaConstructorContent } from '@/assets/shawarmaConstructor/ShawarmaConstructorDrawer.tsx'
 import { ConstructorProvider } from '@/contexts/ConstructorContext'
+import ConstructorButton from '@/assets/shawarmaConstructor/ConstructorButton.tsx'
 
 export default function App() {
     const { categories, error } = useCategories()
@@ -46,6 +47,10 @@ export default function App() {
                             setActiveCategory={setActiveCategory}
                         />
 
+                        <MotionDrawer trigger={<ConstructorButton />}>
+                            <ShawarmaConstructorContent />
+                        </MotionDrawer>
+
                         <MainList
                             categories={categories.map((c) => c.name)}
                             activeCategory={activeCategory}
@@ -66,10 +71,6 @@ export default function App() {
                                 handleBack={() => setConfirmActive(false)}
                                 handleConfirm={() => setConfirmActive(true)}
                             />
-                        </MotionDrawer>
-
-                        <MotionDrawer trigger={<Button>Конструктор</Button>}>
-                            <ShawarmaConstructorContent />
                         </MotionDrawer>
 
                         <Toaster />

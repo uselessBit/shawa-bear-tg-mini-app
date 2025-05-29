@@ -58,8 +58,11 @@ export const StepWrapper = ({
                         key={item.ingredient_id}
                         item={item}
                         isSelected={
-                            selectedItems[item.type]?.ingredient_id ===
-                            item.ingredient_id
+                            selectedItems[item.type]?.some(
+                                (selected) =>
+                                    selected.ingredient_id ===
+                                    item.ingredient_id
+                            ) ?? false
                         }
                         onSelect={() => selectItem(item)}
                     />

@@ -35,65 +35,85 @@ export const Summary = () => {
                 Ваш заказ
             </Heading>
 
-            <VStack gap={4} align="stretch">
-                {Object.entries(selectedItems).map(([type, item]) => (
-                    <Flex
-                        key={type}
-                        bg={`${item.color}/10`}
-                        p={4}
-                        rounded="24px"
-                        align="center"
-                        gap={4}
-                    >
-                        {item.image_url ? (
-                            <Image
-                                src={`${API_BASE_URL}media/ingredients/${item.image_url}`}
-                                alt={item.name}
-                                boxSize="80px"
-                                borderRadius="md"
-                                objectFit="cover"
-                            />
-                        ) : (
-                            <Box
-                                boxSize="80px"
-                                borderRadius="md"
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
-                            >
-                                <Text fontSize="sm">Нет фото</Text>
-                            </Box>
-                        )}
+            <VStack gap={4} align="stretch" overflow="auto" pb="110px">
+                {Object.entries(selectedItems)
+                    .flatMap(
+                        ([type, items]) =>
+                            items?.map((item) => ({ type, item })) || []
+                    )
+                    .map(({ type, item }) => (
                         <Flex
-                            direction="column"
-                            h="full"
-                            justifyContent="space-between"
+                            key={`${type}-${item.ingredient_id}`}
+                            bg={`${item.color}/10`}
+                            p={4}
+                            rounded="24px"
+                            align="center"
+                            gap={4}
                         >
-                            <Text fontSize="xl" fontWeight="600" mt={2}>
-                                {item.name}
-                            </Text>
-
-                            <Text
-                                fontSize="md"
-                                color="text"
-                                bg="card"
-                                w="fit"
-                                px="24px"
-                                py="8px"
-                                rounded="50px"
+                            {item.image_url ? (
+                                <Image
+                                    src={`${API_BASE_URL}media/ingredients/${item.image_url}`}
+                                    alt={item.name}
+                                    boxSize="80px"
+                                    borderRadius="md"
+                                    objectFit="cover"
+                                />
+                            ) : (
+                                <Box
+                                    boxSize="80px"
+                                    borderRadius="md"
+                                    display="flex"
+                                    alignItems="center"
+                                    justifyContent="center"
+                                >
+                                    <Text fontSize="sm">Нет фото</Text>
+                                </Box>
+                            )}
+                            <Flex
+                                direction="column"
+                                h="full"
+                                justifyContent="space-between"
                             >
-                                {item.price}
-                                <Mark color="accent">р</Mark>
-                            </Text>
+                                <Text
+                                    fontSize="xl"
+                                    fontWeight="600"
+                                    mb={5}
+                                    mt={2}
+                                >
+                                    {item.name}
+                                </Text>
+
+                                <Text
+                                    fontSize="md"
+                                    color="text"
+                                    bg="card"
+                                    w="fit"
+                                    px="24px"
+                                    py="8px"
+                                    rounded="50px"
+                                >
+                                    {item.price}
+                                    <Mark color="accent">р</Mark>
+                                </Text>
+                            </Flex>
                         </Flex>
-                    </Flex>
-                ))}
+                    ))}
             </VStack>
 
-            <Box pt={4} borderTopWidth="1px">
+            <Box
+                pos="absolute"
+                bottom="60px"
+                bg="card"
+                w="100%"
+                py="12px"
+                px="5%"
+            >
                 <Flex justify="space-between" fontSize="xl" fontWeight="600">
                     <Text>Итого:</Text>
-                    <Text>{totalPrice} ₽</Text>
+                    <Text>
+                        {totalPrice}
+                        <Mark color="accent">р</Mark>
+                    </Text>
                 </Flex>
             </Box>
 
