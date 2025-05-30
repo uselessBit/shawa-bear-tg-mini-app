@@ -38,15 +38,16 @@ class OrderService(BaseService, OrderServiceI):
             )
             result = await session.execute(query)
             basket = result.unique().scalar_one_or_none()
-            if not basket:
+
+            if not basket.items:
                 raise BasketNotFoundError
+
 
             for basket_item in basket.items:
                 order_item = OrderItem(
                     order_id=new_order.order_id,
                     price_id=basket_item.price_id,
                     quantity=basket_item.quantity,
-                    # Копируем исключенные ингредиенты
                     excluded_ingredients=basket_item.excluded_ingredients.copy()
                 )
                 session.add(order_item)
@@ -71,24 +72,23 @@ class OrderService(BaseService, OrderServiceI):
                 joinedload(Order.items).joinedload(OrderItem.excluded_ingredients)
             )
             result = await session.execute(query)
-            order = result.unique().scalars().all()
+            orders = result.unique().scalars().all()
 
-            if not order:
+            if not orders:
                 raise OrderNotFoundError
-            answer = []
-            for i in order:
-                answer.append(OrderResponse(
-                    order_id=i.order_id,
-                    basket_id=i.basket_id,
-                    order_date=i.order_date,
-                    payment_option=i.payment_option,
-                    time_taken=i.time_taken,
-                    total_price=i.total_price,
-                    comment=i.comment,
-                    status=i.status,
-                    first_name=i.first_name,
-                    address=i.address,
-                    phone=i.phone,
+
+            return [OrderResponse(
+                    order_id=order.order_id,
+                    basket_id=order.basket_id,
+                    order_date=order.order_date,
+                    payment_option=order.payment_option,
+                    time_taken=order.time_taken,
+                    total_price=order.total_price,
+                    comment=order.comment,
+                    status=order.status,
+                    first_name=order.first_name,
+                    address=order.address,
+                    phone=order.phone,
                     items=[
                         OrderItemResponse(
                             order_item_id=item.order_item_id,
@@ -96,10 +96,10 @@ class OrderService(BaseService, OrderServiceI):
                             quantity=item.quantity,
                             excluded_ingredient_ids=[ing.ingredient_id for ing in item.excluded_ingredients]
                         )
-                        for item in i.items
+                        for item in order.items
                     ],
-                ))
-            return answer
+                ) for order in orders]
+
 
     async def change_status(self, order_id: int, status: OrderStatus) -> None:
         async with self.session() as session:
