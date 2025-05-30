@@ -30,6 +30,12 @@ class OrderCreate(BaseModel):
     class Config:
         use_enum_values = True
 
+class OrderItemResponse(BaseModel):
+    order_item_id: int
+    price_id: int
+    quantity: int
+    excluded_ingredient_ids: list[int]
+
 
 class OrderResponse(BaseModel):
     order_id: int
@@ -43,6 +49,7 @@ class OrderResponse(BaseModel):
     first_name: str | None
     address: str | None
     phone: str | None
+    items: list[OrderItemResponse]
 
     class Config:
         from_attributes = True

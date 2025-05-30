@@ -20,3 +20,4 @@ class Price(Base):
     product: Mapped["Product"] = relationship(back_populates="prices")  # noqa: F821
     size: Mapped["Size"] = relationship(back_populates="prices")  # noqa: F821
     basket_items: Mapped[list["BasketItem"]] = relationship("BasketItem", back_populates="price", cascade="all, delete-orphan")  # noqa: F821
+    order_items: Mapped[list["OrderItem"]] = relationship("OrderItem", back_populates="price",cascade="all, delete-orphan")
