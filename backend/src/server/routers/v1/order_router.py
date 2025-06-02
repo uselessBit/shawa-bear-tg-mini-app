@@ -19,10 +19,11 @@ async def get_order_service() -> OrderServiceI:
 
 @router.post("/", response_model=OrderResponse)
 async def create_order(
+    user_id: int,
     order_data: OrderCreate,
     order_service: OrderServiceI = Depends(get_order_service),
 ) -> JSONResponse:
-    await order_service.create_order(order_data)
+    await order_service.create_order(user_id=user_id, order_data=order_data)
     return JSONResponse(content={"message": create_message.format(entity=order_tag)}, status_code=HTTPStatus.CREATED)
 
 
