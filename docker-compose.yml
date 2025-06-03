@@ -16,7 +16,7 @@ services:
   redis:
     image: redis:7
     restart: always
-    container_name: anime-academy-redis
+    container_name: tg-mini-app-redis
     networks:
       - my_network
     ports:

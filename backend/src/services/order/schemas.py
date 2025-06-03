@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import StrEnum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 
 class OrderStatus(StrEnum):
@@ -29,6 +29,16 @@ class OrderCreate(BaseModel):
 
     class Config:
         use_enum_values = True
+
+    @field_validator("time_taken")
+    def validate_time_format(cls, value):
+        try:
+            h, m, s = map(int, value.split(":"))
+            if not (0 <= h <= 23 and 0 <= m <= 59 and 0 <= s <= 59):
+                raise ValueError("Invalid time values")
+            return value
+        except (ValueError, AttributeError):
+            raise ValueError("Time must be in HH:MM:SS format")
 
 class OrderItemResponse(BaseModel):
     order_item_id: int
