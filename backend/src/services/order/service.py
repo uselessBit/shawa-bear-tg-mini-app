@@ -3,12 +3,13 @@ from collections.abc import Callable
 from datetime import UTC, datetime
 
 from pydantic import TypeAdapter
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from src.clients.database.models.basket import BasketItem, Basket
 from src.clients.database.models.order import Order, OrderItem
+from src.clients.database.models.user import User
 from src.services.base import BaseService
 from src.services.basket.interface import BasketServiceI
 from src.services.errors import OrderNotFoundError, PriceNotFoundError, BasketNotFoundError
@@ -148,5 +149,18 @@ class OrderService(BaseService, OrderServiceI):
 
             await asyncio.sleep(300)
             await self.change_status(order_id, OrderStatus.TAKEN)
+            asyncio.create_task(self.earning_points(order_id))
         except Exception as e:
             print(f"Error in status flow for order {order_id}: {e}")
+
+    async def earning_points(self, order_id: int):
+        async with self.session() as session, session.begin():
+            query = select(Order).where(Order.order_id == order_id)
+            result = await session.execute(query)
+            order: Order = result.scalars().first()
+            stmt = (
+                update(User)
+                .values(coins=User.coins + int(order.total_price/10))
+                .where(user_id=order.user_id)
+            )
+            await session.execute(stmt)
