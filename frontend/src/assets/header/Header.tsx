@@ -1,8 +1,10 @@
-import { Flex, Heading, Box, Center } from '@chakra-ui/react'
+import { Flex, Heading, Box, Center, Text, Button } from '@chakra-ui/react'
 import Bonuses from './components/Bonuses.tsx'
 import ProfileButton from './components/ProfileButton.tsx'
 import PromoGroup from './components/promoList/PromoGroup.tsx'
 import CategoriesGroup from './components/categoriesNavigation/CategoriesGroup.tsx'
+import MotionDrawer from '@/assets/MotionDrawer.tsx'
+import ProfilePage from '@/assets/profile/ProfilePage.tsx'
 
 type HeaderProps = {
     categories: string[]
@@ -28,7 +30,9 @@ export default function Header({
                 <Box position="relative">
                     <Flex justify="space-between" alignItems="center">
                         <Bonuses />
-                        <ProfileButton />
+                        <MotionDrawer trigger={<ProfileButton />}>
+                            <ProfilePage />
+                        </MotionDrawer>
                     </Flex>
 
                     <Center
@@ -41,6 +45,20 @@ export default function Header({
                         <Heading color="text" fontWeight="800" size="2xl">
                             Меню
                         </Heading>
+                    </Center>
+
+                    <Center
+                        h="hb"
+                        position="absolute"
+                        top="0"
+                        right="40px"
+                        pointerEvents="none"
+                    >
+                        <Button bg="gray" rounded="full" h="hb" px="24px">
+                            <Text color="text" fontWeight="600" fontSize="xs">
+                                Админка
+                            </Text>
+                        </Button>
                     </Center>
                 </Box>
             </Box>

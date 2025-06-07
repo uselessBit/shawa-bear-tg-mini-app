@@ -65,6 +65,9 @@ const TextSection = ({
         <Text fontSize="xl" fontWeight="600" mt={2}>
             {item.name}
         </Text>
+        <Mark opacity="0.5" fontWeight="500" fontSize="md">
+            {item.grams}г
+        </Mark>
         <Flex justify="space-between">
             <Text
                 fontSize="md"

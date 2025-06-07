@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import CategoryTitle from './components/CategoryTitle'
 import { useProducts } from '@/hooks/useProducts'
 import Card from './components/Card'
-import ProductPage from '@/assets/productPage/ProductPage'
+import ProductPage from '@/assets/product/ProductPage'
 import MotionDrawer from '@/assets/MotionDrawer'
 
 type MainListProps = {
@@ -56,7 +56,7 @@ export default function MainList({
     }
 
     return (
-        <Flex px="gap" flexDirection="column" gap="gap">
+        <Flex px="gap" flexDirection="column" gap="gap" pb="gap">
             {loading ? (
                 <>
                     <Skeleton h="32px" rounded="26px" />

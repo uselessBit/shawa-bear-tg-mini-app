@@ -15,12 +15,9 @@ export default function PromoGroup() {
         return saved
             ? JSON.parse(saved)
             : [
-                  { image: './promo.webp', isViewed: false },
-                  { image: './promo.webp', isViewed: false },
-                  { image: './promo.webp', isViewed: false },
-                  { image: './promo.webp', isViewed: false },
-                  { image: './promo.webp', isViewed: false },
-                  { image: './promo.webp', isViewed: false },
+                  { image: './promo1.png', isViewed: false },
+                  { image: './promo2.png', isViewed: false },
+                  { image: './promo3.png', isViewed: false },
               ]
     })
 

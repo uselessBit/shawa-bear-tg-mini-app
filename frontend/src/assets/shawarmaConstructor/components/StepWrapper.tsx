@@ -52,21 +52,31 @@ export const StepWrapper = ({
                 </motion.div>
             </Box>
 
-            <Flex direction="column" gap={4} py="12px" maxW="600px" mx="auto">
-                {filteredIngredients.map((item) => (
-                    <IngredientCard
-                        key={item.ingredient_id}
-                        item={item}
-                        isSelected={
-                            selectedItems[item.type]?.some(
-                                (selected) =>
-                                    selected.ingredient_id ===
-                                    item.ingredient_id
-                            ) ?? false
-                        }
-                        onSelect={() => selectItem(item)}
-                    />
-                ))}
+            <Flex pb="130px" w="full" h="full">
+                <Flex
+                    direction="column"
+                    gap={4}
+                    py="12px"
+                    w="full"
+                    mx="auto"
+                    overflow="auto"
+                    h="full"
+                >
+                    {filteredIngredients.map((item) => (
+                        <IngredientCard
+                            key={item.ingredient_id}
+                            item={item}
+                            isSelected={
+                                selectedItems[item.type]?.some(
+                                    (selected) =>
+                                        selected.ingredient_id ===
+                                        item.ingredient_id
+                                ) ?? false
+                            }
+                            onSelect={() => selectItem(item)}
+                        />
+                    ))}
+                </Flex>
             </Flex>
 
             {children}

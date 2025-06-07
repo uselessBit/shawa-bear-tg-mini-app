@@ -17,6 +17,7 @@ export interface Ingredient {
     color?: string
     required?: boolean
     description?: string
+    grams?: number
 }
 
 export interface Category {

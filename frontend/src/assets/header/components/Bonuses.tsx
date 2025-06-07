@@ -19,7 +19,7 @@ export default function Bonuses() {
             </Icon>
 
             <Text fontWeight="700" fontSize="lm" color="text">
-                666
+                0
             </Text>
         </Flex>
     )

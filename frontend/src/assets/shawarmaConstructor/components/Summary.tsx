@@ -69,19 +69,25 @@ export const Summary = () => {
                                     <Text fontSize="sm">Нет фото</Text>
                                 </Box>
                             )}
+
                             <Flex
                                 direction="column"
                                 h="full"
                                 justifyContent="space-between"
                             >
-                                <Text
-                                    fontSize="xl"
-                                    fontWeight="600"
-                                    mb={5}
-                                    mt={2}
-                                >
+                                <Text fontSize="xl" fontWeight="600">
                                     {item.name}
                                 </Text>
+
+                                <Mark
+                                    opacity="0.5"
+                                    fontWeight="500"
+                                    fontSize="md"
+                                    mt="10px"
+                                    mb="16px"
+                                >
+                                    {item.grams}г
+                                </Mark>
 
                                 <Text
                                     fontSize="md"

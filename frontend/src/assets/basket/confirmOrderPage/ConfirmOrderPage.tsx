@@ -5,6 +5,8 @@ import {
     Icon,
     Flex,
     Textarea,
+    Switch,
+    Text,
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { IoArrowBackOutline } from 'react-icons/io5'
@@ -14,6 +16,7 @@ import { Input } from '@chakra-ui/react'
 import { withMask } from 'use-mask-input'
 import { IoWallet, IoCard } from 'react-icons/io5'
 import { useOrder } from '@/contexts/OrderContext'
+import { HiCheck, HiX } from 'react-icons/hi'
 
 const MotionHeader = motion(Drawer.Header)
 const MotionBody = motion(Drawer.Body)
@@ -119,6 +122,37 @@ export const ConfirmOrderPage = {
                         }
                         isInvalid={!!errors.payment}
                     />
+                    <Flex
+                        bg="back"
+                        h="56px"
+                        rounded="full"
+                        px="24px"
+                        justify="space-between"
+                        alignItems="center"
+                    >
+                        <Text fontSize="16px" fontWeight="500">
+                            Скидка 8% за баллы
+                        </Text>
+
+                        <Switch.Root size="lg" scale="1.5">
+                            <Switch.HiddenInput />
+                            <Switch.Control bg="card">
+                                <Switch.Thumb
+                                    bg="back"
+                                    boxShadow="none"
+                                    _checked={{
+                                        bg: 'accent',
+                                    }}
+                                >
+                                    <Switch.ThumbIndicator
+                                        fallback={<HiX color="text" />}
+                                    >
+                                        <HiCheck />
+                                    </Switch.ThumbIndicator>
+                                </Switch.Thumb>
+                            </Switch.Control>
+                        </Switch.Root>
+                    </Flex>
                     <Textarea
                         bg="back"
                         borderWidth="0"

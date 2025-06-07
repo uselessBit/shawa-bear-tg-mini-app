@@ -131,10 +131,13 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
             setIsSuccess(false)
 
             try {
+                const minutes = formState.timeTaken.padStart(2, '0')
+                const timeTakenFormatted = `00:${minutes}:00`
+
                 await OrderService.createOrder({
                     basket_id: basket.basket_id,
                     payment_option: formState.paymentOption,
-                    time_taken: formState.timeTaken,
+                    time_taken: timeTakenFormatted,
                     comment: formState.comment,
                     status: 'created',
                     first_name: formState.firstName,
