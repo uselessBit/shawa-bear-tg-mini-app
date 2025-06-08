@@ -11,5 +11,6 @@ class User(Base):
     first_name: Mapped[str] = mapped_column(nullable=True)
     last_name: Mapped[str] = mapped_column(nullable=True)
     username: Mapped[str] = mapped_column(nullable=True)
+    phone_number: Mapped[str] = mapped_column(nullable=True)
     language_code: Mapped[str] = mapped_column(nullable=True)
     coins: Mapped[int] = mapped_column(nullable=True)

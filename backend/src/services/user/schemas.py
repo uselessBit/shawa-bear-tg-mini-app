@@ -8,6 +8,10 @@ class UserCreate(BaseModel):
     username: str | None = None
     language_code: str | None = None
     coins: int | None = None
+    phone_number: str | None = None
+
+    class Config:
+        from_attributes = True
 
 
 class UserResponse(BaseModel):
@@ -17,6 +21,7 @@ class UserResponse(BaseModel):
     username: str | None
     language_code: str | None
     coins: int | None
+    phone_number: str | None = None
 
     class Config:
         from_attributes = True
