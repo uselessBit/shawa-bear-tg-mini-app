@@ -1,13 +1,15 @@
+import asyncio
 from collections.abc import Callable
 from datetime import UTC, datetime
 
 from pydantic import TypeAdapter
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from src.clients.database.models.basket import BasketItem, Basket
 from src.clients.database.models.order import Order, OrderItem
+from src.clients.database.models.user import User
 from src.services.base import BaseService
 from src.services.basket.interface import BasketServiceI
 from src.services.errors import OrderNotFoundError, PriceNotFoundError, BasketNotFoundError
@@ -21,6 +23,11 @@ class OrderService(BaseService, OrderServiceI):
         self.basket_service = basket_service
 
     async def create_order(self,user_id: int, order_data: OrderCreate) -> None:
+        try:
+            time_taken_seconds = self.parse_time(order_data.time_taken)
+        except ValueError as e:
+            raise ValueError("Invalid time_taken format") from e
+
         async with self.session() as session, session.begin():
             total_price = await self._calculate_total_price(session, order_data.basket_id)
             new_order = Order(
@@ -31,6 +38,7 @@ class OrderService(BaseService, OrderServiceI):
             )
             session.add(new_order)
             await session.flush()
+            order_id = new_order.order_id
 
             query = select(Basket).where(Basket.user_id == user_id).options(
                 joinedload(Basket.items).joinedload(BasketItem.price),
@@ -53,6 +61,7 @@ class OrderService(BaseService, OrderServiceI):
                 session.add(order_item)
 
         await self.basket_service.clear_basket(order_data.basket_id)
+        asyncio.create_task(self.status_flow(order_id, time_taken_seconds))
 
     async def get_order(self, order_id: int) -> OrderResponse:
         async with self.session() as session:
@@ -105,8 +114,9 @@ class OrderService(BaseService, OrderServiceI):
         async with self.session() as session:
             order = await session.get(Order, order_id)
             if order:
-                order.status = status.value
-                await session.commit()
+                if order.status != status.value:
+                    order.status = status.value
+                    await session.commit()
             else:
                 raise OrderNotFoundError
 
@@ -123,3 +133,36 @@ class OrderService(BaseService, OrderServiceI):
             else:
                 raise PriceNotFoundError()
         return total
+
+    @staticmethod
+    def parse_time(time_str: str) -> int:
+        h, m, s = map(int, time_str.split(':'))
+        return h * 3600 + m * 60 + s
+
+    async def status_flow(self, order_id: int, time_taken_seconds: int):
+        try:
+            await asyncio.sleep(60)
+            await self.change_status(order_id, OrderStatus.IN_PROGRESS)
+
+            await asyncio.sleep(time_taken_seconds)
+            await self.change_status(order_id, OrderStatus.COMPLETED)
+
+            await asyncio.sleep(300)
+            await self.change_status(order_id, OrderStatus.TAKEN)
+            asyncio.create_task(self.earning_points(order_id))
+        except Exception as e:
+            print(f"Error in status flow for order {order_id}: {e}")
+
+    async def earning_points(self, order_id: int):
+        async with self.session() as session, session.begin():
+            query = select(Order).where(Order.order_id == order_id)
+            result = await session.execute(query)
+            order: Order = result.scalars().first()
+
+            stmt = (
+                update(User)
+                .where(User.user_id == order.user_id)
+                .values(coins=User.coins + int(order.total_price/10))
+
+            )
+            await session.execute(stmt)

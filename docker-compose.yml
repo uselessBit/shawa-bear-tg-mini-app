@@ -13,6 +13,14 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7
+    restart: always
+    container_name: tg-mini-app-redis
+    networks:
+      - my_network
+    ports:
+      - "6379:6379"
 
   backend:
     build:
@@ -27,30 +35,31 @@ services:
       - my_network
     depends_on:
       - db
+      - redis
 
-  bot:
-    build:
-      context: bot
-    container_name: bot
-    ports:
-      - "8001:8001"
-    networks:
-      - my_network
-    depends_on:
-      - backend
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
-
-  adminer:
-    image: adminer
-    ports:
-      - "8080:8080"
-    networks:
-      - my_network
-    depends_on:
-      - db
-    restart: always
+#  bot:
+#    build:
+#      context: bot
+#    container_name: bot
+#    ports:
+#      - "8001:8001"
+#    networks:
+#      - my_network
+#    depends_on:
+#      - backend
+#    dns:
+#      - 8.8.8.8
+#      - 8.8.4.4
+#
+#  adminer:
+#    image: adminer
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - my_network
+#    depends_on:
+#      - db
+#    restart: always
 
 
 volumes:
