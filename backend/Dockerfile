@@ -12,3 +12,7 @@ COPY pyproject.toml poetry.lock /backend/
 RUN poetry install --no-interaction --only main --no-root
 
 COPY . .
+
+RUN chmod +x /backend/entrypoint.sh
+
+ENTRYPOINT ["/backend/entrypoint.sh"]

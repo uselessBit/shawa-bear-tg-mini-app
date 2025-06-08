@@ -37,29 +37,29 @@ services:
       - db
       - redis
 
-#  bot:
-#    build:
-#      context: bot
-#    container_name: bot
-#    ports:
-#      - "8001:8001"
-#    networks:
-#      - my_network
-#    depends_on:
-#      - backend
-#    dns:
-#      - 8.8.8.8
-#      - 8.8.4.4
-#
-#  adminer:
-#    image: adminer
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - my_network
-#    depends_on:
-#      - db
-#    restart: always
+  bot:
+    build:
+      context: bot
+    container_name: bot
+    ports:
+      - "8001:8001"
+    networks:
+      - my_network
+    depends_on:
+      - backend
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - my_network
+    depends_on:
+      - db
+    restart: always
 
 
 volumes:
