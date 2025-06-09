@@ -106,24 +106,20 @@ export const ProductService = {
         name: string
         description: string
         category_id: number
-        ingredients: Ingredient[]
+        ingredient_ids: number[] // Теперь передаем только ID ингредиентов
     }): Promise<Product> => {
         try {
-            const formData = new FormData()
-            formData.append('name', productData.name)
-            formData.append('description', productData.description)
-            formData.append('category_id', productData.category_id.toString())
-            formData.append(
-                'ingredients',
-                JSON.stringify(productData.ingredients)
-            )
-
             const response = await axios.post<Product>(
                 `${API_BASE_URL}api/v1/product/`,
-                formData,
+                {
+                    name: productData.name,
+                    description: productData.description,
+                    category_id: productData.category_id,
+                    ingredient_ids: productData.ingredient_ids,
+                },
                 {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'application/json',
                     },
                 }
             )

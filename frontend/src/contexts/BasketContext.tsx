@@ -226,7 +226,7 @@ export const BasketProvider = ({
                 name: 'Конструктор',
                 description: '',
                 category_id: 1,
-                ingredients: ingredients,
+                ingredient_ids: ingredients.map((ing) => ing.ingredient_id),
             })
 
             // 3. Создать цену

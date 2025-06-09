@@ -52,7 +52,7 @@ export const StepWrapper = ({
                 </motion.div>
             </Box>
 
-            <Flex pb="130px" w="full" h="full">
+            <Flex pb="110px" w="full" h="full">
                 <Flex
                     direction="column"
                     gap={4}
