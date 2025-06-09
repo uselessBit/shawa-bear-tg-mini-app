@@ -1,3 +1,4 @@
+# src/app.py
 import logging
 import sys
 
@@ -7,8 +8,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from src.config import bot
 from src.handlers.message_handlers import router as message_router
 
-
-async def main() -> None:
+async def start_polling() -> None:
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
