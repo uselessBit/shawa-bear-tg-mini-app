@@ -22,7 +22,7 @@ class OrderService(BaseService, OrderServiceI):
         super().__init__(session)
         self.basket_service = basket_service
 
-    async def create_order(self,user_id: int, order_data: OrderCreate) -> None:
+    async def create_order(self, user_id: int, order_data: OrderCreate) -> None:
         try:
             time_taken_seconds = self.parse_time(order_data.time_taken)
         except ValueError as e:
