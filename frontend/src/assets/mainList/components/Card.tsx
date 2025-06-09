@@ -1,6 +1,5 @@
 import React from 'react'
 import { Text, Flex, Button, Image, Heading, Mark } from '@chakra-ui/react'
-import API_SHORT_URL from '@/config.ts'
 import { Price } from '@/types/Products.ts'
 
 type CardProps = {
@@ -25,7 +24,7 @@ export default function Card({ price, onClick }: CardProps) {
             onClick={onClick}
         >
             <Image
-                src={`${API_SHORT_URL}media/products/${price.product.image_url}`}
+                src={`products/${price.product.name}.png`}
                 h="full"
                 minW="132px"
             />

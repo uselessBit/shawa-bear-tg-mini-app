@@ -1,7 +1,6 @@
 import { Box, Flex, Image, Text, Mark, Center } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { Ingredient } from '@/types/Products'
-import API_BASE_URL from '@/config.ts'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
 export const IngredientCard = ({
@@ -41,7 +40,7 @@ const ImageSection = ({ item }: { item: Ingredient }) => (
     <Box flexShrink={0} w="80px" h="80px">
         {item.image_url ? (
             <Image
-                src={`${API_BASE_URL}media/ingredients/${item.image_url}`}
+                src={`ingredients/${item.name}.png`}
                 alt={item.name}
                 w="full"
                 h="full"

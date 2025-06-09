@@ -7,7 +7,6 @@ import {
     Float,
 } from '@chakra-ui/react'
 import { Price } from '@/types/Products'
-import API_SHORT_URL from '@/config'
 import CostPicker from './components/CostPicker'
 import IngredientCheckboxGroup from './components/IngredientCheckboxGroup'
 import CustomNumberInput from './components/CustomNumberInput'
@@ -82,7 +81,7 @@ export default function ProductPage({ price }: ProductPageProps) {
                 </CloseButton>
 
                 <Image
-                    src={`${API_SHORT_URL}media/products/${price.product.image_url}`}
+                    src={`products/${price.product.name}.png`}
                     transform="scaleX(-1)"
                     rounded="42px 42px 0 0"
                     zIndex="base"
