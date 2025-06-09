@@ -1,7 +1,6 @@
 import { Box, Flex, Image, Text, Mark, Center } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { Ingredient } from '@/types/Products'
-import API_BASE_URL from '@/config.ts'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
 export const IngredientCard = ({
