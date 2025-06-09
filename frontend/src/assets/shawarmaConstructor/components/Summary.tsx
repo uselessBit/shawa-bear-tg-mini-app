@@ -108,7 +108,7 @@ export const Summary = () => {
 
             <Box
                 pos="absolute"
-                bottom="60px"
+                bottom="50px"
                 bg="card"
                 w="100%"
                 py="12px"

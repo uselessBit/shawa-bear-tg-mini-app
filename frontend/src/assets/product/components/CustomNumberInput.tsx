@@ -18,8 +18,8 @@ export default function CustomNumberInput({
             spinOnPress={false}
             onValueChange={(e) => setQuantity(Number(e.value))}
             bg="back"
-            p={small ? '8px' : '12px'}
-            h={small ? '40px' : '56px'}
+            p={small ? '6px' : '8px'}
+            h={small ? '32px' : '48px'}
             rounded="full"
             defaultValue={defaultValue ? defaultValue : '1'}
             min={1}
@@ -30,8 +30,8 @@ export default function CustomNumberInput({
                     <IconButton
                         bg="accent"
                         rounded="full"
-                        maxH={small ? '24px' : '32px'}
-                        minW={small ? '24px' : '32px'}
+                        maxH={small ? '20px' : '32px'}
+                        minW={small ? '20px' : '32px'}
                         color="text"
                     >
                         <Icon as={FaMinus} boxSize={small ? 2 : 4} />
@@ -49,8 +49,8 @@ export default function CustomNumberInput({
                     <IconButton
                         bg="accent"
                         rounded="full"
-                        maxH={small ? '24px' : '32px'}
-                        minW={small ? '24px' : '32px'}
+                        maxH={small ? '20px' : '32px'}
+                        minW={small ? '20px' : '32px'}
                         color="text"
                     >
                         <Icon as={FaPlus} boxSize={small ? 2 : 4} />

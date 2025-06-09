@@ -81,10 +81,10 @@ export const ConfirmOrderPage = {
                         bg="back"
                         borderColor={errors.firstName ? 'red.500' : 'back'}
                         outline="none"
-                        h="56px"
+                        h="48px"
                         px="24px"
                         rounded="full"
-                        size="lg"
+                        size="md"
                         fontWeight="500"
                         placeholder="Имя"
                         value={formState.firstName}
@@ -96,9 +96,9 @@ export const ConfirmOrderPage = {
                         bg="back"
                         borderColor={errors.phone ? 'red.500' : 'back'}
                         outline="none"
-                        h="56px"
+                        h="48px"
                         rounded="full"
-                        size="lg"
+                        size="md"
                         fontWeight="500"
                         px="24px"
                         placeholder="+375 (99) 999-99-99"
@@ -124,17 +124,17 @@ export const ConfirmOrderPage = {
                     />
                     <Flex
                         bg="back"
-                        h="56px"
+                        h="48px"
                         rounded="full"
                         px="24px"
                         justify="space-between"
                         alignItems="center"
                     >
-                        <Text fontSize="16px" fontWeight="500">
+                        <Text fontSize="14px" fontWeight="500">
                             Скидка 8% за баллы
                         </Text>
 
-                        <Switch.Root size="lg" scale="1.5">
+                        <Switch.Root size="md" scale="1.5">
                             <Switch.HiddenInput />
                             <Switch.Control bg="card">
                                 <Switch.Thumb
@@ -160,9 +160,10 @@ export const ConfirmOrderPage = {
                         boxShadow="none"
                         flex="1"
                         rounded="28px"
-                        size="lg"
+                        size="md"
                         fontWeight="500"
                         px="24px"
+                        py="12px"
                         resize="none"
                         placeholder="Комментарий к заказу..."
                         value={formState.comment}

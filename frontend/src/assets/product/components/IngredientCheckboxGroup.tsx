@@ -78,8 +78,8 @@ export default function IngredientCheckboxGroup({
                                         }
                                     />
                                     <CheckboxCard.Control
-                                        px="16px"
-                                        py="8px"
+                                        px="12px"
+                                        py="6px"
                                         className="checkbox-control"
                                     >
                                         <CheckboxCard.Label>
@@ -87,7 +87,9 @@ export default function IngredientCheckboxGroup({
                                                 src={`${API_BASE_URL}media/ingredients/${ingredient.image_url}`}
                                                 h="24px"
                                             />
-                                            <Text>{ingredient.name}</Text>
+                                            <Text fontSize="xs">
+                                                {ingredient.name}
+                                            </Text>
                                             <IoClose />
                                         </CheckboxCard.Label>
                                     </CheckboxCard.Control>

@@ -27,7 +27,7 @@ export default function Card({ price, onClick }: CardProps) {
             <Image
                 src={`${API_SHORT_URL}media/products/${price.product.image_url}`}
                 h="full"
-                minW="152px"
+                minW="132px"
             />
             <Flex
                 flexDirection="column"

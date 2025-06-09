@@ -24,7 +24,6 @@ export default function CostPicker({
             bg="back"
             p="12px"
             rounded="32px"
-            gap="12px"
             w="full"
         >
             <SegmentGroup.Indicator rounded="20px" boxShadow="none" bg="gray" />
@@ -39,9 +38,10 @@ export default function CostPicker({
                     display="flex"
                     flexDirection="column"
                     alignItems="center"
+                    gap="0"
                 >
                     <Text opacity="50%">{priceItem.size.grams}г</Text>
-                    <Heading fontWeight="700" fontSize="3xl">
+                    <Heading fontWeight="700" fontSize="2xl">
                         {priceItem.price}
                         <Mark color="accent">р</Mark>
                     </Heading>

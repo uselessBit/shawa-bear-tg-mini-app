@@ -37,7 +37,7 @@ export default function App() {
     }
 
     return (
-        <OrderProvider>
+        <OrderProvider userId={0}>
             <BasketProvider userId={0}>
                 <ConstructorProvider>
                     <ChakraProvider value={system}>

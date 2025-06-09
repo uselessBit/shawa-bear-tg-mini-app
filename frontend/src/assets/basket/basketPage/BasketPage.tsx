@@ -66,8 +66,8 @@ export const BasketPage = {
                         placement="middle-end"
                         opacity="0.5"
                         fontWeight="500"
-                        fontSize="md"
-                        offsetX="10"
+                        fontSize="xs"
+                        offsetX="6"
                     >
                         {itemCount} {getItemCountText(itemCount)}
                     </Float>

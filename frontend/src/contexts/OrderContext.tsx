@@ -33,7 +33,13 @@ type OrderContextType = {
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined)
 
-export const OrderProvider = ({ children }: { children: ReactNode }) => {
+export const OrderProvider = ({
+    children,
+    userId,
+}: {
+    children: ReactNode
+    userId: number
+}) => {
     const [formState, setFormState] = useState<OrderFormState>({
         firstName: '',
         phone: '',
@@ -134,7 +140,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
                 const minutes = formState.timeTaken.padStart(2, '0')
                 const timeTakenFormatted = `00:${minutes}:00`
 
-                await OrderService.createOrder({
+                await OrderService.createOrder(userId, {
                     basket_id: basket.basket_id,
                     payment_option: formState.paymentOption,
                     time_taken: timeTakenFormatted,
@@ -155,7 +161,7 @@ export const OrderProvider = ({ children }: { children: ReactNode }) => {
                 setIsSubmitting(false)
             }
         },
-        [formState, validateForm]
+        [formState, validateForm, userId]
     )
 
     const resetForm = useCallback(() => {

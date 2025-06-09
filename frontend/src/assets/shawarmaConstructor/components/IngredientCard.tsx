@@ -20,7 +20,7 @@ export const IngredientCard = ({
             transition={{ duration: 0.3 }}
         >
             <Box
-                p={4}
+                p={3}
                 rounded="24px"
                 borderWidth="0"
                 bg={!isSelected ? `${item.color}/10` : `${item.color}/40`}
@@ -38,7 +38,7 @@ export const IngredientCard = ({
 }
 
 const ImageSection = ({ item }: { item: Ingredient }) => (
-    <Box flexShrink={0} w="100px" h="100px">
+    <Box flexShrink={0} w="80px" h="80px">
         {item.image_url ? (
             <Image
                 src={`${API_BASE_URL}media/ingredients/${item.image_url}`}
@@ -62,7 +62,7 @@ const TextSection = ({
     isSelected: boolean
 }) => (
     <Flex direction="column" justifyContent="space-between" h="100px" w="full">
-        <Text fontSize="xl" fontWeight="600" mt={2}>
+        <Text fontSize="lg" fontWeight="600">
             {item.name}
         </Text>
         <Mark opacity="0.5" fontWeight="500" fontSize="md">
@@ -70,13 +70,14 @@ const TextSection = ({
         </Mark>
         <Flex justify="space-between">
             <Text
-                fontSize="md"
+                fontSize="xs"
                 color="text"
                 bg="card"
                 w="fit"
-                px="24px"
-                py="8px"
+                px="20px"
+                py="6px"
                 rounded="50px"
+                fontWeight="500"
             >
                 {item.price}
                 <Mark color="accent">р</Mark>
@@ -115,7 +116,7 @@ const Placeholder = ({ text }: { text: string }) => (
         borderRadius="12px"
         bg="text/10"
     >
-        <Text fontSize="sm" color="text">
+        <Text fontSize="md" color="text">
             {text}
         </Text>
     </Box>

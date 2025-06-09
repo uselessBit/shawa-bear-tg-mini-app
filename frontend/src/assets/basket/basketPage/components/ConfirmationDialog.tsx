@@ -24,13 +24,13 @@ export default function ConfirmationDialog({
                     bg="card"
                     p="gap"
                     rounded="42px"
-                    gap="gap"
+                    gap="0"
                     w="90%"
                 >
                     <Dialog.Header p="0" pt="gap">
                         <Dialog.Title
                             textAlign="center"
-                            fontSize="2xl"
+                            fontSize="xl"
                             fontWeight="700"
                             w="full"
                         >
@@ -44,7 +44,7 @@ export default function ConfirmationDialog({
                     </Dialog.Header>
 
                     <Dialog.Body px="0" py="gap">
-                        <Text fontSize="lg" textAlign="center">
+                        <Text fontSize="md" textAlign="center">
                             {message}
                         </Text>
                     </Dialog.Body>
@@ -55,11 +55,11 @@ export default function ConfirmationDialog({
                                 flex="1"
                                 onClick={onClose}
                                 bg="back"
-                                h="56px"
+                                h="48px"
                                 rounded="full"
                                 color="text"
                                 fontWeight="700"
-                                fontSize="lg"
+                                fontSize="md"
                             >
                                 Отмена
                             </Button>
@@ -70,11 +70,11 @@ export default function ConfirmationDialog({
                                     onClose()
                                 }}
                                 bg="red.500"
-                                h="56px"
+                                h="48px"
                                 rounded="full"
                                 color="white"
                                 fontWeight="700"
-                                fontSize="lg"
+                                fontSize="md"
                                 _hover={{ bg: 'red.600' }}
                             >
                                 Удалить

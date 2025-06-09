@@ -33,9 +33,9 @@ export default function ToBasketButton({
         <CloseButton
             flex="1"
             bg="accent"
-            h="56px"
+            h="48px"
             p="0"
-            fontSize="lg"
+            fontSize="md"
             fontWeight="700"
             rounded="full"
             color="text"
