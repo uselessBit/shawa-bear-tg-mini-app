@@ -15,9 +15,7 @@ export default function BasketCard({ price }: CardProps) {
     const { basket, updateQuantity, removeFromBasket } = useBasketContext()
     const { onClose } = useDrawer()
     const [localQuantity, setLocalQuantity] = useState(price.quantity)
-    const [updateTimeout, setUpdateTimeout] = useState<NodeJS.Timeout | null>(
-        null
-    )
+    const [updateTimeout, setUpdateTimeout] = useState<number | null>(null)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
     useEffect(() => {

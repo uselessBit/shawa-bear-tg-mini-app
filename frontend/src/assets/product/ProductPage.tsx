@@ -27,7 +27,7 @@ export default function ProductPage({ price }: ProductPageProps) {
     const [selectedPrice, setSelectedPrice] = useState<Price>(price)
     const [quantity, setQuantity] = useState(1)
     const [tempQuantity, setTempQuantity] = useState(1)
-    const [quantityTimeout, setQuantityTimeout] = useState<NodeJS.Timeout>()
+    const [quantityTimeout, setQuantityTimeout] = useState<number>()
     const [excludedIngredientIds, setExcludedIngredientIds] = useState<
         number[]
     >([])
