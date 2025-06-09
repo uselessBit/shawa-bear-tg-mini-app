@@ -13,4 +13,4 @@ RUN poetry install --no-interaction --only main --no-root
 
 COPY . .
 
-CMD ["python3", "-m", "src"]
+CMD ["python", "server.py"]
