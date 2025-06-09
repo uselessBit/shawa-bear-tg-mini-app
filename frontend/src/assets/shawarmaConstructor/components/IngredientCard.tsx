@@ -41,7 +41,7 @@ const ImageSection = ({ item }: { item: Ingredient }) => (
     <Box flexShrink={0} w="80px" h="80px">
         {item.image_url ? (
             <Image
-                src={`${API_BASE_URL}media/ingredients/${item.image_url}`}
+                src={`ingredients/${item.name}.png`}
                 alt={item.name}
                 w="full"
                 h="full"

@@ -7,7 +7,6 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { Ingredient } from '@/types/Products.ts'
-import API_BASE_URL from '@/config.ts'
 import { IoClose } from 'react-icons/io5'
 import { useState } from 'react'
 
@@ -84,7 +83,7 @@ export default function IngredientCheckboxGroup({
                                     >
                                         <CheckboxCard.Label>
                                             <Image
-                                                src={`${API_BASE_URL}media/ingredients/${ingredient.image_url}`}
+                                                src={`ingredients/${ingredient.name}.png`}
                                                 h="24px"
                                             />
                                             <Text fontSize="xs">

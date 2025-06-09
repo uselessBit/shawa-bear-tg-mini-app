@@ -1,5 +1,4 @@
 import { Text, Flex, Image, Heading, Mark, Center } from '@chakra-ui/react'
-import API_BASE_URL from '@/config.ts'
 import { useState, useEffect } from 'react'
 import { useBasketContext, PriceWithQuantity } from '@/contexts/BasketContext'
 import CustomNumberInput from '@/assets/product/components/CustomNumberInput'
@@ -76,7 +75,7 @@ export default function BasketCard({ price }: CardProps) {
                 gap="0"
             >
                 <Image
-                    src={`${API_BASE_URL}media/products/${price.product.image_url}`}
+                    src={`products/${price.product.name}.png`}
                     h="full"
                     minW="121px"
                 />

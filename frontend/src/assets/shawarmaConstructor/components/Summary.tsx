@@ -12,7 +12,6 @@ import { useConstructor } from '@/contexts/ConstructorContext'
 import { NavigationButtons } from './NavigationButtons.tsx'
 import { IoClose } from 'react-icons/io5'
 import { useDrawer } from '@/contexts/DrawerContext.tsx'
-import API_BASE_URL from '@/config.ts'
 
 export const Summary = () => {
     const { selectedItems, totalPrice } = useConstructor()
@@ -52,7 +51,7 @@ export const Summary = () => {
                         >
                             {item.image_url ? (
                                 <Image
-                                    src={`${API_BASE_URL}media/ingredients/${item.image_url}`}
+                                    src={`ingredients/${item.name}.png`}
                                     alt={item.name}
                                     boxSize="80px"
                                     borderRadius="md"
@@ -117,7 +116,7 @@ export const Summary = () => {
                 <Flex justify="space-between" fontSize="xl" fontWeight="600">
                     <Text>Итого:</Text>
                     <Text>
-                        {totalPrice}
+                        {totalPrice.toFixed(1)}
                         <Mark color="accent">р</Mark>
                     </Text>
                 </Flex>
