@@ -4,7 +4,13 @@ import { useConstructor } from '@/contexts/ConstructorContext'
 
 const MotionFlex = motion(Flex)
 
-export const NavigationButtons = () => {
+interface NavigationButtonsProps {
+    onAddToBasket?: () => void
+}
+
+export const NavigationButtons = ({
+    onAddToBasket,
+}: NavigationButtonsProps) => {
     const { goNext, goBack, currentStep, selectedItems } = useConstructor()
 
     const isFirstStep = currentStep === 'base'
@@ -23,6 +29,14 @@ export const NavigationButtons = () => {
     const getMainButtonText = () => {
         if (isLastStep) return 'В корзину'
         return 'Далее'
+    }
+
+    const handleMainButtonClick = () => {
+        if (isLastStep && onAddToBasket) {
+            onAddToBasket()
+        } else {
+            goNext()
+        }
     }
 
     return (
@@ -58,7 +72,6 @@ export const NavigationButtons = () => {
             <Button
                 flex="1"
                 h="48px"
-                onClick={goNext}
                 bg="accent"
                 color="text"
                 borderRadius="full"
@@ -70,6 +83,7 @@ export const NavigationButtons = () => {
                     cursor: 'not-allowed',
                 }}
                 transition="all 0.2s"
+                onClick={handleMainButtonClick}
             >
                 {getMainButtonText()}
             </Button>
