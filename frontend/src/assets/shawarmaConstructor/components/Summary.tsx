@@ -12,10 +12,25 @@ import { useConstructor } from '@/contexts/ConstructorContext'
 import { NavigationButtons } from './NavigationButtons.tsx'
 import { IoClose } from 'react-icons/io5'
 import { useDrawer } from '@/contexts/DrawerContext.tsx'
+import { useBasketContext } from '@/contexts/BasketContext.tsx'
+import { Ingredient } from '@/types/Products.ts'
 
 export const Summary = () => {
     const { selectedItems, totalPrice } = useConstructor()
     const { onClose } = useDrawer()
+    const { addCustomProduct } = useBasketContext()
+
+    const handleAddToBasket = async () => {
+        const allIngredients = Object.values(selectedItems)
+            .flat()
+            .filter(Boolean) as Ingredient[]
+
+        const success = await addCustomProduct(allIngredients, totalPrice)
+
+        if (success) {
+            onClose()
+        }
+    }
 
     return (
         <VStack pos="relative" h="full" gap="12px" align="stretch">
@@ -122,7 +137,7 @@ export const Summary = () => {
                 </Flex>
             </Box>
 
-            <NavigationButtons />
+            <NavigationButtons onAddToBasket={handleAddToBasket} />
         </VStack>
     )
 }

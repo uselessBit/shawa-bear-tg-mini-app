@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { Basket } from '@/types/Basket'
 import { BasketService } from '@/api/BasketService'
 import { ProductService } from '@/api/ProductService'
-import { Price } from '@/types/Products'
+import { Price, Ingredient } from '@/types/Products'
 
 export type PriceWithQuantity = Price & {
     quantity: number
@@ -24,6 +24,10 @@ type BasketContextType = {
     updateQuantity: (basketItemId: number, quantity: number) => Promise<void>
     clearError: () => void
     removeFromBasket: (basketItemId: number) => Promise<Basket | null>
+    addCustomProduct: (
+        ingredients: Ingredient[],
+        totalPrice: number
+    ) => Promise<boolean>
 }
 
 const BasketContext = createContext<BasketContextType>({
@@ -36,6 +40,7 @@ const BasketContext = createContext<BasketContextType>({
     updateQuantity: async () => {},
     clearError: () => {},
     removeFromBasket: async () => null,
+    addCustomProduct: async () => false,
 })
 
 export const BasketProvider = ({
@@ -198,6 +203,55 @@ export const BasketProvider = ({
         }
     }
 
+    const addCustomProduct = async (
+        ingredients: Ingredient[],
+        totalPrice: number
+    ): Promise<boolean> => {
+        setLoading(true)
+        setError('')
+
+        try {
+            // 1. Создать размер
+            const totalGrams = ingredients.reduce(
+                (sum, ing) => sum + (ing.grams || 0),
+                0
+            )
+            const size = await ProductService.createSize({
+                name: 'Custom',
+                grams: totalGrams,
+            })
+
+            // 2. Создать продукт
+            const product = await ProductService.createProduct({
+                name: 'Конструктор',
+                description: '',
+                category_id: 1,
+                ingredient_ids: ingredients.map((ing) => ing.ingredient_id),
+            })
+
+            // 3. Создать цену
+            const price = await ProductService.createPrice({
+                size_id: size.size_id,
+                product_id: product.product_id,
+                price: totalPrice,
+                proteins: 0,
+                fats: 0,
+                carbohydrates: 0,
+                calories: 0,
+                is_custom: true,
+            })
+
+            // 4. Добавить в корзину
+            return await addToBasket(price.price_id, 1, [])
+        } catch (err) {
+            setError('Ошибка создания кастомного продукта')
+            console.error('Ошибка создания кастомного продукта:', err)
+            return false
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <BasketContext.Provider
             value={{
@@ -210,6 +264,7 @@ export const BasketProvider = ({
                 updateQuantity,
                 clearError,
                 removeFromBasket,
+                addCustomProduct,
             }}
         >
             {children}

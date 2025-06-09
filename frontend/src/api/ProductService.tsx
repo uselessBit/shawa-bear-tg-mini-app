@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Price, Category, Ingredient } from '@/types/Products'
+import { Price, Category, Ingredient, Size, Product } from '@/types/Products'
 import API_BASE_URL from '@/config'
 
 let cachedPrices: Price[] | null = null
@@ -84,5 +84,71 @@ export const ProductService = {
 
     getCachedIngredients: (): Ingredient[] | null => {
         return cachedIngredients
+    },
+
+    createSize: async (sizeData: {
+        name: string
+        grams: number
+    }): Promise<Size> => {
+        try {
+            const response = await axios.post<Size>(
+                `${API_BASE_URL}api/v1/size/`,
+                sizeData
+            )
+            return response.data
+        } catch (error) {
+            console.error('Error creating size:', error)
+            throw error
+        }
+    },
+
+    createProduct: async (productData: {
+        name: string
+        description: string
+        category_id: number
+        ingredient_ids: number[] // Теперь передаем только ID ингредиентов
+    }): Promise<Product> => {
+        try {
+            const response = await axios.post<Product>(
+                `${API_BASE_URL}api/v1/product/`,
+                {
+                    name: productData.name,
+                    description: productData.description,
+                    category_id: productData.category_id,
+                    ingredient_ids: productData.ingredient_ids,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+            return response.data
+        } catch (error) {
+            console.error('Error creating product:', error)
+            throw error
+        }
+    },
+
+    createPrice: async (priceData: {
+        size_id: number
+        product_id: number
+        price: number
+        proteins: number
+        fats: number
+        carbohydrates: number
+        calories: number
+        is_custom: boolean
+    }): Promise<Price> => {
+        try {
+            const response = await axios.post<Price>(
+                `${API_BASE_URL}api/v1/price/`,
+                priceData
+            )
+            return response.data
+        } catch (error) {
+            console.error('Error creating price:', error)
+            throw error
+        }
     },
 }
