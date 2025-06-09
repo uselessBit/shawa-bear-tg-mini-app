@@ -9,6 +9,7 @@ class UserCreate(BaseModel):
     language_code: str | None = None
     coins: int | None = None
     phone_number: str | None = None
+    is_admin: bool | None = None
 
     class Config:
         from_attributes = True
@@ -22,6 +23,7 @@ class UserResponse(BaseModel):
     language_code: str | None
     coins: int | None
     phone_number: str | None = None
+    is_admin: bool | None = None
 
     class Config:
         from_attributes = True
