@@ -14,3 +14,4 @@ class User(Base):
     phone_number: Mapped[str] = mapped_column(nullable=True)
     language_code: Mapped[str] = mapped_column(nullable=True)
     coins: Mapped[int] = mapped_column(nullable=True)
+    is_admin: Mapped[bool] = mapped_column(nullable=True)
