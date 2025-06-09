@@ -58,7 +58,13 @@ export default function ConstructorButton({ onClick }: ConstructorButtonProps) {
                     шаурму
                 </Text>
             </Flex>
-            <Image src="constructor.png" h="full" scale="1.8" rotate="30deg" />
+            <Image
+                src="constructor.png"
+                h="full"
+                scale="1.8"
+                rotate="30deg"
+                zIndex="-1"
+            />
         </Button>
     )
 }

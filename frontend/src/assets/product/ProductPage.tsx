@@ -93,7 +93,7 @@ export default function ProductPage({ price }: ProductPageProps) {
                     fontWeight="800"
                     color="text"
                     textAlign="center"
-                    mt="-32px"
+                    mt="-38px"
                     pos="relative"
                     w="full"
                 >
@@ -114,7 +114,7 @@ export default function ProductPage({ price }: ProductPageProps) {
             </Drawer.Body>
 
             <Drawer.Footer p="12px">
-                <Flex w="full" gap="12px">
+                <Flex w="full" gap="gap">
                     <CustomNumberInput
                         defaultValue={tempQuantity.toString()}
                         setQuantity={(value) => {

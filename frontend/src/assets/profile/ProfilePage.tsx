@@ -40,22 +40,22 @@ export default function ProfilePage() {
 
             <Drawer.Body p="12px">
                 <Flex gap="gap">
-                    <Center w="120px" h="120px" bg="back" rounded="24px">
+                    <Center w="100px" h="100px" bg="back" rounded="24px">
                         <Icon w="60%" h="60%" color="text">
                             <RiUser3Line />
                         </Icon>
                     </Center>
 
                     <Flex direction="column" justify="space-between" py="8px">
-                        <Heading size="2xl" fontWeight="800">
+                        <Heading size="xl" fontWeight="800">
                             alexander
                         </Heading>
 
-                        <Heading size="xl" fontWeight="500">
+                        <Heading size="lg" fontWeight="500">
                             +375 (12) 345-67-89
                         </Heading>
 
-                        <Heading size="xl" fontWeight="500">
+                        <Heading size="lg" fontWeight="500">
                             Баллов: 0
                         </Heading>
                     </Flex>
@@ -86,8 +86,8 @@ export default function ProfilePage() {
                             bg="accent"
                             fontWeight="600"
                             rounded="full"
-                            px="24px"
-                            py="8px"
+                            px="16px"
+                            py="6px"
                             w="fit"
                             right="gap"
                             pos="absolute"

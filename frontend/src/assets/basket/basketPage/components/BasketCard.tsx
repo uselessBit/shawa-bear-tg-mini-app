@@ -70,7 +70,7 @@ export default function BasketCard({ price }: CardProps) {
                 overflow="hidden"
                 bg="card"
                 w="full"
-                h="140px"
+                h="110px"
                 justifyContent="space-between"
                 p="0"
                 gap="0"
@@ -78,12 +78,12 @@ export default function BasketCard({ price }: CardProps) {
                 <Image
                     src={`${API_BASE_URL}media/products/${price.product.image_url}`}
                     h="full"
-                    minW="152px"
+                    minW="121px"
                 />
                 <Flex
                     flexDirection="column"
                     flex="2"
-                    height="full"
+                    height="calc(full - 12px)"
                     py="6px"
                     justifyContent="space-between"
                     position="relative"
@@ -113,7 +113,7 @@ export default function BasketCard({ price }: CardProps) {
                         w="80%"
                         lineHeight="15px"
                         fontSize="xs"
-                        minH="40px"
+                        minH="30px"
                         mb="4px"
                     >
                         {price.excluded_ingredient_names[0] &&
@@ -127,12 +127,12 @@ export default function BasketCard({ price }: CardProps) {
                         h="fit"
                     >
                         <Center
-                            h="40px"
+                            h="32px"
                             bg="back"
                             color="text"
-                            px="30px"
+                            px="20px"
                             rounded="full"
-                            fontSize="md"
+                            fontSize="xs"
                             fontWeight="500"
                         >
                             {price.price}

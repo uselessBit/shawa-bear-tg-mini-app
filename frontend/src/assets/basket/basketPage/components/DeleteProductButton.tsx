@@ -13,8 +13,9 @@ export default function DeleteProductButton({
             pos="absolute"
             right="0"
             rounded="full"
-            h="40px"
-            w="hb"
+            h="30px"
+            w="30px"
+            maxW="30px"
             bg="back"
             color="text"
             onClick={onDelete}

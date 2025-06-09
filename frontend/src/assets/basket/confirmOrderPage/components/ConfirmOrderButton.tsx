@@ -31,9 +31,9 @@ export default function ConfirmOrderButton() {
         <Button
             w="full"
             bg="accent"
-            h="56px"
+            h="48px"
             p="0"
-            fontSize="lg"
+            fontSize="md"
             fontWeight="700"
             rounded="full"
             color="text"

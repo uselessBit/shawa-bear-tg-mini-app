@@ -42,12 +42,12 @@ export const NavigationButtons = () => {
             {!isFirstStep && (
                 <Button
                     flex="1"
-                    h="56px"
+                    h="48px"
                     onClick={goBack}
                     variant="outline"
                     borderWidth="2px"
                     borderRadius="full"
-                    fontSize="lg"
+                    fontSize="md"
                     fontWeight="700"
                     transition="all 0.2s"
                 >
@@ -57,12 +57,12 @@ export const NavigationButtons = () => {
 
             <Button
                 flex="1"
-                h="56px"
+                h="48px"
                 onClick={goNext}
                 bg="accent"
                 color="text"
                 borderRadius="full"
-                fontSize="lg"
+                fontSize="md"
                 fontWeight="700"
                 disabled={!isStepValid()}
                 _disabled={{

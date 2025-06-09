@@ -21,7 +21,7 @@ export default function CustomSelect({
     return (
         <Select.Root
             collection={collection}
-            size="lg"
+            size="md"
             width="full"
             bg="back"
             rounded="full"
@@ -32,7 +32,7 @@ export default function CustomSelect({
         >
             <Select.HiddenSelect />
             <Select.Control>
-                <Select.Trigger borderWidth="0" py="16px" px="24px">
+                <Select.Trigger borderWidth="0" py="14px" px="24px">
                     <Select.ValueText
                         fontWeight="500"
                         placeholder={placeholder}
