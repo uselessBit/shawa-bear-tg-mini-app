@@ -71,7 +71,7 @@ export default function ProfilePage() {
                     История заказов
                 </Heading>
 
-                <Flex gap="gap">
+                <Flex gap="gap" direction="column">
                     <Flex
                         direction="column"
                         gap="12px"
@@ -85,7 +85,6 @@ export default function ProfilePage() {
                         <Center
                             bg="accent"
                             fontWeight="600"
-                            fontSize="md"
                             rounded="full"
                             px="24px"
                             py="8px"
