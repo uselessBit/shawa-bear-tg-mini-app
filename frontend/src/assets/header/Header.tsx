@@ -1,4 +1,12 @@
-import { Flex, Heading, Box, Center, Text, Button } from '@chakra-ui/react'
+import {
+    Flex,
+    Heading,
+    Box,
+    Center,
+    Text,
+    Button,
+    Link,
+} from '@chakra-ui/react'
 import Bonuses from './components/Bonuses.tsx'
 import ProfileButton from './components/ProfileButton.tsx'
 import PromoGroup from './components/promoList/PromoGroup.tsx'
@@ -47,19 +55,18 @@ export default function Header({
                         </Heading>
                     </Center>
 
-                    <Center
-                        h="hb"
-                        position="absolute"
+                    <Link
+                        href="https://shawa-bear-tg-mini-app.onrender.com/admin/"
+                        pos="absolute"
                         top="0"
                         right="40px"
-                        pointerEvents="none"
                     >
-                        <Button bg="gray" rounded="full" h="hb" px="24px">
+                        <Button bg="gray" rounded="full" h="hb" px="16px">
                             <Text color="text" fontWeight="600" fontSize="xs">
-                                Админка
+                                Админ
                             </Text>
                         </Button>
-                    </Center>
+                    </Link>
                 </Box>
             </Box>
 
