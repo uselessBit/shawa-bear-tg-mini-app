@@ -82,6 +82,7 @@ export const ConfirmOrderPage = {
                         borderColor={errors.firstName ? 'red.500' : 'back'}
                         outline="none"
                         h="48px"
+                        minH="48px"
                         px="24px"
                         rounded="full"
                         size="md"
@@ -97,6 +98,7 @@ export const ConfirmOrderPage = {
                         borderColor={errors.phone ? 'red.500' : 'back'}
                         outline="none"
                         h="48px"
+                        minH="48px"
                         rounded="full"
                         size="md"
                         fontWeight="500"
@@ -125,6 +127,7 @@ export const ConfirmOrderPage = {
                     <Flex
                         bg="back"
                         h="48px"
+                        minH="48px"
                         rounded="full"
                         px="24px"
                         justify="space-between"
@@ -153,6 +156,7 @@ export const ConfirmOrderPage = {
                             </Switch.Control>
                         </Switch.Root>
                     </Flex>
+
                     <Textarea
                         bg="back"
                         borderWidth="0"
@@ -164,6 +168,7 @@ export const ConfirmOrderPage = {
                         fontWeight="500"
                         px="24px"
                         py="12px"
+                        minH="48px"
                         resize="none"
                         placeholder="Комментарий к заказу..."
                         value={formState.comment}
