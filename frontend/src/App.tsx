@@ -14,14 +14,25 @@ import { ShawarmaConstructorContent } from '@/assets/shawarmaConstructor/Shawarm
 import { ConstructorProvider } from '@/contexts/ConstructorContext'
 import ConstructorButton from '@/assets/shawarmaConstructor/ConstructorButton.tsx'
 
-interface AppProps {
-    userId: number
+declare global {
+    interface Window {
+        Telegram: {
+            WebApp: {
+                initData: string
+                initDataUnsafe: {
+                    user: { id: number; first_name: string; username?: string }
+                }
+                ready: () => void
+            }
+        }
+    }
 }
 
-export default function App({ userId }: AppProps) {
+export default function App() {
     const { categories, error } = useCategories()
     const [activeCategory, setActiveCategory] = useState('')
     const [confirmActive, setConfirmActive] = useState<boolean>(false)
+    const [userId, setUserId] = useState<number | null>(null)
 
     useEffect(() => {
         if (categories.length > 0) setActiveCategory(categories[0].name)
@@ -31,11 +42,29 @@ export default function App({ userId }: AppProps) {
         window.scrollTo(0, 0)
     }, [])
 
+    useEffect(() => {
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready()
+
+            const uid = window.Telegram.WebApp.initDataUnsafe.user.id
+            setUserId(uid)
+        }
+    }, [])
+
     if (error) {
         return (
             <Alert.Root status="error">
                 <Alert.Indicator />
                 <Alert.Title>{error}</Alert.Title>
+            </Alert.Root>
+        )
+    }
+
+    if (userId === null) {
+        return (
+            <Alert.Root status="info">
+                <Alert.Indicator />
+                <Alert.Title>Идёт загрузка данных пользователя…</Alert.Title>
             </Alert.Root>
         )
     }
@@ -60,8 +89,6 @@ export default function App({ userId }: AppProps) {
                             activeCategory={activeCategory}
                             setActiveCategory={setActiveCategory}
                         />
-
-                        <div>{userId}</div>
 
                         <MotionDrawer
                             trigger={
