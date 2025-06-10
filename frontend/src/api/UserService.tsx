@@ -7,6 +7,7 @@ export interface User {
     username?: string
     phone?: string
     address?: string
+    is_admin: boolean
 }
 
 export interface OrderHistory {

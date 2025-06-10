@@ -83,7 +83,7 @@ export default function ProfilePage() {
                         </Heading>
 
                         <Heading size="lg" fontWeight="500">
-                            {user?.phone || 'Телефон не указан'}
+                            {`@${user?.username}` || 'Юзернейм скрыт'}
                         </Heading>
 
                         <Heading size="lg" fontWeight="500">
