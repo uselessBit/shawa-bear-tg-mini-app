@@ -1,4 +1,4 @@
-import { ChakraProvider, Alert } from '@chakra-ui/react'
+import { ChakraProvider, Alert, Spinner, Center } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { system } from './theme.ts'
 import Header from '@/assets/header/Header.tsx'
@@ -63,10 +63,9 @@ export default function App() {
 
     if (userId === null) {
         return (
-            <Alert.Root status="info">
-                <Alert.Indicator />
-                <Alert.Title>Идёт загрузка данных пользователя…</Alert.Title>
-            </Alert.Root>
+            <Center h="100vh">
+                <Spinner size="xl" />
+            </Center>
         )
     }
 
