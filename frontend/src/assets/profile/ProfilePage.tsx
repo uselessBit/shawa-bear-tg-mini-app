@@ -7,7 +7,6 @@ import {
     Flex,
     Text,
     Spinner,
-    Alert,
 } from '@chakra-ui/react'
 import { IoClose } from 'react-icons/io5'
 import { useDrawer } from '@/contexts/DrawerContext'
@@ -18,7 +17,7 @@ import { ru } from 'date-fns/locale'
 
 export default function ProfilePage() {
     const { onClose } = useDrawer()
-    const { user, orderHistory, loading, error } = useUserContext()
+    const { user, orderHistory, loading } = useUserContext()
 
     const formatOrderDate = (dateString: string) => {
         try {
@@ -45,15 +44,6 @@ export default function ProfilePage() {
             <Center h="100vh">
                 <Spinner size="xl" />
             </Center>
-        )
-    }
-
-    if (error) {
-        return (
-            <Alert.Root status="error">
-                <Alert.Indicator />
-                <Alert.Title>{error}</Alert.Title>
-            </Alert.Root>
         )
     }
 
@@ -112,86 +102,88 @@ export default function ProfilePage() {
                     История заказов
                 </Heading>
 
-                <Flex gap="gap" direction="column">
-                    {orderHistory.length === 0 ? (
-                        <Text textAlign="center" py={4}>
-                            У вас пока нет заказов
-                        </Text>
-                    ) : (
-                        orderHistory.map((order) => (
-                            <Flex
-                                key={order.order_id}
-                                direction="column"
-                                gap="12px"
-                                p="gap"
-                                borderWidth="2px"
-                                borderColor="gray"
-                                w="full"
-                                rounded="32px"
-                                pos="relative"
-                            >
-                                <Center
-                                    bg="accent"
-                                    fontWeight="600"
-                                    rounded="full"
-                                    px="16px"
-                                    py="6px"
-                                    w="fit"
-                                    right="gap"
-                                    pos="absolute"
+                {orderHistory && (
+                    <Flex gap="gap" direction="column">
+                        {orderHistory.length === 0 ? (
+                            <Text textAlign="center" py={4}>
+                                У вас пока нет заказов
+                            </Text>
+                        ) : (
+                            orderHistory.map((order) => (
+                                <Flex
+                                    key={order.order_id}
+                                    direction="column"
+                                    gap="12px"
+                                    p="gap"
+                                    borderWidth="2px"
+                                    borderColor="gray"
+                                    w="full"
+                                    rounded="32px"
+                                    pos="relative"
                                 >
-                                    {translateStatus(order.status)}
-                                </Center>
+                                    <Center
+                                        bg="accent"
+                                        fontWeight="600"
+                                        rounded="full"
+                                        px="16px"
+                                        py="6px"
+                                        w="fit"
+                                        right="gap"
+                                        pos="absolute"
+                                    >
+                                        {translateStatus(order.status)}
+                                    </Center>
 
-                                <Text fontWeight="500" color="text/50">
-                                    {formatOrderDate(order.order_date)}
-                                </Text>
+                                    <Text fontWeight="500" color="text/50">
+                                        {formatOrderDate(order.order_date)}
+                                    </Text>
 
-                                <Text fontWeight="500">
-                                    Заказ №{order.order_id}
-                                </Text>
+                                    <Text fontWeight="500">
+                                        Заказ №{order.order_id}
+                                    </Text>
 
-                                <Text fontWeight="500">
-                                    {order.address || 'Адрес не указан'}
-                                </Text>
+                                    <Text fontWeight="500">
+                                        {order.address || 'Адрес не указан'}
+                                    </Text>
 
-                                <Flex direction="column">
-                                    {order.items.map((item) => (
-                                        <Flex
-                                            key={item.order_item_id}
-                                            direction="column"
-                                        >
-                                            <Text fontWeight="500">
-                                                {item.quantity} ×{' '}
-                                                {item.price_id}
-                                            </Text>
-                                            {item.excluded_ingredient_ids
-                                                .length > 0 && (
-                                                <Text
-                                                    fontWeight="500"
-                                                    color="text/50"
-                                                >
-                                                    Без:{' '}
-                                                    {item.excluded_ingredient_ids.join(
-                                                        ', '
-                                                    )}
+                                    <Flex direction="column">
+                                        {order.items.map((item) => (
+                                            <Flex
+                                                key={item.order_item_id}
+                                                direction="column"
+                                            >
+                                                <Text fontWeight="500">
+                                                    {item.quantity} ×{' '}
+                                                    {item.price_id}
                                                 </Text>
-                                            )}
-                                        </Flex>
-                                    ))}
+                                                {item.excluded_ingredient_ids
+                                                    .length > 0 && (
+                                                    <Text
+                                                        fontWeight="500"
+                                                        color="text/50"
+                                                    >
+                                                        Без:{' '}
+                                                        {item.excluded_ingredient_ids.join(
+                                                            ', '
+                                                        )}
+                                                    </Text>
+                                                )}
+                                            </Flex>
+                                        ))}
+                                    </Flex>
+
+                                    <Text fontWeight="500">
+                                        Способ оплаты: {order.payment_option}
+                                    </Text>
+
+                                    <Text fontWeight="500">
+                                        Итоговая сумма: {order.total_price}р
+                                    </Text>
                                 </Flex>
-
-                                <Text fontWeight="500">
-                                    Способ оплаты: {order.payment_option}
-                                </Text>
-
-                                <Text fontWeight="500">
-                                    Итоговая сумма: {order.total_price}р
-                                </Text>
-                            </Flex>
-                        ))
-                    )}
-                </Flex>
+                            ))
+                        )}
+                    </Flex>
+                )}
             </Drawer.Body>
         </>
     )
