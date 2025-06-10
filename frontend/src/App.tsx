@@ -61,6 +61,8 @@ export default function App({ userId }: AppProps) {
                             setActiveCategory={setActiveCategory}
                         />
 
+                        <div>{userId}</div>
+
                         <MotionDrawer
                             trigger={
                                 <BasketButton
