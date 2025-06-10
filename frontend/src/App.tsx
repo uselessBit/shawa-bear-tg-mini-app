@@ -13,6 +13,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { ShawarmaConstructorContent } from '@/assets/shawarmaConstructor/ShawarmaConstructorDrawer.tsx'
 import { ConstructorProvider } from '@/contexts/ConstructorContext'
 import ConstructorButton from '@/assets/shawarmaConstructor/ConstructorButton.tsx'
+import { UserProvider } from '@/contexts/UserContext.tsx'
 
 declare global {
     interface Window {
@@ -70,46 +71,48 @@ export default function App() {
     }
 
     return (
-        <OrderProvider userId={userId}>
-            <BasketProvider userId={userId}>
-                <ConstructorProvider>
-                    <ChakraProvider value={system}>
-                        <Header
-                            categories={categories.map((c) => c.name)}
-                            activeCategory={activeCategory}
-                            setActiveCategory={setActiveCategory}
-                        />
-
-                        <MotionDrawer trigger={<ConstructorButton />}>
-                            <ShawarmaConstructorContent />
-                        </MotionDrawer>
-
-                        <MainList
-                            categories={categories.map((c) => c.name)}
-                            activeCategory={activeCategory}
-                            setActiveCategory={setActiveCategory}
-                        />
-
-                        <MotionDrawer
-                            trigger={
-                                <BasketButton
-                                    openBasketPage={() =>
-                                        setConfirmActive(false)
-                                    }
-                                />
-                            }
-                        >
-                            <BasketDrawerContent
-                                confirmActive={confirmActive}
-                                handleBack={() => setConfirmActive(false)}
-                                handleConfirm={() => setConfirmActive(true)}
+        <UserProvider userId={userId}>
+            <OrderProvider userId={userId}>
+                <BasketProvider userId={userId}>
+                    <ConstructorProvider>
+                        <ChakraProvider value={system}>
+                            <Header
+                                categories={categories.map((c) => c.name)}
+                                activeCategory={activeCategory}
+                                setActiveCategory={setActiveCategory}
                             />
-                        </MotionDrawer>
 
-                        <Toaster />
-                    </ChakraProvider>
-                </ConstructorProvider>
-            </BasketProvider>
-        </OrderProvider>
+                            <MotionDrawer trigger={<ConstructorButton />}>
+                                <ShawarmaConstructorContent />
+                            </MotionDrawer>
+
+                            <MainList
+                                categories={categories.map((c) => c.name)}
+                                activeCategory={activeCategory}
+                                setActiveCategory={setActiveCategory}
+                            />
+
+                            <MotionDrawer
+                                trigger={
+                                    <BasketButton
+                                        openBasketPage={() =>
+                                            setConfirmActive(false)
+                                        }
+                                    />
+                                }
+                            >
+                                <BasketDrawerContent
+                                    confirmActive={confirmActive}
+                                    handleBack={() => setConfirmActive(false)}
+                                    handleConfirm={() => setConfirmActive(true)}
+                                />
+                            </MotionDrawer>
+
+                            <Toaster />
+                        </ChakraProvider>
+                    </ConstructorProvider>
+                </BasketProvider>
+            </OrderProvider>
+        </UserProvider>
     )
 }
