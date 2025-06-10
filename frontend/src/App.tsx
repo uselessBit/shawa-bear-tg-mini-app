@@ -14,7 +14,11 @@ import { ShawarmaConstructorContent } from '@/assets/shawarmaConstructor/Shawarm
 import { ConstructorProvider } from '@/contexts/ConstructorContext'
 import ConstructorButton from '@/assets/shawarmaConstructor/ConstructorButton.tsx'
 
-export default function App() {
+interface AppProps {
+    userId: number
+}
+
+export default function App({ userId }: AppProps) {
     const { categories, error } = useCategories()
     const [activeCategory, setActiveCategory] = useState('')
     const [confirmActive, setConfirmActive] = useState<boolean>(false)
@@ -37,8 +41,8 @@ export default function App() {
     }
 
     return (
-        <OrderProvider userId={0}>
-            <BasketProvider userId={0}>
+        <OrderProvider userId={userId}>
+            <BasketProvider userId={userId}>
                 <ConstructorProvider>
                     <ChakraProvider value={system}>
                         <Header

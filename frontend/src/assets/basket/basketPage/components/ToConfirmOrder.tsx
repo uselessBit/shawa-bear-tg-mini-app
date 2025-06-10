@@ -24,7 +24,7 @@ export default function ToConfirmOrder({
                 openConfirmPage()
             }}
         >
-            Оформить - {basket?.total_price}р
+            Оформить - {basket?.total_price.toFixed(1)}р
         </Button>
     )
 }

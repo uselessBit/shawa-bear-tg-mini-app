@@ -39,7 +39,7 @@ export default function ConfirmOrderButton() {
             color="text"
             onClick={handleSubmit}
         >
-            Заказать - {basket?.total_price}р
+            Заказать - {basket?.total_price.toFixed(1)}р
         </Button>
     )
 }
