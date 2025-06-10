@@ -17,6 +17,7 @@ import { withMask } from 'use-mask-input'
 import { IoWallet, IoCard } from 'react-icons/io5'
 import { useOrder } from '@/contexts/OrderContext'
 import { HiCheck, HiX } from 'react-icons/hi'
+import { useUserContext } from '@/contexts/UserContext.tsx'
 
 const MotionHeader = motion(Drawer.Header)
 const MotionBody = motion(Drawer.Body)
@@ -59,6 +60,8 @@ export const ConfirmOrderPage = {
             { label: 'Наличными', value: 'cash', icon: <IoWallet /> },
         ]
 
+        const { user } = useUserContext()
+
         const { formState, errors, updateField, updateSelectField } = useOrder()
 
         return (
@@ -88,6 +91,7 @@ export const ConfirmOrderPage = {
                         size="md"
                         fontWeight="500"
                         placeholder="Имя"
+                        defaultValue={user?.first_name}
                         value={formState.firstName}
                         onChange={(e) =>
                             updateField('firstName', e.target.value)

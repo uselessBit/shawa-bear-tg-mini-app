@@ -4,11 +4,13 @@ import { useBasketContext } from '@/contexts/BasketContext.tsx'
 import { useOrder } from '@/contexts/OrderContext'
 import { useEffect } from 'react'
 import { toaster } from '@/components/ui/toaster.tsx'
+import { useUserContext } from '@/contexts/UserContext.tsx'
 
 export default function ConfirmOrderButton() {
     const { basket, refreshBasket } = useBasketContext()
     const { onClose } = useDrawer()
     const { submitOrder, isSuccess, resetForm } = useOrder()
+    const { refreshOrderHistory } = useUserContext()
 
     useEffect(() => {
         if (isSuccess) {
@@ -25,6 +27,7 @@ export default function ConfirmOrderButton() {
         if (!basket) return
         await submitOrder(basket)
         await refreshBasket()
+        await refreshOrderHistory()
     }
 
     return (
