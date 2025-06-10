@@ -8,7 +8,7 @@ class Size(Base):
     __tablename__ = "sizes"
 
     size_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(30), nullable=False, unique=True)
+    name: Mapped[str] = mapped_column(String(30), nullable=False)
     grams: Mapped[int] = mapped_column(nullable=False)
 
     prices: Mapped[list["Price"]] = relationship(back_populates="size", cascade="all, delete-orphan")  # noqa: F821

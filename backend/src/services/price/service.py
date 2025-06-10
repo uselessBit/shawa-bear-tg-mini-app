@@ -54,7 +54,6 @@ class PriceService(BaseService, PriceServiceI):
                     selectinload(Price.product).selectinload(Product.category),
                     selectinload(Price.size),
                 )
-                .filter(Price.is_custom == False)
             )
             result = await session.execute(query)
             prices = result.scalars().all()
@@ -89,7 +88,6 @@ class PriceService(BaseService, PriceServiceI):
                     selectinload(Price.product).selectinload(Product.ingredients),
                     selectinload(Price.size),
                 )
-                .filter(Price.is_custom == False)
             )
 
             if price_filter.min_price:

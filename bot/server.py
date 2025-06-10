@@ -11,7 +11,7 @@ async def run_http_server():
     runner = web.AppRunner(app)
     await runner.setup()
 
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 8001))
     site = web.TCPSite(runner, '0.0.0.0', port)
     await site.start()
     print(f"HTTP server started on port {port}")
