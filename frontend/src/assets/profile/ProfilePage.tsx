@@ -14,10 +14,15 @@ import { RiUser3Line } from 'react-icons/ri'
 import { useUserContext } from '@/contexts/UserContext'
 import { format } from 'date-fns'
 import { ru } from 'date-fns/locale'
+import { ProductService } from '@/api/ProductService'
+import { useEffect, useMemo, useState } from 'react'
+import { Price } from '@/types/Products.ts'
 
 export default function ProfilePage() {
     const { onClose } = useDrawer()
     const { user, orderHistory, loading } = useUserContext()
+    const [prices, setPrices] = useState<Price[]>([])
+    const [pricesLoading, setPricesLoading] = useState(true)
 
     const formatOrderDate = (dateString: string) => {
         try {
@@ -32,14 +37,47 @@ export default function ProfilePage() {
         const statusMap: Record<string, string> = {
             in_progress: 'В процессе',
             taken: 'Забран',
-            pending: 'Ожидает',
+            created: 'Создан',
             canceled: 'Отменен',
-            delivered: 'Доставлен',
+            completed: 'Готов',
         }
         return statusMap[status] || status
     }
 
-    if (loading) {
+    const translatePayment = (payment: string) => {
+        const paymentMap: Record<string, string> = {
+            cash: 'Наличными',
+            card: 'Картой',
+        }
+        return paymentMap[payment] || payment
+    }
+
+    useEffect(() => {
+        const fetchPrices = async () => {
+            try {
+                const pricesData = await ProductService.fetchAllPrices()
+                setPrices(pricesData)
+                setPricesLoading(false)
+            } catch (err) {
+                console.error('Failed to load prices:', err)
+                setPricesLoading(false)
+            }
+        }
+
+        fetchPrices()
+    }, [])
+
+    const priceMap = useMemo(() => {
+        const map = new Map<number, Price>()
+        prices.forEach((price) => {
+            map.set(price.price_id, price)
+        })
+        return map
+    }, [prices])
+
+    const isLoading = loading || pricesLoading
+
+    if (isLoading) {
         return (
             <Center h="100vh">
                 <Spinner size="xl" />
@@ -87,7 +125,7 @@ export default function ProfilePage() {
                         </Heading>
 
                         <Heading size="lg" fontWeight="500">
-                            Баллов: 0
+                            Баллов: {user?.coins}
                         </Heading>
                     </Flex>
                 </Flex>
@@ -147,33 +185,29 @@ export default function ProfilePage() {
                                     </Text>
 
                                     <Flex direction="column">
-                                        {order.items.map((item) => (
-                                            <Flex
-                                                key={item.order_item_id}
-                                                direction="column"
-                                            >
-                                                <Text fontWeight="500">
-                                                    {item.quantity} ×{' '}
-                                                    {item.price_id}
-                                                </Text>
-                                                {item.excluded_ingredient_ids
-                                                    .length > 0 && (
-                                                    <Text
-                                                        fontWeight="500"
-                                                        color="text/50"
-                                                    >
-                                                        Без:{' '}
-                                                        {item.excluded_ingredient_ids.join(
-                                                            ', '
-                                                        )}
+                                        {order.items.map((item) => {
+                                            const priceInfo = priceMap.get(
+                                                item.price_id
+                                            )
+                                            return (
+                                                <Flex
+                                                    key={item.order_item_id}
+                                                    direction="column"
+                                                >
+                                                    <Text fontWeight="500">
+                                                        {item.quantity} ×{' '}
+                                                        {priceInfo
+                                                            ? `${priceInfo.product.name} (${priceInfo.size.name})`
+                                                            : `Товар #${item.price_id}`}
                                                     </Text>
-                                                )}
-                                            </Flex>
-                                        ))}
+                                                </Flex>
+                                            )
+                                        })}
                                     </Flex>
 
                                     <Text fontWeight="500">
-                                        Способ оплаты: {order.payment_option}
+                                        Способ оплаты:{' '}
+                                        {translatePayment(order.payment_option)}
                                     </Text>
 
                                     <Text fontWeight="500">

@@ -1,26 +1,33 @@
 import { Flex, Text } from '@chakra-ui/react'
 import { Icon } from '@chakra-ui/react'
 import { RiBearSmileFill } from 'react-icons/ri'
+import { useUserContext } from '@/contexts/UserContext.tsx'
 
 export default function Bonuses() {
-    return (
-        <Flex
-            bg="gray"
-            width="fit"
-            px="12px"
-            rounded="full"
-            alignItems="center"
-            justifyContent="center"
-            gap="6px"
-            h="hb"
-        >
-            <Icon size="md" color="accent">
-                <RiBearSmileFill />
-            </Icon>
+    const { user } = useUserContext()
 
-            <Text fontWeight="700" fontSize="lm" color="text">
-                0
-            </Text>
-        </Flex>
+    return (
+        <>
+            {user && (
+                <Flex
+                    bg="gray"
+                    width="fit"
+                    px="12px"
+                    rounded="full"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap="6px"
+                    h="hb"
+                >
+                    <Icon size="md" color="accent">
+                        <RiBearSmileFill />
+                    </Icon>
+
+                    <Text fontWeight="700" fontSize="lm" color="text">
+                        {user.coins}
+                    </Text>
+                </Flex>
+            )}
+        </>
     )
 }
