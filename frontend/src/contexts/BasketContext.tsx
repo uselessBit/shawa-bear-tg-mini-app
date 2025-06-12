@@ -116,6 +116,11 @@ export const BasketProvider = ({
         setError('')
         try {
             const data = await BasketService.getBasket(userId)
+            const [prices] = await Promise.all([
+                ProductService.fetchAllPrices(),
+                ProductService.fetchAllIngredients(),
+            ])
+            setAllPrices(prices)
             setBasket(data)
         } catch (err) {
             setError('Ошибка обновления корзины')

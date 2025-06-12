@@ -1,7 +1,6 @@
 import { Button, Flex } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useConstructor } from '@/contexts/ConstructorContext'
-import { useProducts } from '@/hooks/useProducts.tsx'
 
 const MotionFlex = motion(Flex)
 
@@ -13,7 +12,6 @@ export const NavigationButtons = ({
     onAddToBasket,
 }: NavigationButtonsProps) => {
     const { goNext, goBack, currentStep, selectedItems } = useConstructor()
-    const { refreshProducts } = useProducts()
 
     const isFirstStep = currentStep === 'base'
     const isLastStep = currentStep === 'summary'
@@ -36,7 +34,6 @@ export const NavigationButtons = ({
     const handleMainButtonClick = () => {
         if (isLastStep && onAddToBasket) {
             onAddToBasket()
-            refreshProducts()
         } else {
             goNext()
         }
