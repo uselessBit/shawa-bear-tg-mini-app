@@ -69,7 +69,7 @@ export default function BasketCard({ price }: CardProps) {
                 overflow="hidden"
                 bg="card"
                 w="full"
-                h="120px"
+                h="130px"
                 justifyContent="space-between"
                 p="0"
                 gap="0"
@@ -78,7 +78,7 @@ export default function BasketCard({ price }: CardProps) {
                     <Image
                         src={`products/${price.product.name}.png`}
                         h="full"
-                        minW="132px"
+                        minW="142px"
                     />
                 )}
                 <Flex
