@@ -33,4 +33,4 @@ async def send_welcome(message: Message) -> None:
                     await message.answer("Произошли маленькие технические шоколадки, чутка подождите")
                     return
 
-    await message.answer("Добро пожаловать! Нажмите на кнопку 'Shop' чтобы перейти в магазин")
+    await message.answer("Добро пожаловать! Нажмите на кнопку 'Магазин' чтобы перейти в магазин")

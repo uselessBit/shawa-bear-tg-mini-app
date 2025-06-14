@@ -80,14 +80,16 @@ export default function MainList({
                             onVisibilityChange={handleVisibilityChange}
                         />
 
-                        {getProductsByCategory(category).map((price) => (
-                            <MotionDrawer
-                                key={`${price.product.product_id}-${price.size.size_id}`}
-                                trigger={<Card price={price} />}
-                            >
-                                <ProductPage price={price} />
-                            </MotionDrawer>
-                        ))}
+                        {getProductsByCategory(category)
+                            .filter((price) => !price.is_custom)
+                            .map((price) => (
+                                <MotionDrawer
+                                    key={`${price.product.product_id}-${price.size.size_id}`}
+                                    trigger={<Card price={price} />}
+                                >
+                                    <ProductPage price={price} />
+                                </MotionDrawer>
+                            ))}
                     </Flex>
                 ))
             )}

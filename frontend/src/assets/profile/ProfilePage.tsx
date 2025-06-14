@@ -6,13 +6,84 @@ import {
     Center,
     Flex,
     Text,
+    Spinner,
 } from '@chakra-ui/react'
 import { IoClose } from 'react-icons/io5'
 import { useDrawer } from '@/contexts/DrawerContext'
 import { RiUser3Line } from 'react-icons/ri'
+import { useUserContext } from '@/contexts/UserContext'
+import { format } from 'date-fns'
+import { ru } from 'date-fns/locale'
+import { ProductService } from '@/api/ProductService'
+import { useEffect, useMemo, useState } from 'react'
+import { Price } from '@/types/Products.ts'
 
 export default function ProfilePage() {
     const { onClose } = useDrawer()
+    const { user, orderHistory, loading } = useUserContext()
+    const [prices, setPrices] = useState<Price[]>([])
+    const [pricesLoading, setPricesLoading] = useState(true)
+
+    const formatOrderDate = (dateString: string) => {
+        try {
+            const date = new Date(dateString)
+            return format(date, 'dd.MM.yyyy HH:mm', { locale: ru })
+        } catch {
+            return 'Дата неизвестна'
+        }
+    }
+
+    const translateStatus = (status: string) => {
+        const statusMap: Record<string, string> = {
+            in_progress: 'В процессе',
+            taken: 'Забран',
+            created: 'Создан',
+            canceled: 'Отменен',
+            completed: 'Готов',
+        }
+        return statusMap[status] || status
+    }
+
+    const translatePayment = (payment: string) => {
+        const paymentMap: Record<string, string> = {
+            cash: 'Наличными',
+            card: 'Картой',
+        }
+        return paymentMap[payment] || payment
+    }
+
+    useEffect(() => {
+        const fetchPrices = async () => {
+            try {
+                const pricesData = await ProductService.fetchAllPrices()
+                setPrices(pricesData)
+                setPricesLoading(false)
+            } catch (err) {
+                console.error('Failed to load prices:', err)
+                setPricesLoading(false)
+            }
+        }
+
+        fetchPrices()
+    }, [])
+
+    const priceMap = useMemo(() => {
+        const map = new Map<number, Price>()
+        prices.forEach((price) => {
+            map.set(price.price_id, price)
+        })
+        return map
+    }, [prices])
+
+    const isLoading = loading || pricesLoading
+
+    if (isLoading) {
+        return (
+            <Center h="100vh">
+                <Spinner size="xl" />
+            </Center>
+        )
+    }
 
     return (
         <>
@@ -41,22 +112,20 @@ export default function ProfilePage() {
             <Drawer.Body p="12px">
                 <Flex gap="gap">
                     <Center w="100px" h="100px" bg="back" rounded="24px">
-                        <Icon w="60%" h="60%" color="text">
-                            <RiUser3Line />
-                        </Icon>
+                        <Icon as={RiUser3Line} w="60%" h="60%" color="text" />
                     </Center>
 
                     <Flex direction="column" justify="space-between" py="8px">
                         <Heading size="xl" fontWeight="800">
-                            alexander
+                            {user?.first_name || 'Пользователь'}
                         </Heading>
 
                         <Heading size="lg" fontWeight="500">
-                            +375 (12) 345-67-89
+                            {`@${user?.username}` || 'Юзернейм скрыт'}
                         </Heading>
 
                         <Heading size="lg" fontWeight="500">
-                            Баллов: 0
+                            Баллов: {user?.coins}
                         </Heading>
                     </Flex>
                 </Flex>
@@ -71,55 +140,84 @@ export default function ProfilePage() {
                     История заказов
                 </Heading>
 
-                <Flex gap="gap" direction="column">
-                    <Flex
-                        direction="column"
-                        gap="12px"
-                        p="gap"
-                        borderWidth="2px"
-                        borderColor="gray"
-                        w="full"
-                        rounded="32px"
-                        pos="relative"
-                    >
-                        <Center
-                            bg="accent"
-                            fontWeight="600"
-                            rounded="full"
-                            px="16px"
-                            py="6px"
-                            w="fit"
-                            right="gap"
-                            pos="absolute"
-                        >
-                            забран
-                        </Center>
-
-                        <Text fontWeight="500" color="text/50">
-                            27.11.2025 13:45
-                        </Text>
-
-                        <Text fontWeight="500">Заказ №13</Text>
-
-                        <Text fontWeight="500">Минск, Крутая улица 13а</Text>
-
-                        <Flex direction="column">
-                            <Text fontWeight="500">
-                                1. Шаурма "Чикен" - 400г
+                {orderHistory && (
+                    <Flex gap="gap" direction="column">
+                        {orderHistory.length === 0 ? (
+                            <Text textAlign="center" py={4}>
+                                У вас пока нет заказов
                             </Text>
+                        ) : (
+                            orderHistory.map((order) => (
+                                <Flex
+                                    key={order.order_id}
+                                    direction="column"
+                                    gap="12px"
+                                    p="gap"
+                                    borderWidth="2px"
+                                    borderColor="gray"
+                                    w="full"
+                                    rounded="32px"
+                                    pos="relative"
+                                >
+                                    <Center
+                                        bg="accent"
+                                        fontWeight="600"
+                                        rounded="full"
+                                        px="16px"
+                                        py="6px"
+                                        w="fit"
+                                        right="gap"
+                                        pos="absolute"
+                                    >
+                                        {translateStatus(order.status)}
+                                    </Center>
 
-                            <Text fontWeight="500" color="text/50">
-                                Без: помидор
-                            </Text>
+                                    <Text fontWeight="500" color="text/50">
+                                        {formatOrderDate(order.order_date)}
+                                    </Text>
 
-                            <Text fontWeight="500">8.5р х 1 шт.</Text>
-                        </Flex>
+                                    <Text fontWeight="500">
+                                        Заказ №{order.order_id}
+                                    </Text>
 
-                        <Text fontWeight="500">Способ оплаты: картой</Text>
+                                    <Text fontWeight="500">
+                                        {order.address || 'Адрес не указан'}
+                                    </Text>
 
-                        <Text fontWeight="500">Итоговая сумма: 8.5р</Text>
+                                    <Flex direction="column">
+                                        {order.items.map((item) => {
+                                            const priceInfo = priceMap.get(
+                                                item.price_id
+                                            )
+                                            return (
+                                                <Flex
+                                                    key={item.order_item_id}
+                                                    direction="column"
+                                                >
+                                                    <Text fontWeight="500">
+                                                        {item.quantity} ×{' '}
+                                                        {priceInfo
+                                                            ? `${priceInfo.product.name} (${priceInfo.size.grams}г) - ${priceInfo.price * item.quantity}р`
+                                                            : `Товар #${item.price_id}`}
+                                                    </Text>
+                                                </Flex>
+                                            )
+                                        })}
+                                    </Flex>
+
+                                    <Text fontWeight="500">
+                                        Способ оплаты:{' '}
+                                        {translatePayment(order.payment_option)}
+                                    </Text>
+
+                                    <Text fontWeight="500">
+                                        Итоговая сумма: {order.total_price}р
+                                    </Text>
+                                </Flex>
+                            ))
+                        )}
                     </Flex>
-                </Flex>
+                )}
             </Drawer.Body>
         </>
     )

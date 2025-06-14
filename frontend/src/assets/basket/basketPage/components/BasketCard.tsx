@@ -69,16 +69,18 @@ export default function BasketCard({ price }: CardProps) {
                 overflow="hidden"
                 bg="card"
                 w="full"
-                h="120px"
+                h="130px"
                 justifyContent="space-between"
                 p="0"
                 gap="0"
             >
-                <Image
-                    src={`products/${price.product.name}.png`}
-                    h="full"
-                    minW="132px"
-                />
+                {price.product.image_url && (
+                    <Image
+                        src={`products/${price.product.name}.png`}
+                        h="full"
+                        minW="142px"
+                    />
+                )}
                 <Flex
                     flexDirection="column"
                     flex="2"
@@ -115,8 +117,10 @@ export default function BasketCard({ price }: CardProps) {
                         minH="30px"
                         mb="4px"
                     >
-                        {price.excluded_ingredient_names[0] &&
-                            `Без: ${price.excluded_ingredient_names.join(', ')}`}
+                        {price.is_custom
+                            ? `Состав: ${price.product.ingredients.map((ing) => ing.name).join(', ')}`
+                            : price.excluded_ingredient_names[0] &&
+                              `Без: ${price.excluded_ingredient_names.join(', ')}`}
                     </Text>
 
                     <Flex
@@ -134,7 +138,7 @@ export default function BasketCard({ price }: CardProps) {
                             fontSize="xs"
                             fontWeight="500"
                         >
-                            {price.price}
+                            {price.price.toFixed(1)}
                             <Mark color="accent">р</Mark>
                         </Center>
 

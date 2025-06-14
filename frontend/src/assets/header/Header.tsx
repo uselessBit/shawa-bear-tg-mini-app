@@ -13,6 +13,7 @@ import PromoGroup from './components/promoList/PromoGroup.tsx'
 import CategoriesGroup from './components/categoriesNavigation/CategoriesGroup.tsx'
 import MotionDrawer from '@/assets/MotionDrawer.tsx'
 import ProfilePage from '@/assets/profile/ProfilePage.tsx'
+import { useUserContext } from '@/contexts/UserContext'
 
 type HeaderProps = {
     categories: string[]
@@ -25,6 +26,8 @@ export default function Header({
     activeCategory,
     setActiveCategory,
 }: HeaderProps) {
+    const { user } = useUserContext()
+
     return (
         <>
             <Box
@@ -55,18 +58,24 @@ export default function Header({
                         </Heading>
                     </Center>
 
-                    <Link
-                        href="https://shawa-bear-tg-mini-app.onrender.com/admin/"
-                        pos="absolute"
-                        top="0"
-                        right="40px"
-                    >
-                        <Button bg="gray" rounded="full" h="hb" px="16px">
-                            <Text color="text" fontWeight="600" fontSize="xs">
-                                Админ
-                            </Text>
-                        </Button>
-                    </Link>
+                    {user && user.is_admin && (
+                        <Link
+                            href="https://shawa-bear-tg-mini-app.onrender.com/admin/"
+                            pos="absolute"
+                            top="0"
+                            right="40px"
+                        >
+                            <Button bg="gray" rounded="full" h="hb" px="16px">
+                                <Text
+                                    color="text"
+                                    fontWeight="600"
+                                    fontSize="xs"
+                                >
+                                    Админ
+                                </Text>
+                            </Button>
+                        </Link>
+                    )}
                 </Box>
             </Box>
 

@@ -106,26 +106,40 @@ export const ProductService = {
         name: string
         description: string
         category_id: number
-        ingredient_ids: number[] // Теперь передаем только ID ингредиентов
+        ingredient_ids: number[]
     }): Promise<Product> => {
         try {
+            const formData = new FormData()
+
+            const productJson = JSON.stringify({
+                name: productData.name,
+                description: productData.description,
+                ingredient_ids: productData.ingredient_ids,
+                category_id: productData.category_id,
+            })
+
+            formData.append('product', productJson)
+
             const response = await axios.post<Product>(
                 `${API_BASE_URL}api/v1/product/`,
-                {
-                    name: productData.name,
-                    description: productData.description,
-                    category_id: productData.category_id,
-                    ingredient_ids: productData.ingredient_ids,
-                },
+                formData,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                        Accept: 'application/json',
                     },
                 }
             )
             return response.data
         } catch (error) {
             console.error('Error creating product:', error)
+            if (axios.isAxiosError(error)) {
+                console.error('Server response:', {
+                    status: error.response?.status,
+                    data: error.response?.data,
+                    config: error.config,
+                })
+            }
             throw error
         }
     },

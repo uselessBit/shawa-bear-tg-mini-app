@@ -69,7 +69,7 @@ export default function BasketButton({
                             damping: 10,
                         }}
                     >
-                        {basket.total_price}p
+                        {basket.total_price.toFixed(1)}p
                     </motion.span>
                 </MotionButton>
             )}

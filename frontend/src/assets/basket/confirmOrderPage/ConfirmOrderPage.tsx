@@ -17,6 +17,8 @@ import { withMask } from 'use-mask-input'
 import { IoWallet, IoCard } from 'react-icons/io5'
 import { useOrder } from '@/contexts/OrderContext'
 import { HiCheck, HiX } from 'react-icons/hi'
+import { useUserContext } from '@/contexts/UserContext.tsx'
+import { useBasketContext } from '@/contexts/BasketContext.tsx'
 
 const MotionHeader = motion(Drawer.Header)
 const MotionBody = motion(Drawer.Body)
@@ -58,6 +60,9 @@ export const ConfirmOrderPage = {
             { label: 'Картой', value: 'card', icon: <IoCard /> },
             { label: 'Наличными', value: 'cash', icon: <IoWallet /> },
         ]
+
+        const { user } = useUserContext()
+        const { basket } = useBasketContext()
 
         const { formState, errors, updateField, updateSelectField } = useOrder()
 
@@ -124,38 +129,41 @@ export const ConfirmOrderPage = {
                         }
                         isInvalid={!!errors.payment}
                     />
-                    <Flex
-                        bg="back"
-                        h="48px"
-                        minH="48px"
-                        rounded="full"
-                        px="24px"
-                        justify="space-between"
-                        alignItems="center"
-                    >
-                        <Text fontSize="14px" fontWeight="500">
-                            Скидка 8% за баллы
-                        </Text>
 
-                        <Switch.Root size="md" scale="1.5">
-                            <Switch.HiddenInput />
-                            <Switch.Control bg="card">
-                                <Switch.Thumb
-                                    bg="back"
-                                    boxShadow="none"
-                                    _checked={{
-                                        bg: 'accent',
-                                    }}
-                                >
-                                    <Switch.ThumbIndicator
-                                        fallback={<HiX color="text" />}
+                    {user && basket && user.coins > 0 && (
+                        <Flex
+                            bg="back"
+                            h="48px"
+                            minH="48px"
+                            rounded="full"
+                            px="24px"
+                            justify="space-between"
+                            alignItems="center"
+                        >
+                            <Text fontSize="14px" fontWeight="500">
+                                {`Скидка ${((user.coins * 100) / basket.total_price).toFixed(0)}% за баллы`}
+                            </Text>
+
+                            <Switch.Root size="md" scale="1.5">
+                                <Switch.HiddenInput />
+                                <Switch.Control bg="card">
+                                    <Switch.Thumb
+                                        bg="back"
+                                        boxShadow="none"
+                                        _checked={{
+                                            bg: 'accent',
+                                        }}
                                     >
-                                        <HiCheck />
-                                    </Switch.ThumbIndicator>
-                                </Switch.Thumb>
-                            </Switch.Control>
-                        </Switch.Root>
-                    </Flex>
+                                        <Switch.ThumbIndicator
+                                            fallback={<HiX color="text" />}
+                                        >
+                                            <HiCheck />
+                                        </Switch.ThumbIndicator>
+                                    </Switch.Thumb>
+                                </Switch.Control>
+                            </Switch.Root>
+                        </Flex>
+                    )}
 
                     <Textarea
                         bg="back"
