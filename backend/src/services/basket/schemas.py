@@ -17,6 +17,7 @@ class BasketItemResponse(BaseModel):
 class BasketResponse(BaseModel):
     basket_id: int
     user_id: int
+    discount: float | None
     items: list[BasketItemResponse]
     total_price: float
 

@@ -31,6 +31,7 @@ class BasketService(BaseService, BasketServiceI):
         return BasketResponse(
             basket_id=basket.basket_id,
             user_id=basket.user_id,
+            discount=basket.discount,
             total_price=total_price,
             items=[
                 BasketItemResponse(
