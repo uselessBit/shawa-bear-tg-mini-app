@@ -7,7 +7,7 @@ class UserCreate(BaseModel):
     last_name: str | None = None
     username: str | None = None
     language_code: str | None = None
-    coins: int | None = None
+    coins: float | None = None
     phone_number: str | None = None
     is_admin: bool | None = None
 
@@ -21,7 +21,7 @@ class UserResponse(BaseModel):
     last_name: str | None
     username: str | None
     language_code: str | None
-    coins: int | None
+    coins: float | None
     phone_number: str | None = None
     is_admin: bool | None = None
 

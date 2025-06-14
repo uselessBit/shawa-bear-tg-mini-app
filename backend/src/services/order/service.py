@@ -98,6 +98,7 @@ class OrderService(BaseService, OrderServiceI):
                     first_name=order.first_name,
                     address=order.address,
                     phone=order.phone,
+                    discount=order.discount,
                     items=[
                         OrderItemResponse(
                             order_item_id=item.order_item_id,

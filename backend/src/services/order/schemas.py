@@ -26,6 +26,7 @@ class OrderCreate(BaseModel):
     first_name: str | None
     address: str | None
     phone: str | None
+    discount: float | None
 
     class Config:
         use_enum_values = True
@@ -59,6 +60,7 @@ class OrderResponse(BaseModel):
     first_name: str | None
     address: str | None
     phone: str | None
+    discount: float | None
     items: list[OrderItemResponse]
 
     class Config:
