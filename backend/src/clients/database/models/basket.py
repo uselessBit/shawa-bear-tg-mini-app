@@ -9,6 +9,7 @@ class Basket(Base):
 
     basket_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(nullable=False)
+    discount: Mapped[float] = mapped_column(nullable=True)
 
     items: Mapped[list["BasketItem"]] = relationship(
         "BasketItem", back_populates="basket", cascade="all, delete-orphan"
