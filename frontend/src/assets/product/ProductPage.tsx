@@ -106,10 +106,12 @@ export default function ProductPage({ price }: ProductPageProps) {
             <Drawer.Body p="12px">
                 <CostPicker price={price} setSelectedPrice={setSelectedPrice} />
 
-                <IngredientCheckboxGroup
-                    ingredients={price.product.ingredients}
-                    onChange={(ids) => setExcludedIngredientIds(ids)}
-                />
+                {price.product.ingredients.length !== 0 && (
+                    <IngredientCheckboxGroup
+                        ingredients={price.product.ingredients}
+                        onChange={(ids) => setExcludedIngredientIds(ids)}
+                    />
+                )}
             </Drawer.Body>
 
             <Drawer.Footer p="12px">
