@@ -147,51 +147,47 @@ export default function ProfilePage() {
                                 У вас пока нет заказов
                             </Text>
                         ) : (
-                            orderHistory.map((order) => (
-                                <Flex
-                                    key={order.order_id}
-                                    direction="column"
-                                    gap="12px"
-                                    p="gap"
-                                    borderWidth="2px"
-                                    borderColor="gray"
-                                    w="full"
-                                    rounded="32px"
-                                    pos="relative"
-                                >
-                                    <Center
-                                        bg="accent"
-                                        fontWeight="600"
-                                        rounded="full"
-                                        px="16px"
-                                        py="6px"
-                                        w="fit"
-                                        right="gap"
-                                        pos="absolute"
+                            orderHistory
+                                .sort((a, b) => b.order_id - a.order_id)
+                                .map((order) => (
+                                    <Flex
+                                        key={order.order_id}
+                                        direction="column"
+                                        gap="12px"
+                                        p="gap"
+                                        borderWidth="2px"
+                                        borderColor="gray"
+                                        w="full"
+                                        rounded="32px"
+                                        pos="relative"
                                     >
-                                        {translateStatus(order.status)}
-                                    </Center>
+                                        <Center
+                                            bg="accent"
+                                            fontWeight="600"
+                                            rounded="full"
+                                            px="16px"
+                                            py="6px"
+                                            w="fit"
+                                            right="gap"
+                                            pos="absolute"
+                                        >
+                                            {translateStatus(order.status)}
+                                        </Center>
 
-                                    <Text fontWeight="500" color="text/50">
-                                        {formatOrderDate(order.order_date)}
-                                    </Text>
+                                        <Text fontWeight="500" color="text/50">
+                                            {formatOrderDate(order.order_date)}
+                                        </Text>
 
-                                    <Text fontWeight="500">
-                                        Заказ №{order.order_id}
-                                    </Text>
+                                        <Text fontWeight="500">
+                                            Заказ №{order.order_id}
+                                        </Text>
 
-                                    <Text fontWeight="500">
-                                        {order.address || 'Адрес не указан'}
-                                    </Text>
+                                        <Text fontWeight="500">
+                                            {order.address || 'Адрес не указан'}
+                                        </Text>
 
-                                    <Flex direction="column">
-                                        {order.items
-                                            .sort(
-                                                (a, b) =>
-                                                    b.order_item_id -
-                                                    a.order_item_id
-                                            )
-                                            .map((item) => {
+                                        <Flex direction="column">
+                                            {order.items.map((item) => {
                                                 const priceInfo = priceMap.get(
                                                     item.price_id
                                                 )
@@ -209,19 +205,21 @@ export default function ProfilePage() {
                                                     </Flex>
                                                 )
                                             })}
+                                        </Flex>
+
+                                        <Text fontWeight="500">
+                                            Способ оплаты:{' '}
+                                            {translatePayment(
+                                                order.payment_option
+                                            )}
+                                        </Text>
+
+                                        <Text fontWeight="500">
+                                            Итоговая сумма:{' '}
+                                            {order.total_price.toFixed(1)}р
+                                        </Text>
                                     </Flex>
-
-                                    <Text fontWeight="500">
-                                        Способ оплаты:{' '}
-                                        {translatePayment(order.payment_option)}
-                                    </Text>
-
-                                    <Text fontWeight="500">
-                                        Итоговая сумма:{' '}
-                                        {order.total_price.toFixed(1)}р
-                                    </Text>
-                                </Flex>
-                            ))
+                                ))
                         )}
                     </Flex>
                 )}
