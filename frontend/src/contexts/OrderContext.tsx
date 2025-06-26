@@ -149,6 +149,7 @@ export const OrderProvider = ({
                     first_name: formState.firstName,
                     address: formState.address,
                     phone: formState.phone,
+                    discount: 0,
                 })
 
                 setIsSuccess(true)
