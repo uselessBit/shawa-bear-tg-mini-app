@@ -17,8 +17,6 @@ type OrderFormState = {
     address: string
     timeTaken: string
     paymentOption: PaymentOption
-    useCoins: boolean
-    discount: number
 }
 
 type OrderContextType = {
@@ -27,15 +25,10 @@ type OrderContextType = {
     isSubmitting: boolean
     submitError: string | null
     isSuccess: boolean
-    updateField: (
-        field: keyof OrderFormState,
-        value: string | boolean | number
-    ) => void
+    updateField: (field: keyof OrderFormState, value: string) => void
     updateSelectField: (field: keyof OrderFormState, value: string[]) => void
     submitOrder: (basket: Basket) => Promise<boolean>
     resetForm: () => void
-    virtualCoins: number
-    setVirtualCoins: (coins: number) => void
 }
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined)
@@ -54,8 +47,6 @@ export const OrderProvider = ({
         address: '',
         timeTaken: '',
         paymentOption: 'cash',
-        useCoins: false,
-        discount: 0,
     })
 
     const [errors, setErrors] = useState<Record<string, string>>({})
@@ -112,7 +103,7 @@ export const OrderProvider = ({
     }, [formState])
 
     const updateField = useCallback(
-        (field: keyof OrderFormState, value: string | boolean | number) => {
+        (field: keyof OrderFormState, value: string) => {
             setFormState((prev) => ({
                 ...prev,
                 [field]: value,
@@ -121,8 +112,6 @@ export const OrderProvider = ({
         },
         []
     )
-
-    const [virtualCoins, setVirtualCoins] = useState(0)
 
     const updateSelectField = useCallback(
         (field: keyof OrderFormState, value: string[]) => {
@@ -160,7 +149,6 @@ export const OrderProvider = ({
                     first_name: formState.firstName,
                     address: formState.address,
                     phone: formState.phone,
-                    discount: formState.discount,
                 })
 
                 setIsSuccess(true)
@@ -184,8 +172,6 @@ export const OrderProvider = ({
             address: '',
             timeTaken: '',
             paymentOption: 'cash',
-            useCoins: false,
-            discount: 0,
         })
         setErrors({})
         setSubmitError(null)
@@ -204,8 +190,6 @@ export const OrderProvider = ({
                 updateSelectField,
                 submitOrder,
                 resetForm,
-                virtualCoins,
-                setVirtualCoins,
             }}
         >
             {children}

@@ -9,30 +9,25 @@ import { useUserContext } from '@/contexts/UserContext.tsx'
 export default function ConfirmOrderButton() {
     const { basket, refreshBasket } = useBasketContext()
     const { onClose } = useDrawer()
-    const { formState, submitOrder, isSuccess, resetForm, setVirtualCoins } =
-        useOrder()
-    const { user } = useUserContext()
+    const { submitOrder, isSuccess, resetForm } = useOrder()
+    const { refreshOrderHistory } = useUserContext()
 
     useEffect(() => {
         if (isSuccess) {
             resetForm()
             onClose()
-
-            if (user && setVirtualCoins) {
-                setVirtualCoins(user.coins)
-            }
-
             toaster.create({
-                description: 'Заказ успешно оформлен!',
+                description: 'Заказ успешнно оформлен!',
                 type: 'success',
             })
         }
-    }, [isSuccess, resetForm, onClose, user, setVirtualCoins])
+    }, [isSuccess, resetForm, onClose])
 
     const handleSubmit = async () => {
         if (!basket) return
         await submitOrder(basket)
         await refreshBasket()
+        await refreshOrderHistory()
     }
 
     return (
@@ -47,11 +42,7 @@ export default function ConfirmOrderButton() {
             color="text"
             onClick={handleSubmit}
         >
-            Заказать -{' '}
-            {basket
-                ? (basket.total_price - formState.discount).toFixed(1)
-                : '0'}
-            р
+            Заказать - {basket?.total_price.toFixed(1)}р
         </Button>
     )
 }

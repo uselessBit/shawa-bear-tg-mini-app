@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { UserService, User, OrderHistory } from '@/api/UserService'
-import { useOrder } from '@/contexts/OrderContext.tsx'
 
 type UserContextType = {
     user: User | null
@@ -31,16 +30,12 @@ export const UserProvider = ({
     const [orderHistory, setOrderHistory] = useState<OrderHistory[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const { setVirtualCoins } = useOrder()
 
     const fetchUser = async () => {
         setLoading(true)
         try {
             const userData = await UserService.getUserById(userId)
             setUser(userData)
-            if (setVirtualCoins) {
-                setVirtualCoins(userData.coins)
-            }
             setError(null)
         } catch (err) {
             setError('Не удалось загрузить данные пользователя')
