@@ -197,7 +197,7 @@ export default function ProfilePage() {
                                                     <Text fontWeight="500">
                                                         {item.quantity} ×{' '}
                                                         {priceInfo
-                                                            ? `${priceInfo.product.name} (${priceInfo.size.grams}г) - ${priceInfo.price * item.quantity}р`
+                                                            ? `${priceInfo.product.name} (${priceInfo.size.grams}г) - ${(priceInfo.price * item.quantity).toFixed(1)}р`
                                                             : `Товар #${item.price_id}`}
                                                     </Text>
                                                 </Flex>
@@ -211,7 +211,8 @@ export default function ProfilePage() {
                                     </Text>
 
                                     <Text fontWeight="500">
-                                        Итоговая сумма: {order.total_price}р
+                                        Итоговая сумма:{' '}
+                                        {order.total_price.toFixed(1)}р
                                     </Text>
                                 </Flex>
                             ))
