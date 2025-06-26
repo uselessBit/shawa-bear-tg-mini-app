@@ -1,14 +1,14 @@
 import { Flex, Text } from '@chakra-ui/react'
 import { Icon } from '@chakra-ui/react'
 import { RiBearSmileFill } from 'react-icons/ri'
-import { useOrder } from '@/contexts/OrderContext'
+import { useUserContext } from '@/contexts/UserContext.tsx'
 
 export default function Bonuses() {
-    const { virtualCoins } = useOrder()
+    const { user } = useUserContext()
 
     return (
         <>
-            {virtualCoins !== null && (
+            {user && (
                 <Flex
                     bg="gray"
                     width="fit"
@@ -24,7 +24,7 @@ export default function Bonuses() {
                     </Icon>
 
                     <Text fontWeight="700" fontSize="lm" color="text">
-                        {virtualCoins}
+                        {user.coins}
                     </Text>
                 </Flex>
             )}
