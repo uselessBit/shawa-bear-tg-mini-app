@@ -24,7 +24,7 @@ export default function Bonuses() {
                     </Icon>
 
                     <Text fontWeight="700" fontSize="lm" color="text">
-                        {user.coins}
+                        {user.coins.toFixed(1)}
                     </Text>
                 </Flex>
             )}
