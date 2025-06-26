@@ -185,24 +185,30 @@ export default function ProfilePage() {
                                     </Text>
 
                                     <Flex direction="column">
-                                        {order.items.map((item) => {
-                                            const priceInfo = priceMap.get(
-                                                item.price_id
+                                        {order.items
+                                            .sort(
+                                                (a, b) =>
+                                                    b.order_item_id -
+                                                    a.order_item_id
                                             )
-                                            return (
-                                                <Flex
-                                                    key={item.order_item_id}
-                                                    direction="column"
-                                                >
-                                                    <Text fontWeight="500">
-                                                        {item.quantity} ×{' '}
-                                                        {priceInfo
-                                                            ? `${priceInfo.product.name} (${priceInfo.size.grams}г) - ${(priceInfo.price * item.quantity).toFixed(1)}р`
-                                                            : `Товар #${item.price_id}`}
-                                                    </Text>
-                                                </Flex>
-                                            )
-                                        })}
+                                            .map((item) => {
+                                                const priceInfo = priceMap.get(
+                                                    item.price_id
+                                                )
+                                                return (
+                                                    <Flex
+                                                        key={item.order_item_id}
+                                                        direction="column"
+                                                    >
+                                                        <Text fontWeight="500">
+                                                            {item.quantity} ×{' '}
+                                                            {priceInfo
+                                                                ? `${priceInfo.product.name} (${priceInfo.size.grams}г) - ${(priceInfo.price * item.quantity).toFixed(1)}р`
+                                                                : `Товар #${item.price_id}`}
+                                                        </Text>
+                                                    </Flex>
+                                                )
+                                            })}
                                     </Flex>
 
                                     <Text fontWeight="500">
