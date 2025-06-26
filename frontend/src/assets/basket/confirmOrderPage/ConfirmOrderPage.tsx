@@ -64,7 +64,13 @@ export const ConfirmOrderPage = {
         const { user } = useUserContext()
         const { basket } = useBasketContext()
 
-        const { formState, errors, updateField, updateSelectField } = useOrder()
+        const {
+            formState,
+            errors,
+            updateField,
+            updateSelectField,
+            setVirtualCoins,
+        } = useOrder()
 
         return (
             <MotionBody
@@ -141,18 +147,42 @@ export const ConfirmOrderPage = {
                             alignItems="center"
                         >
                             <Text fontSize="14px" fontWeight="500">
-                                {`Скидка ${((user.coins * 100) / basket.total_price).toFixed(0)}% за баллы`}
+                                {`Скидка ${Math.min(70, Math.floor((user.coins * 100) / basket.total_price))}% за баллы`}
                             </Text>
 
-                            <Switch.Root size="md" scale="1.5">
+                            <Switch.Root
+                                size="md"
+                                scale="1.5"
+                                checked={formState.useCoins}
+                                onCheckedChange={(checked) => {
+                                    updateField('useCoins', Boolean(checked))
+
+                                    const maxDiscount = Math.floor(
+                                        basket.total_price * 0.7
+                                    )
+                                    const discount = Math.min(
+                                        user.coins,
+                                        maxDiscount
+                                    )
+
+                                    updateField(
+                                        'discount',
+                                        checked ? discount : 0
+                                    )
+
+                                    if (checked) {
+                                        setVirtualCoins(user.coins - discount)
+                                    } else {
+                                        setVirtualCoins(user.coins)
+                                    }
+                                }}
+                            >
                                 <Switch.HiddenInput />
                                 <Switch.Control bg="card">
                                     <Switch.Thumb
                                         bg="back"
                                         boxShadow="none"
-                                        _checked={{
-                                            bg: 'accent',
-                                        }}
+                                        _checked={{ bg: 'accent' }}
                                     >
                                         <Switch.ThumbIndicator
                                             fallback={<HiX color="text" />}

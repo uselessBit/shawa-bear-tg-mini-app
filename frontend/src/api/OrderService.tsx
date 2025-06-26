@@ -14,6 +14,7 @@ export const OrderService = {
             first_name: string
             address: string
             phone: string
+            discount: number
         }
     ): Promise<Basket> => {
         const response = await axios.post<Basket>(
