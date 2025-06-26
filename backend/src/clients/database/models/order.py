@@ -21,6 +21,8 @@ class Order(Base):
     first_name: Mapped[str] = mapped_column(String(50), nullable=True)
     address: Mapped[str] = mapped_column(String(50), nullable=True)
     phone: Mapped[str] = mapped_column(String(50), nullable=True)
+    discount: Mapped[float] = mapped_column(nullable=True)
+
     items: Mapped[list["OrderItem"]] = relationship(
         "OrderItem", back_populates="order", cascade="all, delete-orphan"
     )
